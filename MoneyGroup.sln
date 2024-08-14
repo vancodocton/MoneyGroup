@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Infrastucture", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.IntegrationTests", "test\IntegrationTests\MoneyGroup.IntegrationTests.csproj", "{FCA39533-663C-4990-BD94-306AB16B26F2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Infrastucture.PostgreSql", "src\Infrastucture.PostgreSql\MoneyGroup.Infrastucture.PostgreSql.csproj", "{6ECAE430-A1EC-4315-A46F-CC886FB81BD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{FCA39533-663C-4990-BD94-306AB16B26F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCA39533-663C-4990-BD94-306AB16B26F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCA39533-663C-4990-BD94-306AB16B26F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ECAE430-A1EC-4315-A46F-CC886FB81BD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ECAE430-A1EC-4315-A46F-CC886FB81BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ECAE430-A1EC-4315-A46F-CC886FB81BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ECAE430-A1EC-4315-A46F-CC886FB81BD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{516B9671-29C4-4EAC-8FEB-E664E2749BE5} = {3B9DF5DA-A093-4638-B04A-54BEFED607CC}
 		{AC05EAFC-C471-42CE-95E1-E74C81E14107} = {7B9E362D-B973-45BD-B4FC-D7946634464E}
 		{FCA39533-663C-4990-BD94-306AB16B26F2} = {3B9DF5DA-A093-4638-B04A-54BEFED607CC}
+		{6ECAE430-A1EC-4315-A46F-CC886FB81BD5} = {7B9E362D-B973-45BD-B4FC-D7946634464E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D511F8F-6BB6-40AB-85A8-21F0B44DC038}

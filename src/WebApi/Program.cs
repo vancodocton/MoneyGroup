@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+
+using MoneyGroup.Infrastucture.AutoMapper.Profiles;
 using MoneyGroup.Infrastucture.PostgreSql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper();
 
 var connectionString = builder.Configuration.GetConnectionString("PostgreSqlConnection")
     ?? throw new InvalidOperationException();

@@ -22,6 +22,45 @@ public class OrderServiceTest
     }
 
     [Fact]
+    public async Task GetOrderByIdAsync_ValidId_ShouldReturnOrder()
+    {
+        // Arrange
+        int id = 1;
+        var orderDto = new OrderDto
+        {
+            Id = id,
+        };
+        CancellationToken cancellationToken = default;
+
+        _orderRepository.Setup(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<Expression<Func<Order, bool>>>(), cancellationToken))
+            .ReturnsAsync(orderDto);
+
+        // Act
+        var result = await _orderService.GetOrderByIdAsync(id, cancellationToken);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(id, result.Id);
+    }
+
+    [Fact]
+    public async Task GetOrderByIdAsync_InvalidId_ShouldReturnNull()
+    {
+        // Arrange
+        int invalidId = -1;
+        CancellationToken cancellationToken = default;
+
+        _orderRepository.Setup(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<Expression<Func<Order, bool>>>(), cancellationToken))
+            .ReturnsAsync((OrderDto?)null);
+
+        // Act
+        var result = await _orderService.GetOrderByIdAsync(invalidId, cancellationToken);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
     public async Task CreateOrderAsync_ValidDto_ShouldAddOrder()
     {
         // Arrange

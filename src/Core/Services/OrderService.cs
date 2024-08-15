@@ -17,6 +17,11 @@ public class OrderService
         _userRepository = userRepository;
     }
 
+    public async Task<OrderDto?> GetOrderByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _orderRepository.FirstOrDefaultAsync<OrderDto>(o => o.Id == id, cancellationToken);
+    }
+
     public async Task CreateOrderAsync(OrderDto model, CancellationToken cancellationToken = default)
     {
         if (!await _userRepository.AnyAsync(u => u.Id == model.IssuerId, cancellationToken))

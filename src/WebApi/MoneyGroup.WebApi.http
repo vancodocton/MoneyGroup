@@ -1,0 +1,6 @@
+@MoneyGroup.WebApi_HostAddress = http://localhost:5200
+
+GET {{MoneyGroup.WebApi_HostAddress}}/healthz/
+Accept: application/json
+
+###

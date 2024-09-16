@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Infrastucture\MoneyGroup.Infrastucture.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="MoneyGroup.FunctionalTests"/>
+  </ItemGroup>
+
 </Project>

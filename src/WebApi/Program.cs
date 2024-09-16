@@ -32,3 +32,7 @@ app.MapHealthChecks("/healthz");
 app.UseHttpsRedirection();
 
 await app.RunAsync();
+
+#pragma warning disable S1118 // Utility classes should not have public constructors
+public sealed partial class Program { }
+#pragma warning restore S1118 // Utility classes should not have public constructors

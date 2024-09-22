@@ -36,4 +36,15 @@ jobs:
       run: dotnet format MoneyGroup.sln --no-restore --verify-no-changes -v diag
 
     - name: Test
-      run:  dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal
+      run:  dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal --collect "XPlat Code Coverage"
+
+    - name: Upload TestResults Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ runner.os }}-TestResults
+        path: |
+            **/TestResults/**
+    - name: Upload TestResults to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

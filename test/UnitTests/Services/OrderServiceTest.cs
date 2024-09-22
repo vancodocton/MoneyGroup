@@ -10,14 +10,14 @@ using Moq;
 namespace MoneyGroup.UnitTests.Services;
 public class OrderServiceTest
 {
-    private readonly Mock<IRepository<User>> _userRepository;
-    private readonly Mock<IRepository<Order>> _orderRepository;
+    private readonly Mock<IUserRepository> _userRepository;
+    private readonly Mock<IOrderRepository> _orderRepository;
     private readonly IOrderService _orderService;
 
     public OrderServiceTest()
     {
-        _userRepository = new Mock<IRepository<User>>();
-        _orderRepository = new Mock<IRepository<Order>>();
+        _userRepository = new Mock<IUserRepository>();
+        _orderRepository = new Mock<IOrderRepository>();
         _orderService = new OrderService(_orderRepository.Object, _userRepository.Object);
     }
 
@@ -32,13 +32,14 @@ public class OrderServiceTest
         };
         CancellationToken cancellationToken = default;
 
-        _orderRepository.Setup(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<Expression<Func<Order, bool>>>(), cancellationToken))
+        _orderRepository.Setup(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<int>(), cancellationToken))
             .ReturnsAsync(orderDto);
 
         // Act
         var result = await _orderService.GetOrderByIdAsync(id, cancellationToken);
 
         // Assert
+        _orderRepository.Verify(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<int>(), cancellationToken));
         Assert.NotNull(result);
         Assert.Equal(id, result.Id);
     }
@@ -57,6 +58,7 @@ public class OrderServiceTest
         var result = await _orderService.GetOrderByIdAsync(invalidId, cancellationToken);
 
         // Assert
+        _orderRepository.Verify(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<int>(), cancellationToken));
         Assert.Null(result);
     }
 
@@ -75,7 +77,7 @@ public class OrderServiceTest
             ],
         };
 
-        _userRepository.Setup(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         _orderRepository.Setup(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()))
@@ -89,8 +91,8 @@ public class OrderServiceTest
         await _orderService.CreateOrderAsync(model);
 
         // Assert
-        _userRepository.Verify(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
-        _orderRepository.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Once);
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
+        _orderRepository.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()));
         Assert.Equal(newOrderId, model.Id);
     }
 
@@ -108,13 +110,15 @@ public class OrderServiceTest
             ]
         };
 
-        _userRepository.Setup(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
 
         // Act
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.CreateOrderAsync(model));
 
         // Assert
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
+        _orderRepository.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
         Assert.Equal("Issuer not found", ex.Message);
     }
 
@@ -132,7 +136,7 @@ public class OrderServiceTest
             ]
         };
 
-        _userRepository.SetupSequence(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.SetupSequence(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true)
             .ReturnsAsync(true)
             .ReturnsAsync(false);
@@ -141,6 +145,8 @@ public class OrderServiceTest
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.CreateOrderAsync(model));
 
         // Assert
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
+        _orderRepository.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
         Assert.Equal("Consumer not found", ex.Message);
     }
 
@@ -158,13 +164,15 @@ public class OrderServiceTest
             ]
         };
 
-        _userRepository.Setup(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         // Act
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.CreateOrderAsync(model));
 
         // Assert
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
+        _orderRepository.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
         Assert.Equal("Duplicated consumer", ex.Message);
     }
 
@@ -177,13 +185,15 @@ public class OrderServiceTest
             IssuerId = 1,
             Consumers = [],
         };
-        _userRepository.Setup(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         // Act
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.CreateOrderAsync(model));
 
         // Assert
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
+        _orderRepository.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
         Assert.Equal("Consumers is empty", ex.Message);
     }
 
@@ -202,10 +212,10 @@ public class OrderServiceTest
                 ]
         };
 
-        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()))
+        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
-        _userRepository.Setup(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         _orderRepository.Setup(o => o.UpdateAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()))
@@ -215,9 +225,9 @@ public class OrderServiceTest
         await _orderService.UpdateOrderAsync(model);
 
         // Assert
-        _orderRepository.Verify(o => o.AnyAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()), Times.Once);
-        _userRepository.Verify(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
-        _orderRepository.Verify(o => o.UpdateAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Once);
+        _orderRepository.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
+        _orderRepository.Verify(o => o.UpdateAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()));
     }
 
     [Fact]
@@ -235,16 +245,18 @@ public class OrderServiceTest
             ]
         };
 
-        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()))
+        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
-        _userRepository.Setup(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
 
         // Act
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
 
         // Assert
+        _orderRepository.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         Assert.Equal("Issuer not found", ex.Message);
     }
 
@@ -263,13 +275,14 @@ public class OrderServiceTest
             }
         };
 
-        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()))
+        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
 
         // Act
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
 
         //  Assert
+        _orderRepository.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         Assert.Equal("Order not found", ex.Message);
     }
 
@@ -288,10 +301,10 @@ public class OrderServiceTest
             ]
         };
 
-        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()))
+        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
-        _userRepository.SetupSequence(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.SetupSequence(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true)
             .ReturnsAsync(true)
             .ReturnsAsync(false);
@@ -300,6 +313,8 @@ public class OrderServiceTest
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
 
         // Assert
+        _orderRepository.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
         Assert.Equal("Consumer not found", ex.Message);
     }
 
@@ -314,16 +329,18 @@ public class OrderServiceTest
             Consumers = [],
         };
 
-        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()))
+        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
-        _userRepository.Setup(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         // Act
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
 
         // Assert
+        _orderRepository.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         Assert.Equal("Consumers is empty", ex.Message);
     }
 
@@ -342,16 +359,18 @@ public class OrderServiceTest
             ]
         };
 
-        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()))
+        _orderRepository.Setup(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
-        _userRepository.Setup(u => u.AnyAsync(It.IsAny<Expression<Func<User, bool>>>(), It.IsAny<CancellationToken>()))
+        _userRepository.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         // Act
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
 
         // Assert
+        _orderRepository.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
+        _userRepository.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
         Assert.Equal("Duplicated consumer", ex.Message);
     }
 
@@ -362,7 +381,7 @@ public class OrderServiceTest
         var orderId = 1;
         var order = new Order { Id = orderId };
 
-        _orderRepository.Setup(o => o.FirstOrDefaultAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()))
+        _orderRepository.Setup(o => o.FirstOrDefaultAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(order);
 
         _orderRepository.Setup(o => o.RemoveAsync(It.IsAny<Order>(), It.IsAny<CancellationToken>()))
@@ -372,8 +391,8 @@ public class OrderServiceTest
         await _orderService.RemoveOrderAsync(orderId);
 
         // Assert
-        _orderRepository.Verify(o => o.FirstOrDefaultAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()), Times.Once);
-        _orderRepository.Verify(o => o.RemoveAsync(It.IsAny<Order>(), It.IsAny<CancellationToken>()), Times.Once);
+        _orderRepository.Verify(o => o.FirstOrDefaultAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
+        _orderRepository.Verify(o => o.RemoveAsync(It.IsAny<Order>(), It.IsAny<CancellationToken>()));
     }
 
     [Fact]
@@ -382,11 +401,14 @@ public class OrderServiceTest
         // Arrange
         var orderId = 1;
 
-        _orderRepository.Setup(o => o.FirstOrDefaultAsync(It.IsAny<Expression<Func<Order, bool>>>(), It.IsAny<CancellationToken>()))
+        _orderRepository.Setup(o => o.FirstOrDefaultAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Order?)null);
 
         // Act
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.RemoveOrderAsync(orderId));
+
+        // Assert
+        _orderRepository.Verify(o => o.FirstOrDefaultAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         Assert.Equal("Order not found", ex.Message);
     }
 }

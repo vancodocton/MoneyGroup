@@ -38,9 +38,13 @@ jobs:
     - name: Test
       run:  dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal --collect "XPlat Code Coverage"
 
-    - name: Upload Test Results Artifacts
+    - name: Upload TestResults Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ runner.os }}-TestResults
         path: |
             **/TestResults/**
+    - name: Upload TestResults to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

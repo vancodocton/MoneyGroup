@@ -133,6 +133,9 @@ COPY public."Orders" ("Id", "Title", "Description", "Total", "IssuerId") FROM st
 --
 
 COPY public."Users" ("Id", "Name") FROM stdin;
+1	Truong
+2	Duc
+3	Manh
 \.
 
 
@@ -147,7 +150,7 @@ SELECT pg_catalog.setval('public."Orders_Id_seq"', 1, false);
 -- Name: Users_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."Users_Id_seq"', 1, false);
+SELECT pg_catalog.setval('public."Users_Id_seq"', 3, true);
 
 
 --

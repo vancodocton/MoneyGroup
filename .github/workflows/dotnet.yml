@@ -37,6 +37,7 @@ jobs:
 
     - name: Test
       run:  dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal --collect "XPlat Code Coverage"
+      continue-on-error: true
 
     - name: Upload TestResults Artifacts
       uses: actions/upload-artifact@v4

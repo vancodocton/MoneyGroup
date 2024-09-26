@@ -13,7 +13,7 @@ public class EfRepository<TEntity>
 {
     protected readonly DbContext _dbContext;
     protected readonly DbSet<TEntity> _dbSet;
-    private readonly IMapper _mapper;
+    protected readonly IMapper _mapper;
 
     public EfRepository(ApplicationDbContext dbContext, IMapper mapper)
     {
@@ -22,14 +22,14 @@ public class EfRepository<TEntity>
         _mapper = mapper;
     }
 
-    public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         await _dbSet.AddAsync(entity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return entity;
     }
 
-    public async Task<TResult> AddAsync<TResult>(TResult dto, CancellationToken cancellationToken = default)
+    public virtual async Task<TResult> AddAsync<TResult>(TResult dto, CancellationToken cancellationToken = default)
     {
         var entity = _mapper.Map<TEntity>(dto);
 
@@ -40,28 +40,28 @@ public class EfRepository<TEntity>
         return dto;
     }
 
-    public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await _dbSet.AnyAsync(predicate, cancellationToken);
     }
 
-    public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
-    public async Task<TResult?> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await _dbSet.Where(predicate).ProjectTo<TResult>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         _dbSet.Remove(entity);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         _dbSet.Update(entity);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -69,7 +69,7 @@ public class EfRepository<TEntity>
         return entity;
     }
 
-    public async Task<TResult> UpdateAsync<TResult>(TResult dto, CancellationToken cancellationToken = default)
+    public virtual async Task<TResult> UpdateAsync<TResult>(TResult dto, CancellationToken cancellationToken = default)
     {
         var entity = _mapper.Map<TEntity>(dto);
 

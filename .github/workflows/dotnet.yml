@@ -10,6 +10,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5433:5432
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v4
@@ -36,7 +48,9 @@ jobs:
       run: dotnet format MoneyGroup.sln --no-restore --verify-no-changes -v diag
 
     - name: Test
-      run:  dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal --collect "XPlat Code Coverage"
+      run: |
+        bash ./test/IntegrationTests/psql/backup.sh
+        dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal --collect "XPlat Code Coverage"
       continue-on-error: true
 
     - name: Upload TestResults Artifacts

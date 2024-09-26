@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -7,6 +8,7 @@ using MoneyGroup.Infrastucture.Data;
 
 namespace MoneyGroup.Infrastucture.PostgreSql.Data;
 
+[ExcludeFromCodeCoverage]
 internal class ApplicationDbContextDesignTimeFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
     public ApplicationDbContext CreateDbContext(string[] args)

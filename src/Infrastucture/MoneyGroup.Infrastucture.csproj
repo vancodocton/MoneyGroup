@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" />
+    <PackageReference Include="AutoMapper.Collection" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
@@ -20,6 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="MoneyGroup.IntegrationTests"/>
+    <InternalsVisibleTo Include="MoneyGroup.IntegrationTests" />
   </ItemGroup>
 </Project>

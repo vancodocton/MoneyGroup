@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>fabb0739-4135-42f2-b86c-db72325f7e9a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="MoneyGroup.FunctionalTests"/>
+    <InternalsVisibleTo Include="MoneyGroup.FunctionalTests" />
   </ItemGroup>
 
 </Project>

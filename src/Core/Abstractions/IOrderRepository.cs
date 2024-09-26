@@ -10,6 +10,6 @@ public interface IOrderRepository
     public Task<Order?> FirstOrDefaultAsync(int id, CancellationToken cancellationToken = default);
 
     public Task<TResult?> FirstOrDefaultAsync<TResult>(int id, CancellationToken cancellationToken = default);
-    
+
     Task<OrderDto> UpdateAsync(OrderDto dto, CancellationToken cancellationToken = default);
 }

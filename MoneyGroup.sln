@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.WebApi", "src\We
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.FunctionalTests", "test\FunctionalTests\MoneyGroup.FunctionalTests.csproj", "{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

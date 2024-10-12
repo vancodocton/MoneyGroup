@@ -10,24 +10,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      PGHOST: localhost
-      PGPORT: 5433
-    services:
-      postgres:
-        image: postgres
-        ports:
-          - 5433:5432
-        env:
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
     - uses: actions/checkout@v4
+
+    - name: Docker Compose Up
+      run: docker compose up -d
 
     - uses: actions/cache@v4
       with:
@@ -52,7 +39,6 @@ jobs:
 
     - name: Test
       run: |
-        bash ./test/IntegrationTests/psql/backup.sh
         dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal --collect "XPlat Code Coverage"
 
     - name: Upload TestResults Artifacts

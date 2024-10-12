@@ -1,7 +1,8 @@
 <Project>
   <PropertyGroup>
     <Deterministic>true</Deterministic>
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>    
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)\.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

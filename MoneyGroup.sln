@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{54A8A3A2-42E2-4BBB-AC88-F987A2DF2829}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.runsettings = .runsettings
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		.config\dotnet-tools.json = .config\dotnet-tools.json
@@ -29,6 +30,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.WebApi", "src\WebApi\MoneyGroup.WebApi.csproj", "{0F03932C-BC42-4AA8-9D51-092AC254EE28}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.FunctionalTests", "test\FunctionalTests\MoneyGroup.FunctionalTests.csproj", "{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Postgres.Migrator", "src\Postgres.Migrator\MoneyGroup.Postgres.Migrator.csproj", "{CFF31754-355A-4903-9B55-A190437468EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +69,14 @@ Global
 		{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59324AF8-05BD-4FFD-A5A8-4924C1D8CDD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFF31754-355A-4903-9B55-A190437468EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFF31754-355A-4903-9B55-A190437468EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFF31754-355A-4903-9B55-A190437468EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFF31754-355A-4903-9B55-A190437468EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +89,7 @@ Global
 		{6ECAE430-A1EC-4315-A46F-CC886FB81BD5} = {7B9E362D-B973-45BD-B4FC-D7946634464E}
 		{0F03932C-BC42-4AA8-9D51-092AC254EE28} = {7B9E362D-B973-45BD-B4FC-D7946634464E}
 		{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48} = {3B9DF5DA-A093-4638-B04A-54BEFED607CC}
+		{CFF31754-355A-4903-9B55-A190437468EB} = {7B9E362D-B973-45BD-B4FC-D7946634464E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D511F8F-6BB6-40AB-85A8-21F0B44DC038}

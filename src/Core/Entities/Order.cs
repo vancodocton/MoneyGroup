@@ -9,7 +9,9 @@ public class Order
 
     public decimal Total { get; set; }
 
-    public OrderIssuer Issuer { get; set; } = null!;
+    public int IssuerId { get; set; }
+
+    public User Issuer { get; set; } = null!;
 
     public List<OrderConsumer> Consumers { get; set; } = [];
 }

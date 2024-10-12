@@ -11,6 +11,15 @@
           "Microsoft.Extensions.Options": "6.0.0"
         }
       },
+      "AutoMapper.Collection": {
+        "type": "Direct",
+        "requested": "[10.0.0, )",
+        "resolved": "10.0.0",
+        "contentHash": "fq7yI+16EExRpjIb8s7SDTqG8ZV+xaAn/u4FWVmK1Z69MXk+04mjcFfXGrui5Wk6674VAyc9RhRf4T3VJdIIng==",
+        "dependencies": {
+          "AutoMapper": "[13.0.0, 14.0.0)"
+        }
+      },
       "Microsoft.EntityFrameworkCore": {
         "type": "Direct",
         "requested": "[8.0.8, )",

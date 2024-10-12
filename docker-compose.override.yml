@@ -1,0 +1,13 @@
+services:
+  postgres:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/Docker/psql/scripts/:/docker-entrypoint-initdb.d/
+      - postgres:/var/lib/postgresql/data/
+
+volumes:
+  postgres:

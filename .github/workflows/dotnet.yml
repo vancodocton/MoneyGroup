@@ -10,9 +10,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
+
+    - name: Docker Compose Up
+      run: docker compose up -d
 
     - uses: actions/cache@v4
       with:
@@ -36,7 +38,8 @@ jobs:
       run: dotnet format MoneyGroup.sln --no-restore --verify-no-changes -v diag
 
     - name: Test
-      run:  dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal --collect "XPlat Code Coverage"
+      run: |
+        dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal --collect "XPlat Code Coverage"
 
     - name: Upload TestResults Artifacts
       uses: actions/upload-artifact@v4

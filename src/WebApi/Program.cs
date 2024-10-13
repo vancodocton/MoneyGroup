@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Infrastucture.AutoMapper.Profiles;
+using MoneyGroup.Infrastucture.Data;
 using MoneyGroup.Infrastucture.PostgreSql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,9 @@ builder.Services.AddAutoMapper();
 var connectionString = builder.Configuration.GetConnectionString("PostgreSqlConnection")
     ?? throw new InvalidOperationException();
 builder.Services.AddApplicationDbContextNpgsql(connectionString);
+
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>();
 
 var app = builder.Build();
 

@@ -40,7 +40,7 @@ jobs:
     - name: Test
       run: |
         docker compose up --wait
-        dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal --collect "XPlat Code Coverage"
+        dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal
 
     - name: Upload TestResults Artifacts
       uses: actions/upload-artifact@v4

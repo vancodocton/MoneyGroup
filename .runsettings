@@ -2,10 +2,10 @@
 <RunSettings>
   <DataCollectionRunSettings>
     <DataCollectors>
-      <DataCollector friendlyName="XPlat code coverage">
+      <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
           <Format>cobertura</Format>
-          <ExcludeByFile>"**/*Migrations/*.cs"</ExcludeByFile>
+          <ExcludeByFile>**/Migrations/*.cs</ExcludeByFile>
         </Configuration>
       </DataCollector>
     </DataCollectors>

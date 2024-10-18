@@ -1,5 +1,9 @@
 root = true
 
+# Shell script files
+[*.sh]
+end_of_line = lf
+
 # All files
 [*]
 indent_style = space

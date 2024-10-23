@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 17.0 (Debian 17.0-1.pgdg120+1)
--- Dumped by pg_dump version 17.0
+-- Dumped by pg_dump version 17.0 (Debian 17.0-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -128,6 +128,12 @@ ALTER TABLE public."__EFMigrationsHistory" OWNER TO postgres;
 --
 
 COPY public."OrderConsumers" ("ConsumerId", "OrderId") FROM stdin;
+1	1
+2	1
+1	2
+2	2
+1	3
+2	3
 \.
 
 
@@ -136,6 +142,9 @@ COPY public."OrderConsumers" ("ConsumerId", "OrderId") FROM stdin;
 --
 
 COPY public."Orders" ("Id", "Title", "Description", "Total", "IssuerId") FROM stdin;
+1	Order 1	Order 1 description	10000	1
+2	Update order	Update order description	10000	1
+3	Delete order	Delete order description	10000	1
 \.
 
 
@@ -163,7 +172,7 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 -- Name: Orders_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."Orders_Id_seq"', 1, false);
+SELECT pg_catalog.setval('public."Orders_Id_seq"', 3, true);
 
 
 --

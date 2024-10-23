@@ -1,8 +1,11 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
+using MoneyGroup.Core.Abstractions;
+using MoneyGroup.Core.Services;
 using MoneyGroup.Infrastucture.AutoMapper.Profiles;
 using MoneyGroup.Infrastucture.Data;
 using MoneyGroup.Infrastucture.PostgreSql;
+using MoneyGroup.WebApi.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,10 @@ builder.Services.AddApplicationDbContextNpgsql(connectionString);
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>();
 
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,6 +41,8 @@ if (app.Environment.IsDevelopment())
 app.MapHealthChecks("/healthz");
 
 app.UseHttpsRedirection();
+
+app.MapOrderEndpoints();
 
 await app.RunAsync();
 

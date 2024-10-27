@@ -52,6 +52,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    app.UseStatusCodePages();
     app.UseExceptionHandler();
 }
 

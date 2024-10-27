@@ -1,5 +1,7 @@
 ﻿using System.Linq.Expressions;
 
+using FluentValidation;
+
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Models.Orders;
@@ -12,13 +14,15 @@ public class OrderServiceTest
 {
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<IOrderRepository> _orderRepositoryMock;
+    private readonly Mock<IValidator<OrderDto>> _orderValidatorMock;
     private readonly IOrderService _orderService;
 
     public OrderServiceTest()
     {
         _userRepositoryMock = new Mock<IUserRepository>();
         _orderRepositoryMock = new Mock<IOrderRepository>();
-        _orderService = new OrderService(_orderRepositoryMock.Object, _userRepositoryMock.Object);
+        _orderValidatorMock = new Mock<IValidator<OrderDto>>();
+        _orderService = new OrderService(_orderValidatorMock.Object, _orderRepositoryMock.Object, _userRepositoryMock.Object);
     }
 
     [Fact]

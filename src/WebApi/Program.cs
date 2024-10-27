@@ -1,7 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+
+using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Core.Abstractions;
+using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Services;
+using MoneyGroup.Core.Validators;
 using MoneyGroup.Infrastucture.AutoMapper.Profiles;
 using MoneyGroup.Infrastucture.Data;
 using MoneyGroup.Infrastucture.PostgreSql;
@@ -28,6 +32,10 @@ builder.Services.AddHealthChecks()
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+#region Validators
+builder.Services.AddSingleton<IValidator<OrderDto>, OrderDtoValidator>();
+#endregion Validators
 
 var app = builder.Build();
 

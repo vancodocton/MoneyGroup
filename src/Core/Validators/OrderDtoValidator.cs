@@ -6,7 +6,7 @@ namespace MoneyGroup.Core.Validators;
 
 public class OrderDtoValidator : AbstractValidator<OrderDto>
 {
-    public OrderDtoValidator()
+    public OrderDtoValidator(IValidator<ConsumerDto> consumerDtoValidator)
     {
         RuleFor(o => o.Title)
             .NotEmpty();
@@ -22,6 +22,6 @@ public class OrderDtoValidator : AbstractValidator<OrderDto>
 
         RuleForEach(o => o.Consumers)
             .NotNull()
-            .SetValidator(new ConsumerDtoValidator());
+            .SetValidator(consumerDtoValidator);
     }
 }

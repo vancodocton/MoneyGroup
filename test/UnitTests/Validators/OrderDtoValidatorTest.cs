@@ -5,14 +5,24 @@ using MoneyGroup.Core.Validators;
 
 namespace MoneyGroup.UnitTests.Validators;
 
+public class OrderDtoValidatorTestFixture
+{
+    public OrderDtoValidator Validator { get; }
+
+    public OrderDtoValidatorTestFixture()
+    {
+        Validator = new OrderDtoValidator(new ConsumerDtoValidator());
+    }
+}
+
 public class OrderDtoValidatorTest
-    : IClassFixture<OrderDtoValidator>
+    : IClassFixture<OrderDtoValidatorTestFixture>
 {
     private readonly OrderDtoValidator _validator;
 
-    public OrderDtoValidatorTest(OrderDtoValidator validator)
+    public OrderDtoValidatorTest(OrderDtoValidatorTestFixture fixture)
     {
-        _validator = validator;
+        _validator = fixture.Validator;
     }
 
     [Fact]

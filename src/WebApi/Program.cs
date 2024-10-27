@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +34,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
 #region Validators
+builder.Services.AddSingleton<IValidator<ConsumerDto>, ConsumerDtoValidator>();
 builder.Services.AddSingleton<IValidator<OrderDto>, OrderDtoValidator>();
 #endregion Validators
 

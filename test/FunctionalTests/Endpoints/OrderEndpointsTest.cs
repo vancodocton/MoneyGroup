@@ -3,6 +3,8 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
+using Microsoft.AspNetCore.Mvc;
+
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.FunctionalTests.Fixture;
 
@@ -113,6 +115,30 @@ public class OrderEndpointsTest
 
         Assert.Equal($"/api/Order/{order.Id}", response.Headers.Location?.PathAndQuery);
     }
+
+    [Fact]
+    public async Task CreateOrder_InvalidDto_ReturnsProblemDetails()
+    {
+        // Arrange
+        var request = "/api/Order";
+        var newOrder = new
+        {
+        };
+        var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PostAsync(request, content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        Assert.NotNull(problemDetails);
+        Assert.NotEmpty(problemDetails.Errors);
+        Assert.Contains("Title", problemDetails.Errors.Keys);
+        Assert.Contains("IssuerId", problemDetails.Errors.Keys);
+        Assert.Contains("Consumers", problemDetails.Errors.Keys);
+    }
     #endregion CreateOrder
 
     #region UpdateOrder
@@ -153,6 +179,33 @@ public class OrderEndpointsTest
         Assert.Equal(1, order.IssuerId);
         Assert.Equal(2, order.Consumers.Skip(0).First().Id);
         Assert.Equal(3, order.Consumers.Skip(1).First().Id);
+    }
+
+    [Fact]
+    public async Task UpdateOrder_InvalidDto_ReturnsProblemDetails()
+    {
+        // Arrange
+        var orderId = 2; // Assuming an order with Id 2 exists
+        var request = $"/api/Order/{orderId}";
+        var updatedOrder = new
+        {
+            // Populate with necessary order properties
+            Id = orderId,
+        };
+        var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PutAsync(request, content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        Assert.NotNull(problemDetails);
+        Assert.NotEmpty(problemDetails.Errors);
+        Assert.Contains("Title", problemDetails.Errors.Keys);
+        Assert.Contains("IssuerId", problemDetails.Errors.Keys);
+        Assert.Contains("Consumers", problemDetails.Errors.Keys);
     }
     #endregion UpdateOrder
 

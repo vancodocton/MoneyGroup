@@ -53,8 +53,9 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseStatusCodePages();
-    app.UseExceptionHandler();
 }
+
+app.UseExceptionHandler();
 
 app.MapHealthChecks("/healthz");
 

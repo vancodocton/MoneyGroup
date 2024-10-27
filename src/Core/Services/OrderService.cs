@@ -36,11 +36,6 @@ public class OrderService
             throw new InvalidOperationException("Issuer not found");
         }
 
-        if (!model.Consumers.Any())
-        {
-            throw new InvalidOperationException("Consumers is empty");
-        }
-
         var idsHashSet = new HashSet<int>();
 
         foreach (var consumerId in model.Consumers.Select(c => c.Id))
@@ -71,11 +66,6 @@ public class OrderService
         if (!await _userRepository.AnyAsync(model.IssuerId, cancellationToken))
         {
             throw new InvalidOperationException("Issuer not found");
-        }
-
-        if (!model.Consumers.Any())
-        {
-            throw new InvalidOperationException("Consumers is empty");
         }
 
         var idsHashSet = new HashSet<int>();

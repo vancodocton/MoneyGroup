@@ -127,6 +127,22 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
+    public async Task GivenOrderDto_WhenConsumersEmpty_ThenReturnError()
+    {
+        // Arrange
+        var order = new OrderDto()
+        {
+            Consumers = [],
+        };
+
+        // Act
+        var result = await _validator.TestValidateAsync(order);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(o => o.Consumers);
+    }
+
+    [Fact]
     public async Task GivenOrderDto_WhenConsumersContainsNull_ThenReturnError()
     {
         // Arrange

@@ -183,27 +183,6 @@ public class OrderServiceTest
     }
 
     [Fact]
-    public async Task CreateOrderAsync_EmptyConsumers_ShouldThrowInvalidOperationException()
-    {
-        // Arrange
-        var model = new OrderDto
-        {
-            IssuerId = 1,
-            Consumers = [],
-        };
-        _userRepositoryMock.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
-
-        // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.CreateOrderAsync(model));
-
-        // Assert
-        _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
-        _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
-        Assert.Equal("Consumers is empty", ex.Message);
-    }
-
-    [Fact]
     public async Task UpdateOrderAsync_ValidDto_ShouldUpdateOrder()
     {
         // Arrange
@@ -322,32 +301,6 @@ public class OrderServiceTest
         _orderRepositoryMock.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
         Assert.Equal("Consumer not found", ex.Message);
-    }
-
-    [Fact]
-    public async Task UpdateOrderAsync_EmptyConsumers_ShouldThrowInvalidOperationException()
-    {
-        // Arrange
-        var model = new OrderDto
-        {
-            Id = 1,
-            IssuerId = 1,
-            Consumers = [],
-        };
-
-        _orderRepositoryMock.Setup(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
-
-        _userRepositoryMock.Setup(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
-
-        // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
-
-        // Assert
-        _orderRepositoryMock.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
-        _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
-        Assert.Equal("Consumers is empty", ex.Message);
     }
 
     [Fact]

@@ -1,4 +1,4 @@
-﻿using MoneyGroup.Core.Abstractions;
+using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models.Orders;
 
 namespace MoneyGroup.Core.Services;
@@ -10,7 +10,9 @@ public class OrderService
     private readonly IUserRepository _userRepository;
 
 
-    public OrderService(IOrderRepository orderRepository, IUserRepository userRepository)
+    public OrderService(
+        IOrderRepository orderRepository,
+        IUserRepository userRepository)
     {
         _orderRepository = orderRepository;
         _userRepository = userRepository;

@@ -3,8 +3,6 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
-using Microsoft.AspNetCore.Mvc;
-
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.FunctionalTests.Fixture;
 

@@ -10,6 +10,7 @@ using MoneyGroup.Infrastucture.AutoMapper.Profiles;
 using MoneyGroup.Infrastucture.Data;
 using MoneyGroup.Infrastucture.PostgreSql;
 using MoneyGroup.WebApi.Endpoints;
+using MoneyGroup.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,9 +34,12 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
+builder.Services.AddProblemDetails();
+
 #region Validators
 builder.Services.AddSingleton<IValidator<ConsumerDto>, ConsumerDtoValidator>();
 builder.Services.AddSingleton<IValidator<OrderDto>, OrderDtoValidator>();
+builder.Services.AddExceptionHandler<FluentValidationExceptionHandler>();
 #endregion Validators
 
 var app = builder.Build();
@@ -45,6 +49,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    app.UseExceptionHandler();
 }
 
 app.MapHealthChecks("/healthz");

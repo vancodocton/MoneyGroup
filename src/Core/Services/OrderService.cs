@@ -1,4 +1,6 @@
-﻿using MoneyGroup.Core.Abstractions;
+﻿using FluentValidation;
+
+using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models.Orders;
 
 namespace MoneyGroup.Core.Services;
@@ -6,12 +8,17 @@ namespace MoneyGroup.Core.Services;
 public class OrderService
     : IOrderService
 {
+    private readonly IValidator<OrderDto> _orderValidator;
     private readonly IOrderRepository _orderRepository;
     private readonly IUserRepository _userRepository;
 
 
-    public OrderService(IOrderRepository orderRepository, IUserRepository userRepository)
+    public OrderService(
+        IValidator<OrderDto> orderValidator,
+        IOrderRepository orderRepository,
+        IUserRepository userRepository)
     {
+        _orderValidator = orderValidator;
         _orderRepository = orderRepository;
         _userRepository = userRepository;
     }
@@ -23,6 +30,8 @@ public class OrderService
 
     public async Task CreateOrderAsync(OrderDto model, CancellationToken cancellationToken = default)
     {
+        await _orderValidator.ValidateAndThrowAsync(model, cancellationToken: cancellationToken);
+
         if (!await _userRepository.AnyAsync(model.IssuerId, cancellationToken))
         {
             throw new InvalidOperationException("Issuer not found");
@@ -53,6 +62,8 @@ public class OrderService
 
     public async Task UpdateOrderAsync(OrderDto model, CancellationToken cancellationToken = default)
     {
+        await _orderValidator.ValidateAndThrowAsync(model, cancellationToken: cancellationToken);
+
         if (!await _orderRepository.AnyAsync(model.Id, cancellationToken))
         {
             throw new InvalidOperationException("Order not found");

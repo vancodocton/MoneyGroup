@@ -27,7 +27,7 @@ public sealed class EfRepositoryFixture
 
     private ApplicationDbContext? _dbContext;
 
-    private DbContextOptions<ApplicationDbContext> GetDbContextOptions()
+    private static DbContextOptions<ApplicationDbContext> GetDbContextOptions()
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         var connectionString = Configuration.GetConnectionString("PostgreSqlConnection")

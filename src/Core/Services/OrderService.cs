@@ -12,7 +12,6 @@ public class OrderService
     private readonly IOrderRepository _orderRepository;
     private readonly IUserRepository _userRepository;
 
-
     public OrderService(
         IValidator<OrderDto> orderValidator,
         IOrderRepository orderRepository,

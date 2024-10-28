@@ -11,12 +11,12 @@ namespace MoneyGroup.IntegrationTests.Fixtures;
 public sealed class EfRepositoryFixture
     : IDisposable
 {
-    private static readonly IMapper _mapper = new MapperConfiguration(cfg =>
+    private static readonly IMapper MapperConfiguration = new MapperConfiguration(cfg =>
     {
         cfg.AddMaps(typeof(AutoMapperExtensions).Assembly);
     }).CreateMapper();
 
-    public IMapper Mapper { get; private set; } = _mapper;
+    public IMapper Mapper { get; private set; } = MapperConfiguration;
 
     private static readonly IConfiguration Configuration = new ConfigurationBuilder()
         .AddEnvironmentVariables()

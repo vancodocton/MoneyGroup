@@ -40,6 +40,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddSingleton<IValidator<ConsumerDto>, ConsumerDtoValidator>();
 builder.Services.AddSingleton<IValidator<OrderDto>, OrderDtoValidator>();
 builder.Services.AddExceptionHandler<FluentValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<BusinessValidationExceptionHandler>();
 #endregion Validators
 
 var app = builder.Build();

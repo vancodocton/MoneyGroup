@@ -139,6 +139,96 @@ public class OrderEndpointsTest
         Assert.Contains("IssuerId", problemDetails.Errors.Keys);
         Assert.Contains("Consumers", problemDetails.Errors.Keys);
     }
+
+    [Fact]
+    public async Task CreateOrder_NonExistedIssuerId_ReturnsProblemDetails()
+    {
+        // Arrange
+        var request = "/api/Order";
+        var newOrder = new
+        {
+            Title = "New order",
+            Description = "New order description",
+            Total = 10_000,
+            IssuerId = int.MaxValue, // Assuming an issuer Id that does not exist
+            Consumers = new List<object>()
+            {
+                new { Id = 1 },
+                new { Id = 2 },
+            },
+        };
+        var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PostAsync(request, content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        Assert.NotNull(problemDetails);
+        Assert.Equal("Issuer not found", problemDetails.Detail);
+    }
+
+    [Fact]
+    public async Task CreateOrder_NonExistedConsumerId_ReturnsProblemDetails()
+    {
+        // Arrange
+        var request = "/api/Order";
+        var newOrder = new
+        {
+            Title = "New order",
+            Description = "New order description",
+            Total = 10_000,
+            IssuerId = 1,
+            Consumers = new List<object>()
+            {
+                new { Id = 1 },
+                new { Id = int.MaxValue } , // Assuming a consumer Id that does not exist
+            },
+        };
+        var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PostAsync(request, content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        Assert.NotNull(problemDetails);
+        Assert.Equal("Consumer not found", problemDetails.Detail);
+    }
+
+    [Fact]
+    public async Task CreateOrder_DuplicatedConsumers_ReturnsProblemDetails()
+    {
+        // Arrange
+        var request = "/api/Order";
+        var newOrder = new
+        {
+            Title = "New order",
+            Description = "New order description",
+            Total = 10_000,
+            IssuerId = 1,
+            Consumers = new List<object>()
+            {
+                new { Id = 1 },
+                new { Id = 1 }, // Duplicated consumer Id
+            },
+        };
+        var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PostAsync(request, content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        Assert.NotNull(problemDetails);
+        Assert.Equal("Duplicated consumer", problemDetails.Detail);
+    }
     #endregion CreateOrder
 
     #region UpdateOrder
@@ -179,6 +269,105 @@ public class OrderEndpointsTest
         Assert.Equal(1, order.IssuerId);
         Assert.Equal(2, order.Consumers.Skip(0).First().Id);
         Assert.Equal(3, order.Consumers.Skip(1).First().Id);
+    }
+
+    [Fact]
+    public async Task UpdateOrder_NonExistedIssuerId_ReturnsNotFound()
+    {
+        // Arrange
+        var orderId = 2; // Assuming an order with Id 2 exists
+        var request = $"/api/Order/{orderId}";
+        var updatedOrder = new
+        {
+            // Populate with necessary order properties
+            Id = orderId,
+            Title = "Updated order",
+            Description = "Updated order description",
+            Total = 15_000,
+            IssuerId = int.MaxValue, // Assuming an issuer Id that does not exist
+            Consumers = new List<object>()
+            {
+                new { Id = 2 },
+                new { Id = 3 },
+            },
+        };
+        var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PutAsync(request, content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        Assert.NotNull(problemDetails);
+        Assert.Equal("Issuer not found", problemDetails.Detail);
+    }
+
+    [Fact]
+    public async Task UpdateOrder_NonExistedConsumerId_ReturnsNotFound()
+    {
+        // Arrange
+        var orderId = 2; // Assuming an order with Id 2 exists
+        var request = $"/api/Order/{orderId}";
+        var updatedOrder = new
+        {
+            // Populate with necessary order properties
+            Id = orderId,
+            Title = "Updated order",
+            Description = "Updated order description",
+            Total = 15_000,
+            IssuerId = 1,
+            Consumers = new List<object>()
+            {
+                new { Id = 2 },
+                new { Id = int.MaxValue }, // Assuming a consumer Id that does not exist
+            },
+        };
+        var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PutAsync(request, content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        Assert.NotNull(problemDetails);
+        Assert.Equal("Consumer not found", problemDetails.Detail);
+    }
+
+    [Fact]
+    public async Task UpdateOrder_DuplicatedConsumers_ReturnsProblemDetails()
+    {
+        // Arrange
+        var orderId = 2; // Assuming an order with Id 2 exists
+        var request = $"/api/Order/{orderId}";
+        var updatedOrder = new
+        {
+            // Populate with necessary order properties
+            Id = orderId,
+            Title = "Updated order",
+            Description = "Updated order description",
+            Total = 15_000,
+            IssuerId = 1,
+            Consumers = new List<object>()
+            {
+                new { Id = 2 },
+                new { Id = 2 }, // Duplicated consumer Id
+            },
+        };
+        var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PutAsync(request, content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+        Assert.NotNull(problemDetails);
+        Assert.Equal("Duplicated consumer", problemDetails.Detail);
     }
 
     [Fact]

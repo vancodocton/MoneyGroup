@@ -22,18 +22,11 @@ indent_size = 4
 tab_width = 4
 
 # New line preferences
-#end_of_line = crlf
+end_of_line = crlf
 insert_final_newline = false
 
 #### .NET Coding Conventions ####
 [*.{cs,vb}]
-
-# Indentation and spacing
-tab_width = 4
-indent_size = 4
-
-# New line preferences
-#end_of_line = unset
 
 # Organize usings
 dotnet_separate_import_directive_groups = true
@@ -376,4 +369,9 @@ dotnet_naming_style.s_camelcase.required_prefix = s_
 dotnet_naming_style.s_camelcase.required_suffix = 
 dotnet_naming_style.s_camelcase.word_separator = 
 dotnet_naming_style.s_camelcase.capitalization = camel_case
+
+# VS 2022 preferences
+tab_width = 4
+indent_size = 4
+end_of_line = crlf
 

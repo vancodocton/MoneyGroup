@@ -2,6 +2,7 @@
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
+*.cs eol=crlf
 
 ###############################################################################
 # Set default behavior for shell script files to use LF for end of line.

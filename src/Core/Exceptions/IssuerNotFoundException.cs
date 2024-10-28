@@ -4,7 +4,7 @@
 /// The exception that is thrown when Issuer not found.
 /// </summary>
 public class IssuerNotFoundException
-    : Exception
+    : BussinessValidationException
 {
     public IssuerNotFoundException() : base("Issuer not found")
     {

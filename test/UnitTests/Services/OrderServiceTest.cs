@@ -274,11 +274,11 @@ public class OrderServiceTest
         {
             Id = -1,
             IssuerId = 1,
-            Consumers = new List<ConsumerDto>
-            {
+            Consumers =
+            [
                 new() { Id = 2 },
                 new() { Id = 3 }
-            }
+            ]
         };
 
         _orderRepositoryMock.Setup(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))

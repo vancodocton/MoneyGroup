@@ -15,7 +15,9 @@ public class OrderServiceTest
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<IOrderRepository> _orderRepositoryMock;
     private readonly Mock<IValidator<OrderDto>> _orderValidatorMock;
+#pragma warning disable CA1859 // Use concrete types when possible for improved performance
     private readonly IOrderService _orderService;
+#pragma warning restore CA1859 // Use concrete types when possible for improved performance
 
     public OrderServiceTest()
     {

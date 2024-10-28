@@ -22,18 +22,11 @@ indent_size = 4
 tab_width = 4
 
 # New line preferences
-#end_of_line = crlf
+end_of_line = crlf
 insert_final_newline = false
 
 #### .NET Coding Conventions ####
 [*.{cs,vb}]
-
-# Indentation and spacing
-tab_width = 4
-indent_size = 4
-
-# New line preferences
-#end_of_line = unset
 
 # Organize usings
 dotnet_separate_import_directive_groups = true
@@ -60,7 +53,7 @@ dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:sil
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
 
 # Expression-level preferences
-dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_coalesce_expression = true:silent
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_explicit_tuple_names = true:suggestion
 dotnet_style_null_propagation = true:suggestion
@@ -97,7 +90,7 @@ csharp_style_var_when_type_is_apparent = false:silent
 csharp_style_expression_bodied_accessors = true:silent
 csharp_style_expression_bodied_constructors = false:silent
 csharp_style_expression_bodied_indexers = true:silent
-csharp_style_expression_bodied_lambdas = true:suggestion
+csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = false:silent
 csharp_style_expression_bodied_methods = false:silent
 csharp_style_expression_bodied_operators = false:silent
@@ -184,7 +177,7 @@ csharp_preserve_single_line_statements = true
 csharp_style_namespace_declarations = file_scoped:suggestion
 csharp_style_prefer_method_group_conversion = true:silent
 csharp_style_prefer_top_level_statements = true:suggestion
-csharp_style_prefer_primary_constructors = true:suggestion
+csharp_style_prefer_primary_constructors = true:silent
 
 #### Naming styles ####
 [*.{cs,vb}]
@@ -376,4 +369,21 @@ dotnet_naming_style.s_camelcase.required_prefix = s_
 dotnet_naming_style.s_camelcase.required_suffix = 
 dotnet_naming_style.s_camelcase.word_separator = 
 dotnet_naming_style.s_camelcase.capitalization = camel_case
+
+# VS 2022 preferences
+tab_width = 4
+indent_size = 4
+end_of_line = crlf
+
+# IDE0053: Use expression body for lambda expression
+dotnet_diagnostic.IDE0053.severity = silent
+
+# IDE0270: Use coalesce expression
+dotnet_diagnostic.IDE0270.severity = silent
+
+# IDE0290: Use primary constructor
+dotnet_diagnostic.IDE0290.severity = silent
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = silent
 

@@ -4,6 +4,7 @@ using FluentValidation;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
+using MoneyGroup.Core.Exceptions;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Services;
 
@@ -120,7 +121,7 @@ public class OrderServiceTest
             .ReturnsAsync(false);
 
         // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.CreateOrderAsync(model));
+        var ex = await Assert.ThrowsAsync<IssuerNotFoundException>(() => _orderService.CreateOrderAsync(model));
 
         // Assert
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
@@ -148,7 +149,7 @@ public class OrderServiceTest
             .ReturnsAsync(false);
 
         // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.CreateOrderAsync(model));
+        var ex = await Assert.ThrowsAsync<ConsumerNotFoundException>(() => _orderService.CreateOrderAsync(model));
 
         // Assert
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
@@ -174,7 +175,7 @@ public class OrderServiceTest
             .ReturnsAsync(true);
 
         // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.CreateOrderAsync(model));
+        var ex = await Assert.ThrowsAsync<ConsumerDuplicatedException>(() => _orderService.CreateOrderAsync(model));
 
         // Assert
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
@@ -237,7 +238,7 @@ public class OrderServiceTest
             .ReturnsAsync(false);
 
         // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
+        var ex = await Assert.ThrowsAsync<IssuerNotFoundException>(() => _orderService.UpdateOrderAsync(model));
 
         // Assert
         _orderRepositoryMock.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
@@ -264,7 +265,7 @@ public class OrderServiceTest
             .ReturnsAsync(false);
 
         // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
+        var ex = await Assert.ThrowsAsync<OrderNotFoundException>(() => _orderService.UpdateOrderAsync(model));
 
         //  Assert
         _orderRepositoryMock.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
@@ -295,7 +296,7 @@ public class OrderServiceTest
             .ReturnsAsync(false);
 
         // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
+        var ex = await Assert.ThrowsAsync<ConsumerNotFoundException>(() => _orderService.UpdateOrderAsync(model));
 
         // Assert
         _orderRepositoryMock.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
@@ -325,7 +326,7 @@ public class OrderServiceTest
             .ReturnsAsync(true);
 
         // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.UpdateOrderAsync(model));
+        var ex = await Assert.ThrowsAsync<ConsumerDuplicatedException>(() => _orderService.UpdateOrderAsync(model));
 
         // Assert
         _orderRepositoryMock.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
@@ -364,7 +365,7 @@ public class OrderServiceTest
             .ReturnsAsync((Order?)null);
 
         // Act
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => _orderService.RemoveOrderAsync(orderId));
+        var ex = await Assert.ThrowsAsync<OrderNotFoundException>(() => _orderService.RemoveOrderAsync(orderId));
 
         // Assert
         _orderRepositoryMock.Verify(o => o.FirstOrDefaultAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 
 using MoneyGroup.Core.Abstractions;
+using MoneyGroup.Core.Exceptions;
 using MoneyGroup.Core.Models.Orders;
+
 namespace MoneyGroup.WebApi.Endpoints;
 
 public static class OrderEndpoints
@@ -33,16 +35,30 @@ public static class OrderEndpoints
         return TypedResults.CreatedAtRoute(input, "GetOrderById", new { id = input.Id });
     }
 
-    public static async Task<Results<NoContent, ValidationProblem>> UpdateOrderAsync(int id, OrderDto input, IOrderService orderService)
+    public static async Task<Results<NoContent, ValidationProblem, NotFound>> UpdateOrderAsync(int id, OrderDto input, IOrderService orderService)
     {
-        await orderService.UpdateOrderAsync(input);
-        return TypedResults.NoContent();
+        try
+        {
+            await orderService.UpdateOrderAsync(input);
+            return TypedResults.NoContent();
+        }
+        catch (OrderNotFoundException)
+        {
+            return TypedResults.NotFound();
+        }
     }
 
     private static async Task<Results<NoContent, NotFound>> DeleteOrderAsync(int id, IOrderService orderService, CancellationToken cancellationToken)
     {
-        await orderService.RemoveOrderAsync(id, cancellationToken);
-        return TypedResults.NoContent();
+        try
+        {
+            await orderService.RemoveOrderAsync(id, cancellationToken);
+            return TypedResults.NoContent();
+        }
+        catch (OrderNotFoundException)
+        {
+            return TypedResults.NotFound();
+        }
     }
 
     public static async Task<Results<Ok<OrderDto>, NotFound>> GetOrderByIdAsync(int id, IOrderService orderService)

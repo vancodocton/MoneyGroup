@@ -396,6 +396,35 @@ public class OrderEndpointsTest
         Assert.Contains("IssuerId", problemDetails.Errors.Keys);
         Assert.Contains("Consumers", problemDetails.Errors.Keys);
     }
+
+    [Fact]
+    public async Task UpdateOrder_NonExistedId_ReturnsNotFound()
+    {
+        // Arrange
+        var orderId = int.MaxValue; // Assuming an order Id that does not exist
+        var request = $"/api/Order/{orderId}";
+        var updatedOrder = new
+        {
+            // Populate with necessary order properties
+            Id = orderId,
+            Title = "Updated order",
+            Description = "Updated order description",
+            Total = 15_000,
+            IssuerId = 1,
+            Consumers = new List<object>()
+            {
+                new { Id = 2 },
+                new { Id = 3 },
+            },
+        };
+        var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PutAsync(request, content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
     #endregion UpdateOrder
 
     #region DeleteOrder
@@ -415,6 +444,20 @@ public class OrderEndpointsTest
         // Verify the order is actually deleted
         var getResponse = await _client.GetAsync(request);
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeleteOrder_NonExistedId_ReturnsNotFound()
+    {
+        // Arrange
+        var orderId = int.MaxValue; // Assuming an order Id that does not exist
+        var request = $"/api/Order/{orderId}";
+
+        // Act
+        var response = await _client.DeleteAsync(request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
     #endregion DeleteOrder
 }

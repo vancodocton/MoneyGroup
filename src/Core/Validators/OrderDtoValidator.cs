@@ -18,7 +18,7 @@ public class OrderDtoValidator : AbstractValidator<OrderDto>
             .GreaterThanOrEqualTo(0);
 
         RuleFor(o => o.Consumers)
-            .NotNull();
+            .NotEmpty();
 
         RuleForEach(o => o.Consumers)
             .NotNull()

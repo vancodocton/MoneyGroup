@@ -1,4 +1,5 @@
 ﻿using MoneyGroup.Core.Exceptions;
+using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
 
 namespace MoneyGroup.Core.Abstractions;
@@ -38,4 +39,12 @@ public interface IOrderService
     /// <returns></returns>
     /// <exception cref="OrderNotFoundException"></exception>
     Task RemoveOrderAsync(int id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Get orders by page.
+    /// </summary>
+    /// <param name="page"></param>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(int page, int size);
 }

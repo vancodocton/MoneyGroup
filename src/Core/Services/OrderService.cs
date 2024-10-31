@@ -2,6 +2,7 @@
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Exceptions;
+using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
 
 namespace MoneyGroup.Core.Services;
@@ -99,5 +100,11 @@ public class OrderService
         }
 
         await _orderRepository.RemoveAsync(order, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(int page, int size)
+    {
+        return _orderRepository.GetByPageAsync<OrderDto>(page, size);
     }
 }

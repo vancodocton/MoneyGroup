@@ -1,9 +1,15 @@
 ﻿using System.Linq.Expressions;
 
+using MoneyGroup.Core.Models;
+
 namespace MoneyGroup.Core.Abstractions;
 
 public interface IRepository<TEntity>
 {
+    public Task<PaginationModel<TEntity>> GetByPageAsync(int page, int size, Expression<Func<TEntity, bool>>? predicate = null);
+
+    public Task<PaginationModel<TResult>> GetByPageAsync<TResult>(int page, int size, Expression<Func<TEntity, bool>>? predicate = null);
+
     public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
     public Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);

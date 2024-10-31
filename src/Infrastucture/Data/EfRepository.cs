@@ -6,6 +6,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Core.Abstractions;
+using MoneyGroup.Core.Models;
 
 namespace MoneyGroup.Infrastucture.Data;
 public class EfRepository<TEntity>
@@ -20,6 +21,47 @@ public class EfRepository<TEntity>
         _dbContext = dbContext;
         _dbSet = _dbContext.Set<TEntity>();
         _mapper = mapper;
+    }
+
+    public async Task<PaginationModel<TEntity>> GetByPageAsync(int page, int size, Expression<Func<TEntity, bool>>? predicate = null)
+    {
+        IQueryable<TEntity> query = predicate is null
+            ? _dbSet
+            : _dbSet.Where(predicate);
+
+        var model = new PaginationModel<TEntity>()
+        {
+            Page = page,
+            Count = size,
+            Total = await query.CountAsync(),
+            Items = await query
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync(),
+        };
+
+        return model;
+    }
+
+    public async Task<PaginationModel<TResult>> GetByPageAsync<TResult>(int page, int size, Expression<Func<TEntity, bool>>? predicate = null)
+    {
+        IQueryable<TEntity> query = predicate is null
+            ? (IQueryable<TEntity>)_dbSet
+            : _dbSet.Where(predicate);
+
+        var model = new PaginationModel<TResult>()
+        {
+            Page = page,
+            Count = size,
+            Total = await query.CountAsync(),
+            Items = await query
+                .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToListAsync(),
+        };
+
+        return model;
     }
 
     public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)

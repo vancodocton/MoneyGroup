@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Exceptions;
+using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
 
 namespace MoneyGroup.WebApi.Endpoints;
@@ -11,6 +13,10 @@ public static class OrderEndpoints
     public static void MapOrderEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/Order").WithTags("Order");
+
+        group.MapGet("/", GetOrdersAsync)
+        .WithName("GetOrders")
+        .WithOpenApi();
 
         group.MapGet("/{id:int}", GetOrderByIdAsync)
         .WithName("GetOrderById")
@@ -27,6 +33,12 @@ public static class OrderEndpoints
         group.MapDelete("/{id:int}", DeleteOrderAsync)
         .WithName("DeleteOrder")
         .WithOpenApi();
+    }
+
+    private static async Task<Results<Ok<PaginationModel<OrderDto>>, ValidationProblem>> GetOrdersAsync([AsParameters] OrderPaginationRequest request, [FromServices] IOrderService orderService)
+    {
+        var orders = await orderService.GetOrdersByPageAsync(request.Page, request.Size);
+        return TypedResults.Ok(orders);
     }
 
     private static async Task<Results<CreatedAtRoute<OrderDto>, ValidationProblem>> CreateOrderAsync(OrderDto input, IOrderService orderService)

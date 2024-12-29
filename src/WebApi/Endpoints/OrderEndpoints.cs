@@ -37,7 +37,7 @@ public static class OrderEndpoints
 
     private static async Task<Results<Ok<PaginationModel<OrderDto>>, ValidationProblem>> GetOrdersAsync([AsParameters] OrderPaginationRequest request, [FromServices] IOrderService orderService)
     {
-        var orders = await orderService.GetOrdersByPageAsync(request.Page, request.Size);
+        var orders = await orderService.GetOrdersByPageAsync(request);
         return TypedResults.Ok(orders);
     }
 

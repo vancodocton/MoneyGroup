@@ -103,8 +103,8 @@ public class OrderService
     }
 
     /// <inheritdoc />
-    public Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(int page, int size)
+    public Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(IPaginationOptions options)
     {
-        return _orderRepository.GetByPageAsync<OrderDto>(page, size);
+        return _orderRepository.GetByPageAsync<OrderDto>(options.Page, options.Size);
     }
 }

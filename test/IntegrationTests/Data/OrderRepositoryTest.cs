@@ -23,7 +23,7 @@ public class OrderRepositoryTest
     {
         // Arrange
         await using var dbContext = _dbContextFixture.CreateDbContext();
-        await dbContext.Database.BeginTransactionAsync();
+        await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
         var mapper = _dbContextFixture.Mapper;
         var repository = new OrderRepository(dbContext, mapper);
         var orderDto = new OrderDto
@@ -39,7 +39,7 @@ public class OrderRepositoryTest
         };
 
         // Act
-        await repository.AddAsync(orderDto);
+        await repository.AddAsync(orderDto, TestContext.Current.CancellationToken);
         _output.WriteLine(orderDto.ToJson());
 
         // Assert
@@ -50,7 +50,7 @@ public class OrderRepositoryTest
         var createdOrder = await dbContext.Orders
             .Include(o => o.Issuer)
             .Include(o => o.Consumers)
-            .FirstOrDefaultAsync(o => o.Id == orderDto.Id);
+            .FirstOrDefaultAsync(o => o.Id == orderDto.Id, TestContext.Current.CancellationToken);
         Assert.NotNull(createdOrder);
         Assert.Equal(orderDto.Id, createdOrder.Id);
         Assert.Equal(1, createdOrder.IssuerId);
@@ -62,7 +62,7 @@ public class OrderRepositoryTest
     {
         // Arrange
         await using var dbContext = _dbContextFixture.CreateDbContext();
-        await dbContext.Database.BeginTransactionAsync();
+        await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
         var mapper = _dbContextFixture.Mapper;
         var repository = new OrderRepository(dbContext, mapper);
         var orderDto = new OrderDto
@@ -76,7 +76,7 @@ public class OrderRepositoryTest
                 new() { Id = 3 },
             ],
         };
-        await repository.AddAsync(orderDto);
+        await repository.AddAsync(orderDto, TestContext.Current.CancellationToken);
         dbContext.ChangeTracker.Clear();
         var updateOrderDto = new OrderDto
         {
@@ -93,7 +93,7 @@ public class OrderRepositoryTest
         };
 
         // Act
-        await repository.UpdateAsync(updateOrderDto);
+        await repository.UpdateAsync(updateOrderDto, TestContext.Current.CancellationToken);
         _output.WriteLine(updateOrderDto.ToJson());
 
         // Assert
@@ -101,7 +101,7 @@ public class OrderRepositoryTest
         var updatedOrder = await dbContext.Orders
             .Include(o => o.Issuer)
             .Include(o => o.Consumers.OrderBy(c => c.ConsumerId))
-            .FirstOrDefaultAsync(o => o.Id == orderDto.Id);
+            .FirstOrDefaultAsync(o => o.Id == orderDto.Id, TestContext.Current.CancellationToken);
         Assert.NotNull(updatedOrder);
         Assert.Equal(2, updatedOrder.IssuerId);
         Assert.Equal(updateOrderDto.Consumers.Select(o => o.Id), updatedOrder.Consumers.Select(c => c.ConsumerId));
@@ -112,7 +112,7 @@ public class OrderRepositoryTest
     {
         // Arrange
         using var dbContext = _dbContextFixture.CreateDbContext();
-        await dbContext.Database.BeginTransactionAsync();
+        await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
         var mapper = _dbContextFixture.Mapper;
         var repository = new OrderRepository(dbContext, mapper);
         var newOrder = new Order
@@ -127,15 +127,15 @@ public class OrderRepositoryTest
                 new() { ConsumerId = 3 },
             ],
         };
-        var addedOrder = await repository.AddAsync(newOrder);
+        var addedOrder = await repository.AddAsync(newOrder, TestContext.Current.CancellationToken);
         dbContext.ChangeTracker.Clear();
 
         // Act
         _output.WriteLine(addedOrder.ToJson());
-        await repository.RemoveAsync(addedOrder);
+        await repository.RemoveAsync(addedOrder, TestContext.Current.CancellationToken);
 
         // Assert
-        var deletedOrder = await dbContext.Orders.FindAsync(addedOrder.Id);
+        var deletedOrder = await dbContext.Orders.FindAsync([addedOrder.Id], TestContext.Current.CancellationToken);
         Assert.Null(deletedOrder);
     }
 
@@ -144,7 +144,7 @@ public class OrderRepositoryTest
     {
         // Arrange
         using var dbContext = _dbContextFixture.CreateDbContext();
-        await dbContext.Database.BeginTransactionAsync();
+        await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
         var mapper = _dbContextFixture.Mapper;
         var repository = new OrderRepository(dbContext, mapper);
         var newOrder = new Order
@@ -157,14 +157,14 @@ public class OrderRepositoryTest
                 new() { ConsumerId = 1 },
             ],
         };
-        var addedOrder = await repository.AddAsync(newOrder);
+        var addedOrder = await repository.AddAsync(newOrder, TestContext.Current.CancellationToken);
         dbContext.ChangeTracker.Clear();
 
         // Act
-        await repository.RemoveAsync(new Order { Id = addedOrder.Id });
+        await repository.RemoveAsync(new Order { Id = addedOrder.Id }, TestContext.Current.CancellationToken);
 
         // Assert
-        var deletedOrder = await dbContext.Orders.FindAsync(addedOrder.Id);
+        var deletedOrder = await dbContext.Orders.FindAsync([addedOrder.Id], TestContext.Current.CancellationToken);
         Assert.Null(deletedOrder);
     }
 }

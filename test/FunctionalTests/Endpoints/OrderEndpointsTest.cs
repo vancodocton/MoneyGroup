@@ -38,11 +38,11 @@ public class OrderEndpointsTest
         var request = $"/api/Order/{orderId}";
 
         // Act
-        var response = await _client.GetAsync(request);
+        var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var order = await response.Content.ReadFromJsonAsync<OrderDto>();
+        var order = await response.Content.ReadFromJsonAsync<OrderDto>(TestContext.Current.CancellationToken);
         Assert.NotNull(order);
         Assert.Equal(orderId, order.Id);
     }
@@ -55,7 +55,7 @@ public class OrderEndpointsTest
         var request = $"/api/Order/{orderId}";
 
         // Act
-        var response = await _client.GetAsync(request);
+        var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -69,7 +69,7 @@ public class OrderEndpointsTest
         var request = $"/api/Order/{orderId}";
 
         // Act
-        var response = await _client.GetAsync(request);
+        var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -98,11 +98,11 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync(request, content);
+        var response = await _client.PostAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var order = await response.Content.ReadFromJsonAsync<OrderDto>();
+        var order = await response.Content.ReadFromJsonAsync<OrderDto>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(order);
         Assert.NotEqual(0, order.Id);
@@ -127,11 +127,11 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync(request, content);
+        var response = await _client.PostAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
         Assert.NotEmpty(problemDetails.Errors);
@@ -160,11 +160,11 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync(request, content);
+        var response = await _client.PostAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
         Assert.Equal("Issuer not found", problemDetails.Detail);
@@ -190,11 +190,11 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync(request, content);
+        var response = await _client.PostAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
         Assert.Equal("Consumer not found", problemDetails.Detail);
@@ -220,11 +220,11 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PostAsync(request, content);
+        var response = await _client.PostAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
         Assert.Equal("Duplicated consumer", problemDetails.Detail);
@@ -255,12 +255,12 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync(request, content);
+        var response = await _client.PutAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
-        var order = await _client.GetFromJsonAsync<OrderDto>(request);
+        var order = await _client.GetFromJsonAsync<OrderDto>(request, TestContext.Current.CancellationToken);
         Assert.NotNull(order);
         Assert.Equal(orderId, order.Id);
         Assert.Equal("Updated order", order.Title);
@@ -294,11 +294,11 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync(request, content);
+        var response = await _client.PutAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
         Assert.Equal("Issuer not found", problemDetails.Detail);
@@ -327,11 +327,11 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync(request, content);
+        var response = await _client.PutAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
         Assert.Equal("Consumer not found", problemDetails.Detail);
@@ -360,11 +360,11 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync(request, content);
+        var response = await _client.PutAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
         Assert.Equal("Duplicated consumer", problemDetails.Detail);
@@ -384,11 +384,11 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync(request, content);
+        var response = await _client.PutAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
         Assert.NotEmpty(problemDetails.Errors);
@@ -420,7 +420,7 @@ public class OrderEndpointsTest
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await _client.PutAsync(request, content);
+        var response = await _client.PutAsync(request, content, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -436,13 +436,13 @@ public class OrderEndpointsTest
         var request = $"/api/Order/{orderId}";
 
         // Act
-        var response = await _client.DeleteAsync(request);
+        var response = await _client.DeleteAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
         // Verify the order is actually deleted
-        var getResponse = await _client.GetAsync(request);
+        var getResponse = await _client.GetAsync(request, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
     }
 
@@ -454,7 +454,7 @@ public class OrderEndpointsTest
         var request = $"/api/Order/{orderId}";
 
         // Act
-        var response = await _client.DeleteAsync(request);
+        var response = await _client.DeleteAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

@@ -5,8 +5,6 @@ using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Infrastucture.Data;
 using MoneyGroup.IntegrationTests.Fixtures;
 
-using Xunit.Abstractions;
-
 namespace MoneyGroup.IntegrationTests.Data;
 public class OrderRepositoryTest
     : IClassFixture<EfRepositoryFixture>

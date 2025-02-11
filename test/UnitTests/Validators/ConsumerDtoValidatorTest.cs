@@ -24,8 +24,9 @@ public class ConsumerDtoValidatorTest
             Id = 0,
         };
 
+
         // Act
-        var result = await _validator.TestValidateAsync(consumer);
+        var result = await _validator.TestValidateAsync(consumer, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.ShouldHaveValidationErrorFor(c => c.Id);

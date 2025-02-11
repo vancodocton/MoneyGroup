@@ -40,7 +40,7 @@ public class OrderDtoValidatorTest
         };
 
         // Act
-        var result = await _validator.ValidateAsync(order);
+        var result = await _validator.ValidateAsync(order, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Empty(result.Errors);
@@ -56,7 +56,7 @@ public class OrderDtoValidatorTest
         };
 
         // Act
-        var result = await _validator.TestValidateAsync(order);
+        var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.ShouldHaveValidationErrorFor(o => o.Title);
@@ -72,7 +72,7 @@ public class OrderDtoValidatorTest
         };
 
         // Act
-        var result = await _validator.TestValidateAsync(order);
+        var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.ShouldNotHaveValidationErrorFor(o => o.Description);
@@ -88,7 +88,7 @@ public class OrderDtoValidatorTest
         };
 
         // Act
-        var result = await _validator.TestValidateAsync(order);
+        var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.ShouldHaveValidationErrorFor(o => o.IssuerId);
@@ -104,7 +104,7 @@ public class OrderDtoValidatorTest
         };
 
         // Act
-        var result = await _validator.TestValidateAsync(order);
+        var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.ShouldHaveValidationErrorFor(o => o.Total);
@@ -120,7 +120,7 @@ public class OrderDtoValidatorTest
         };
 
         // Act
-        var result = await _validator.TestValidateAsync(order);
+        var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.ShouldHaveValidationErrorFor(o => o.Consumers);
@@ -136,7 +136,7 @@ public class OrderDtoValidatorTest
         };
 
         // Act
-        var result = await _validator.TestValidateAsync(order);
+        var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.ShouldHaveValidationErrorFor(o => o.Consumers);
@@ -152,7 +152,7 @@ public class OrderDtoValidatorTest
         };
 
         // Act
-        var result = await _validator.TestValidateAsync(order);
+        var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.ShouldHaveValidationErrorFor(o => o.Consumers);

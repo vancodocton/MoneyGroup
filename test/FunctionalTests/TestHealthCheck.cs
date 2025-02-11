@@ -18,11 +18,11 @@ public class TestHealthCheck
         var client = _webApiFactory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/healthz");
+        var response = await client.GetAsync("/healthz", TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var responseString = await response.Content.ReadAsStringAsync();
+        var responseString = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("Healthy", responseString);
     }
 }

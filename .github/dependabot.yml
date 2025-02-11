@@ -20,9 +20,10 @@ updates:
     groups:
       microsoft:
         patterns:
+          - "*EntityFrameworkCore*"
           - "Microsoft.*"
 
- - package-ecosystem: "devcontainers"
-   directory: "/"
-   schedule:
-     interval: weekly
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: daily

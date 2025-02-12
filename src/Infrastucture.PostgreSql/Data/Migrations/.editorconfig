@@ -1,0 +1,6 @@
+root = false
+
+# C# files
+[*.cs]
+# S1192: String literals should not be duplicated
+dotnet_diagnostic.S1192.severity = none

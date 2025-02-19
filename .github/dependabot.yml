@@ -17,16 +17,16 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    groups:
-      microsoft:
-        patterns:
-          - "Microsoft.*"
-        exclude-patterns:
-          - "*EntityFrameworkCore*"
-      ef-core:
-        patterns:
-          - "*EntityFrameworkCore*"
-          - "dotnet-ef"
+    # groups:
+    #   microsoft:
+    #     patterns:
+    #       - "Microsoft.*"
+    #     exclude-patterns:
+    #       - "*EntityFrameworkCore*"
+    #   ef-core:
+    #     patterns:
+    #       - "*EntityFrameworkCore*"
+    #       - "dotnet-ef"
 
   - package-ecosystem: "devcontainers"
     directory: "/"

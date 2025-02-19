@@ -1,8 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
-  <RunConfiguration>
-    <EnvironmentVariables>
-      <ConnectionStrings__PostgreSqlConnection>Server=localhost;Port=5432;Database=MoneyGroup;User Id=postgres;Password=postgres</ConnectionStrings__PostgreSqlConnection>
-    </EnvironmentVariables>
-  </RunConfiguration>
 </RunSettings>

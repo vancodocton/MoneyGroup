@@ -1,23 +1,32 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     <UserSecretsId>b331a9f2-9b2b-44c9-8607-6c7ff407eda7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="xunit.runner.visualstudio">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

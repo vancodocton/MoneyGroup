@@ -1,18 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
-  <DataCollectionRunSettings>
-    <DataCollectors>
-      <DataCollector friendlyName="XPlat Code Coverage">
-        <Configuration>
-          <Format>cobertura</Format>
-          <ExcludeByFile>**/Migrations/*.cs</ExcludeByFile>
-        </Configuration>
-      </DataCollector>
-    </DataCollectors>
-  </DataCollectionRunSettings>
-  <RunConfiguration>
-    <EnvironmentVariables>
-      <ConnectionStrings__PostgreSqlConnection>Server=localhost;Port=5432;Database=MoneyGroup;User Id=postgres;Password=postgres</ConnectionStrings__PostgreSqlConnection>
-    </EnvironmentVariables>
-  </RunConfiguration>
 </RunSettings>

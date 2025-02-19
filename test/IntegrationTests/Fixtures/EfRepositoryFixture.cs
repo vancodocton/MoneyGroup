@@ -19,6 +19,7 @@ public sealed class EfRepositoryFixture
     public IMapper Mapper { get; private set; } = MapperConfiguration;
 
     private static readonly IConfiguration Configuration = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json")
         .AddEnvironmentVariables()
         .AddUserSecrets<EfRepositoryFixture>()
         .Build();

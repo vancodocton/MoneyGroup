@@ -61,15 +61,17 @@ jobs:
       run: dotnet format MoneyGroup.sln --no-restore --verify-no-changes -v diag --severity info
 
     - name: Test
+      shell: pwsh
       run: |
         docker compose up --wait
-        dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal
+        dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal -- --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml
 
     - name: End Analyze
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
       run: |
+        dotnet coverage merge **/TestResults/** --output coverage.xml --output-format xml
         dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
     - name: Upload TestResults Artifacts
@@ -78,6 +80,7 @@ jobs:
         name: ${{ runner.os }}-TestResults
         path: |
             **/TestResults/**
+            coverage.xml
     - name: Upload TestResults to Codecov
       uses: codecov/codecov-action@v5
       with:

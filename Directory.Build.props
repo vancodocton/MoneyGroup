@@ -2,7 +2,6 @@
   <PropertyGroup>
     <Deterministic>true</Deterministic>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <RunSettingsFilePath>$(MSBuildThisFileDirectory).runsettings</RunSettingsFilePath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 

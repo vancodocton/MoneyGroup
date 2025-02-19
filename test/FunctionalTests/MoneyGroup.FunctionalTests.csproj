@@ -5,17 +5,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="xunit.runner.visualstudio">

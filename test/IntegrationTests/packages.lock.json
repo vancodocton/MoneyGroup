@@ -379,8 +379,8 @@
       "moneygroup.infrastucture": {
         "type": "Project",
         "dependencies": {
-          "AutoMapper": "[13.0.1, )",
-          "AutoMapper.Collection": "[10.0.0, )",
+          "AutoMapper": "[14.0.0, )",
+          "AutoMapper.Collection": "[11.0.0, )",
           "Microsoft.EntityFrameworkCore": "[9.0.2, )",
           "MoneyGroup.Core": "[1.0.0, )"
         }
@@ -395,20 +395,20 @@
       },
       "AutoMapper": {
         "type": "CentralTransitive",
-        "requested": "[13.0.1, )",
-        "resolved": "13.0.1",
-        "contentHash": "/Fx1SbJ16qS7dU4i604Sle+U9VLX+WSNVJggk6MupKVkYvvBm4XqYaeFuf67diHefHKHs50uQIS2YEDFhPCakQ==",
+        "requested": "[14.0.0, )",
+        "resolved": "14.0.0",
+        "contentHash": "OC+1neAPM4oCCqQj3g2GJ2shziNNhOkxmNB9cVS8jtx4JbgmRzLcUOxB9Tsz6cVPHugdkHgCaCrTjjSI0Z5sCQ==",
         "dependencies": {
-          "Microsoft.Extensions.Options": "6.0.0"
+          "Microsoft.Extensions.Options": "8.0.0"
         }
       },
       "AutoMapper.Collection": {
         "type": "CentralTransitive",
-        "requested": "[10.0.0, )",
-        "resolved": "10.0.0",
-        "contentHash": "fq7yI+16EExRpjIb8s7SDTqG8ZV+xaAn/u4FWVmK1Z69MXk+04mjcFfXGrui5Wk6674VAyc9RhRf4T3VJdIIng==",
+        "requested": "[11.0.0, )",
+        "resolved": "11.0.0",
+        "contentHash": "26CXTuPsIbfk121na1sWt/QcJ4EkXtlWy6R+LJFvsxiF80d2srbUgL0WgZn9mDyrJo4Hvvyqr/WFwNrVOKMiHQ==",
         "dependencies": {
-          "AutoMapper": "[13.0.0, 14.0.0)"
+          "AutoMapper": "[14.0.0, 15.0.0)"
         }
       },
       "FluentValidation": {

@@ -22,6 +22,12 @@
           "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "9.0.2"
         }
       },
+      "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+        "type": "Direct",
+        "requested": "[1.21.1, )",
+        "resolved": "1.21.1",
+        "contentHash": "uOr+MTuP+/RccXnWptvh7D34GVWMsRPC/qRnEm38xsdMGZnWU7oWgJi+m4sIWLa5l5PHTcXuhMY/sT+UO/BKRw=="
+      },
       "Swashbuckle.AspNetCore": {
         "type": "Direct",
         "requested": "[7.2.0, )",

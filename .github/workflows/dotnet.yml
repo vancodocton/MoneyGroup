@@ -64,14 +64,14 @@ jobs:
       shell: pwsh
       run: |
         docker compose up --wait
-        dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal -- --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml
+        dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal -- --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml --report-xunit
 
     - name: End Analyze
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
       run: |
-        dotnet coverage merge **/TestResults/** --output coverage.xml --output-format xml
+        dotnet coverage merge **/TestResults/**.xml --output coverage.xml --output-format xml
         dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
     - name: Upload TestResults Artifacts

@@ -9,6 +9,8 @@ services:
 
   moneygroup.webapi:
     image: ${DOCKER_REGISTRY-}moneygroupwebapi
+    depends_on:
+      - postgres
     build:
       context: .
       dockerfile: src/WebApi/Dockerfile

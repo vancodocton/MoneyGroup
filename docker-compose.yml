@@ -6,3 +6,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  moneygroup.webapi:
+    image: ${DOCKER_REGISTRY-}moneygroupwebapi
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: src/WebApi/Dockerfile

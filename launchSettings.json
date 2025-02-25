@@ -5,7 +5,8 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "postgres": "StartWithoutDebugging",
-        "moneygroup.webapi": "StartDebugging"
+        "moneygroup.webapi": "StartDebugging",
+        "mssql": "DoNotStart"
       }
     }
   }

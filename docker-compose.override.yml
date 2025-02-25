@@ -10,6 +10,13 @@ services:
       - ./src/Docker/psql/:/psql/
       - postgres:/var/lib/postgresql/data/
 
+  mssql:
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "password123!"
+    ports:
+      - "1433:1433"
+
   moneygroup.webapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

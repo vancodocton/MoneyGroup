@@ -10,6 +10,17 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data/
 
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P $$MSSQL_SA_PASSWORD -C -Q 'SELECT 1'"]
+      start_period: 30s
+      interval: 1s
+      timeout: 1s
+      retries: 1
+    volumes:
+      - mssql:/var/opt/mssql
+
   moneygroup.webapi:
     image: ${DOCKER_REGISTRY-}moneygroupwebapi
     depends_on:
@@ -21,3 +32,4 @@ services:
 
 volumes:
   postgres:
+  mssql:

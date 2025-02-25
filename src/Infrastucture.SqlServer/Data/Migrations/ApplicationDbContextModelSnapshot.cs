@@ -86,7 +86,7 @@ namespace MoneyGroup.Infrastucture.SqlServer.Data.Migrations
                     b.HasOne("MoneyGroup.Core.Entities.User", "Issuer")
                         .WithMany()
                         .HasForeignKey("IssuerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Issuer");
@@ -97,13 +97,13 @@ namespace MoneyGroup.Infrastucture.SqlServer.Data.Migrations
                     b.HasOne("MoneyGroup.Core.Entities.User", "Consumer")
                         .WithMany()
                         .HasForeignKey("ConsumerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MoneyGroup.Core.Entities.Order", "Order")
                         .WithMany("Consumers")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Consumer");

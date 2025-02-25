@@ -26,9 +26,26 @@ public class ApplicationDbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<OrderConsumer>(entity =>
+        modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ConsumerId });
+            entity.HasOne(o => o.Issuer)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasMany<User>()
+                .WithMany()
+                .UsingEntity<OrderConsumer>(join =>
+                {
+                    join.HasKey(oc => new { oc.OrderId, oc.ConsumerId });
+                    join.HasOne(oc => oc.Order)
+                        .WithMany(o => o.Consumers)
+                        .HasForeignKey(oc => oc.OrderId)
+                        .OnDelete(DeleteBehavior.Restrict);
+                    join.HasOne(oc => oc.Consumer)
+                        .WithMany()
+                        .HasForeignKey(oc => oc.ConsumerId)
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
         });
     }
 }

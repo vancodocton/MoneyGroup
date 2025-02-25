@@ -6,6 +6,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - postgres:/var/lib/postgresql/data/
 
   moneygroup.webapi:
     image: ${DOCKER_REGISTRY-}moneygroupwebapi
@@ -14,3 +16,6 @@ services:
     build:
       context: .
       dockerfile: src/WebApi/Dockerfile
+
+volumes:
+  postgres:

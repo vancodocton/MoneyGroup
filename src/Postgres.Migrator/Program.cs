@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Infrastucture.Data;
-using MoneyGroup.Infrastucture.PostgreSql;
+using MoneyGroup.Infrastucture.SqlServer;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("PostgreSqlConnection")
+var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection")
     ?? throw new InvalidOperationException();
-builder.Services.AddApplicationDbContextNpgsql(connectionString);
+builder.Services.AddApplicationDbContextSqlServer(connectionString);
 
 var host = builder.Build();
 

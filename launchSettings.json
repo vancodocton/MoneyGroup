@@ -4,9 +4,9 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "postgres": "StartWithoutDebugging",
+        "postgres": "DoNotStart",
         "moneygroup.webapi": "StartDebugging",
-        "mssql": "DoNotStart"
+        "mssql": "StartWithoutDebugging"
       }
     }
   }

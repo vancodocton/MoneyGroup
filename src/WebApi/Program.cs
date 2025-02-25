@@ -8,7 +8,7 @@ using MoneyGroup.Core.Services;
 using MoneyGroup.Core.Validators;
 using MoneyGroup.Infrastucture.AutoMapper.Profiles;
 using MoneyGroup.Infrastucture.Data;
-using MoneyGroup.Infrastucture.PostgreSql;
+using MoneyGroup.Infrastucture.SqlServer;
 using MoneyGroup.WebApi.Endpoints;
 using MoneyGroup.WebApi.Middlewares;
 
@@ -23,9 +23,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper();
 
-var connectionString = builder.Configuration.GetConnectionString("PostgreSqlConnection")
+var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection")
     ?? throw new InvalidOperationException();
-builder.Services.AddApplicationDbContextNpgsql(connectionString);
+builder.Services.AddApplicationDbContextSqlServer(connectionString);
 
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>();

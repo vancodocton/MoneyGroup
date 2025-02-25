@@ -31,9 +31,9 @@ public sealed class EfRepositoryFixture
     private static DbContextOptions<ApplicationDbContext> GetDbContextOptions()
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        var connectionString = Configuration.GetConnectionString("PostgreSqlConnection")
+        var connectionString = Configuration.GetConnectionString("SqlServerConnection")
             ?? throw new InvalidOperationException();
-        optionsBuilder.UseNpgsql(connectionString);
+        optionsBuilder.UseSqlServer(connectionString);
         return optionsBuilder.Options;
     }
 

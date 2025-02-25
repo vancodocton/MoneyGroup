@@ -24,7 +24,7 @@ services:
   moneygroup.webapi:
     image: ${DOCKER_REGISTRY-}moneygroupwebapi
     depends_on:
-      postgres:
+      mssql:
         condition: service_healthy
     build:
       context: .

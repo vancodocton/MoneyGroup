@@ -510,13 +510,13 @@
           "AutoMapper": "[14.0.0, )",
           "AutoMapper.Collection": "[11.0.0, )",
           "Microsoft.EntityFrameworkCore": "[9.0.2, )",
+          "Microsoft.EntityFrameworkCore.Relational": "[9.0.2, )",
           "MoneyGroup.Core": "[1.0.0, )"
         }
       },
       "moneygroup.infrastucture.postgresql": {
         "type": "Project",
         "dependencies": {
-          "Microsoft.EntityFrameworkCore.Relational": "[9.0.2, )",
           "MoneyGroup.Infrastucture": "[1.0.0, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[9.0.3, )"
         }

@@ -16,7 +16,7 @@ jobs:
         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
     - name: Docker Compose Up
-      run: docker compose up -d
+      run: docker compose up -d postgres
 
     - name: Cache Nuget packages
       uses: actions/cache@v4
@@ -63,7 +63,7 @@ jobs:
     - name: Test
       shell: pwsh
       run: |
-        docker compose up --wait
+        docker compose up --wait postgres
         dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal -- --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml --report-xunit
 
     - name: End Analyze

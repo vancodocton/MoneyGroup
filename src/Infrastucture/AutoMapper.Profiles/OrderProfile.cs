@@ -12,9 +12,9 @@ internal class OrderProfile : Profile
         CreateMap<OrderDto, Order>(MemberList.Source)
             .ReverseMap();
 
-        CreateMap<ConsumerDto, OrderConsumer>(MemberList.Source)
-            .EqualityComparison((dto, entity) => dto.Id == entity.ConsumerId)
-            .ForPath(dest => dest.ConsumerId, opt => opt.MapFrom(src => src.Id))
+        CreateMap<ParticipantDto, OrderParticipant>(MemberList.Source)
+            .EqualityComparison((dto, entity) => dto.Id == entity.ParticipantId)
+            .ForPath(dest => dest.ParticipantId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.OrderId, opt => opt.UseDestinationValue())
             .ReverseMap();
     }

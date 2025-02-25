@@ -1,12 +1,12 @@
 ﻿namespace MoneyGroup.Core.Entities;
 
-public class OrderConsumer
+public class OrderParticipant
 {
-    public int ConsumerId { get; set; }
+    public int ParticipantId { get; set; }
 
     public int OrderId { get; set; }
 
-    public User Consumer { get; set; } = null!;
+    public User Participant { get; set; } = null!;
 
     public Order Order { get; set; } = null!;
 }

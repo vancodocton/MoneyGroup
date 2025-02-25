@@ -37,7 +37,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddProblemDetails();
 
 #region Validators
-builder.Services.AddSingleton<IValidator<ConsumerDto>, ConsumerDtoValidator>();
+builder.Services.AddSingleton<IValidator<ParticipantDto>, ParticipantDtoValidator>();
 builder.Services.AddSingleton<IValidator<OrderDto>, OrderDtoValidator>();
 builder.Services.AddExceptionHandler<FluentValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<BusinessValidationExceptionHandler>();

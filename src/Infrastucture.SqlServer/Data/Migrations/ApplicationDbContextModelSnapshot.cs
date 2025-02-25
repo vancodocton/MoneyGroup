@@ -29,11 +29,11 @@ namespace MoneyGroup.Infrastucture.SqlServer.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BuyerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IssuerId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -44,24 +44,24 @@ namespace MoneyGroup.Infrastucture.SqlServer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IssuerId");
+                    b.HasIndex("BuyerId");
 
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("MoneyGroup.Core.Entities.OrderConsumer", b =>
+            modelBuilder.Entity("MoneyGroup.Core.Entities.OrderParticipant", b =>
                 {
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ConsumerId")
+                    b.Property<int>("ParticipantId")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ConsumerId");
+                    b.HasKey("OrderId", "ParticipantId");
 
-                    b.HasIndex("ConsumerId");
+                    b.HasIndex("ParticipantId");
 
-                    b.ToTable("OrderConsumers");
+                    b.ToTable("OrderParticipants");
                 });
 
             modelBuilder.Entity("MoneyGroup.Core.Entities.User", b =>
@@ -83,37 +83,37 @@ namespace MoneyGroup.Infrastucture.SqlServer.Data.Migrations
 
             modelBuilder.Entity("MoneyGroup.Core.Entities.Order", b =>
                 {
-                    b.HasOne("MoneyGroup.Core.Entities.User", "Issuer")
+                    b.HasOne("MoneyGroup.Core.Entities.User", "Buyer")
                         .WithMany()
-                        .HasForeignKey("IssuerId")
+                        .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Issuer");
+                    b.Navigation("Buyer");
                 });
 
-            modelBuilder.Entity("MoneyGroup.Core.Entities.OrderConsumer", b =>
+            modelBuilder.Entity("MoneyGroup.Core.Entities.OrderParticipant", b =>
                 {
-                    b.HasOne("MoneyGroup.Core.Entities.User", "Consumer")
-                        .WithMany()
-                        .HasForeignKey("ConsumerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("MoneyGroup.Core.Entities.Order", "Order")
-                        .WithMany("Consumers")
+                        .WithMany("Participants")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Consumer");
+                    b.HasOne("MoneyGroup.Core.Entities.User", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Order");
+
+                    b.Navigation("Participant");
                 });
 
             modelBuilder.Entity("MoneyGroup.Core.Entities.Order", b =>
                 {
-                    b.Navigation("Consumers");
+                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }

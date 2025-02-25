@@ -33,23 +33,23 @@ public class OrderService
     {
         await _orderValidator.ValidateAndThrowAsync(model, cancellationToken: cancellationToken);
 
-        if (!await _userRepository.AnyAsync(model.IssuerId, cancellationToken))
+        if (!await _userRepository.AnyAsync(model.BuyerId, cancellationToken))
         {
-            throw new IssuerNotFoundException();
+            throw new BuyerNotFoundException();
         }
 
         var idsHashSet = new HashSet<int>();
 
-        foreach (var consumerId in model.Consumers.Select(c => c.Id))
+        foreach (var participantId in model.Participants.Select(c => c.Id))
         {
-            if (!await _userRepository.AnyAsync(consumerId, cancellationToken))
+            if (!await _userRepository.AnyAsync(participantId, cancellationToken))
             {
-                throw new ConsumerNotFoundException();
+                throw new ParticipantNotFoundException();
             }
 
-            if (!idsHashSet.Add(consumerId))
+            if (!idsHashSet.Add(participantId))
             {
-                throw new ConsumerDuplicatedException();
+                throw new ParticipantDuplicatedException();
             }
         }
 
@@ -66,23 +66,23 @@ public class OrderService
             throw new OrderNotFoundException();
         }
 
-        if (!await _userRepository.AnyAsync(model.IssuerId, cancellationToken))
+        if (!await _userRepository.AnyAsync(model.BuyerId, cancellationToken))
         {
-            throw new IssuerNotFoundException();
+            throw new BuyerNotFoundException();
         }
 
         var idsHashSet = new HashSet<int>();
 
-        foreach (var consumerId in model.Consumers.Select(c => c.Id))
+        foreach (var participantId in model.Participants.Select(c => c.Id))
         {
-            if (!await _userRepository.AnyAsync(consumerId, cancellationToken))
+            if (!await _userRepository.AnyAsync(participantId, cancellationToken))
             {
-                throw new ConsumerNotFoundException();
+                throw new ParticipantNotFoundException();
             }
 
-            if (!idsHashSet.Add(consumerId))
+            if (!idsHashSet.Add(participantId))
             {
-                throw new ConsumerDuplicatedException();
+                throw new ParticipantDuplicatedException();
             }
         }
 

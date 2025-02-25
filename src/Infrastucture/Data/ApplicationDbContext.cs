@@ -20,7 +20,7 @@ public class ApplicationDbContext
 
     public DbSet<Order> Orders { get; set; }
 
-    public DbSet<OrderConsumer> OrderConsumers { get; set; }
+    public DbSet<OrderParticipant> OrderParticipants { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,22 +28,22 @@ public class ApplicationDbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasOne(o => o.Issuer)
+            entity.HasOne(o => o.Buyer)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasMany<User>()
                 .WithMany()
-                .UsingEntity<OrderConsumer>(join =>
+                .UsingEntity<OrderParticipant>(join =>
                 {
-                    join.HasKey(oc => new { oc.OrderId, oc.ConsumerId });
+                    join.HasKey(oc => new { oc.OrderId, oc.ParticipantId });
                     join.HasOne(oc => oc.Order)
-                        .WithMany(o => o.Consumers)
+                        .WithMany(o => o.Participants)
                         .HasForeignKey(oc => oc.OrderId)
                         .OnDelete(DeleteBehavior.Restrict);
-                    join.HasOne(oc => oc.Consumer)
+                    join.HasOne(oc => oc.Participant)
                         .WithMany()
-                        .HasForeignKey(oc => oc.ConsumerId)
+                        .HasForeignKey(oc => oc.ParticipantId)
                         .OnDelete(DeleteBehavior.Restrict);
                 });
         });

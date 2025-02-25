@@ -31,8 +31,8 @@ public class OrderRepositoryTest
             Title = "AddOrder",
             Description = "AddOrder",
             Total = 100.00m,
-            IssuerId = 1,
-            Consumers = [
+            BuyerId = 1,
+            Participants = [
                 new() { Id = 1 },
                 new() { Id = 3 },
             ],
@@ -48,13 +48,13 @@ public class OrderRepositoryTest
 
         dbContext.ChangeTracker.Clear();
         var createdOrder = await dbContext.Orders
-            .Include(o => o.Issuer)
-            .Include(o => o.Consumers)
+            .Include(o => o.Buyer)
+            .Include(o => o.Participants)
             .FirstOrDefaultAsync(o => o.Id == orderDto.Id, TestContext.Current.CancellationToken);
         Assert.NotNull(createdOrder);
         Assert.Equal(orderDto.Id, createdOrder.Id);
-        Assert.Equal(1, createdOrder.IssuerId);
-        Assert.Equal(orderDto.Consumers.Select(o => o.Id), createdOrder.Consumers.Select(c => c.ConsumerId));
+        Assert.Equal(1, createdOrder.BuyerId);
+        Assert.Equal(orderDto.Participants.Select(o => o.Id), createdOrder.Participants.Select(c => c.ParticipantId));
     }
 
     [Fact]
@@ -70,8 +70,8 @@ public class OrderRepositoryTest
             Title = "AddOrder",
             Description = "AddOrder",
             Total = 100.00m,
-            IssuerId = 1,
-            Consumers = [
+            BuyerId = 1,
+            Participants = [
                 new() { Id = 1 },
                 new() { Id = 3 },
             ],
@@ -84,8 +84,8 @@ public class OrderRepositoryTest
             Title = "UpdatedOrder",
             Description = "UpdatedOrder",
             Total = 100.00m,
-            IssuerId = 2,
-            Consumers = [
+            BuyerId = 2,
+            Participants = [
                 new() { Id = 1 },
                 new() { Id = 2 },
                 new() { Id = 3 },
@@ -99,12 +99,12 @@ public class OrderRepositoryTest
         // Assert
         dbContext.ChangeTracker.Clear();
         var updatedOrder = await dbContext.Orders
-            .Include(o => o.Issuer)
-            .Include(o => o.Consumers.OrderBy(c => c.ConsumerId))
+            .Include(o => o.Buyer)
+            .Include(o => o.Participants.OrderBy(c => c.ParticipantId))
             .FirstOrDefaultAsync(o => o.Id == orderDto.Id, TestContext.Current.CancellationToken);
         Assert.NotNull(updatedOrder);
-        Assert.Equal(2, updatedOrder.IssuerId);
-        Assert.Equal(updateOrderDto.Consumers.Select(o => o.Id), updatedOrder.Consumers.Select(c => c.ConsumerId));
+        Assert.Equal(2, updatedOrder.BuyerId);
+        Assert.Equal(updateOrderDto.Participants.Select(o => o.Id), updatedOrder.Participants.Select(c => c.ParticipantId));
     }
 
     [Fact]
@@ -120,11 +120,11 @@ public class OrderRepositoryTest
             Title = "AddOrder",
             Description = "AddOrder",
             Total = 100.00m,
-            IssuerId = 1,
-            Consumers = [
-                new() { ConsumerId = 1 },
-                new() { ConsumerId = 2 },
-                new() { ConsumerId = 3 },
+            BuyerId = 1,
+            Participants = [
+                new() { ParticipantId = 1 },
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = 3 },
             ],
         };
         var addedOrder = await repository.AddAsync(newOrder, TestContext.Current.CancellationToken);
@@ -152,9 +152,9 @@ public class OrderRepositoryTest
             Title = "AddOrder",
             Description = "AddOrder",
             Total = 100.00m,
-            IssuerId = 1,
-            Consumers = [
-                new() { ConsumerId = 1 },
+            BuyerId = 1,
+            Participants = [
+                new() { ParticipantId = 1 },
             ],
         };
         var addedOrder = await repository.AddAsync(newOrder, TestContext.Current.CancellationToken);

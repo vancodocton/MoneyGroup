@@ -13,9 +13,9 @@ public interface IOrderService
     /// <param name="model"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    /// <exception cref="IssuerNotFoundException"></exception>
-    /// <exception cref="ConsumerNotFoundException"></exception>
-    /// <exception cref="ConsumerDuplicatedException"></exception>
+    /// <exception cref="BuyerNotFoundException"></exception>
+    /// <exception cref="ParticipantNotFoundException"></exception>
+    /// <exception cref="ParticipantDuplicatedException"></exception>
     Task CreateOrderAsync(OrderDto model, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -25,9 +25,9 @@ public interface IOrderService
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="OrderNotFoundException"></exception>
-    /// <exception cref="IssuerNotFoundException"></exception>
-    /// <exception cref="ConsumerNotFoundException"></exception>
-    /// <exception cref="ConsumerDuplicatedException"></exception>
+    /// <exception cref="BuyerNotFoundException"></exception>
+    /// <exception cref="ParticipantNotFoundException"></exception>
+    /// <exception cref="ParticipantDuplicatedException"></exception>
     Task UpdateOrderAsync(OrderDto model, CancellationToken cancellationToken = default);
 
     /// <summary>

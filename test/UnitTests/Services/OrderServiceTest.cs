@@ -76,8 +76,8 @@ public class OrderServiceTest
         var newOrderId = 1;
         var model = new OrderDto
         {
-            IssuerId = 1,
-            Consumers =
+            BuyerId = 1,
+            Participants =
             [
                 new() { Id = 2 },
                 new() { Id = 3 },
@@ -104,13 +104,13 @@ public class OrderServiceTest
     }
 
     [Fact]
-    public async Task CreateOrderAsync_InvalidIssuer_ShouldThrowInvalidOperationException()
+    public async Task CreateOrderAsync_InvalidBuyer_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var model = new OrderDto
         {
-            IssuerId = -1,
-            Consumers =
+            BuyerId = -1,
+            Participants =
             [
                 new() { Id = 2 },
                 new() { Id = 3 },
@@ -121,22 +121,22 @@ public class OrderServiceTest
             .ReturnsAsync(false);
 
         // Act
-        var ex = await Assert.ThrowsAsync<IssuerNotFoundException>(() => _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken));
+        var ex = await Assert.ThrowsAsync<BuyerNotFoundException>(() => _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken));
 
         // Assert
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
-        Assert.Equal("Issuer not found", ex.Message);
+        Assert.Equal("Buyer not found", ex.Message);
     }
 
     [Fact]
-    public async Task CreateOrderAsync_InvalidConsumers_ShouldThrowInvalidOperationException()
+    public async Task CreateOrderAsync_InvalidParticipants_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var model = new OrderDto
         {
-            IssuerId = 1,
-            Consumers =
+            BuyerId = 1,
+            Participants =
             [
                 new() { Id = 2 },
                 new() { Id = -1 },
@@ -149,22 +149,22 @@ public class OrderServiceTest
             .ReturnsAsync(false);
 
         // Act
-        var ex = await Assert.ThrowsAsync<ConsumerNotFoundException>(() => _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken));
+        var ex = await Assert.ThrowsAsync<ParticipantNotFoundException>(() => _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken));
 
         // Assert
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
         _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
-        Assert.Equal("Consumer not found", ex.Message);
+        Assert.Equal("Participant not found", ex.Message);
     }
 
     [Fact]
-    public async Task CreateOrderAsync_DuplicateConsumers_ShouldThrowInvalidOperationException()
+    public async Task CreateOrderAsync_DuplicateParticipants_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var model = new OrderDto
         {
-            IssuerId = 1,
-            Consumers =
+            BuyerId = 1,
+            Participants =
             [
                 new() { Id = 2 },
                 new() { Id = 2 },
@@ -175,12 +175,12 @@ public class OrderServiceTest
             .ReturnsAsync(true);
 
         // Act
-        var ex = await Assert.ThrowsAsync<ConsumerDuplicatedException>(() => _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken));
+        var ex = await Assert.ThrowsAsync<ParticipantDuplicatedException>(() => _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken));
 
         // Assert
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
         _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
-        Assert.Equal("Duplicated consumer", ex.Message);
+        Assert.Equal("Duplicated participant", ex.Message);
     }
 
     [Fact]
@@ -190,8 +190,8 @@ public class OrderServiceTest
         var model = new OrderDto
         {
             Id = 1,
-            IssuerId = 1,
-            Consumers =
+            BuyerId = 1,
+            Participants =
                 [
                     new() { Id = 2 },
                     new() { Id = 3 },
@@ -217,14 +217,14 @@ public class OrderServiceTest
     }
 
     [Fact]
-    public async Task UpdateOrderAsync_InvalidIssuer_ShouldThrowInvalidOperationException()
+    public async Task UpdateOrderAsync_InvalidBuyer_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var model = new OrderDto
         {
             Id = 1,
-            IssuerId = -1,
-            Consumers =
+            BuyerId = -1,
+            Participants =
             [
                 new() { Id = 2 },
                 new() { Id = 3 },
@@ -238,12 +238,12 @@ public class OrderServiceTest
             .ReturnsAsync(false);
 
         // Act
-        var ex = await Assert.ThrowsAsync<IssuerNotFoundException>(() => _orderService.UpdateOrderAsync(model, TestContext.Current.CancellationToken));
+        var ex = await Assert.ThrowsAsync<BuyerNotFoundException>(() => _orderService.UpdateOrderAsync(model, TestContext.Current.CancellationToken));
 
         // Assert
         _orderRepositoryMock.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
-        Assert.Equal("Issuer not found", ex.Message);
+        Assert.Equal("Buyer not found", ex.Message);
     }
 
     [Fact]
@@ -253,8 +253,8 @@ public class OrderServiceTest
         var model = new OrderDto
         {
             Id = -1,
-            IssuerId = 1,
-            Consumers =
+            BuyerId = 1,
+            Participants =
             [
                 new() { Id = 2 },
                 new() { Id = 3 }
@@ -273,14 +273,14 @@ public class OrderServiceTest
     }
 
     [Fact]
-    public async Task UpdateOrderAsync_InvalidConsumers_ShouldThrowInvalidOperationException()
+    public async Task UpdateOrderAsync_InvalidParticipants_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var model = new OrderDto
         {
             Id = 1,
-            IssuerId = 1,
-            Consumers =
+            BuyerId = 1,
+            Participants =
             [
                 new() { Id = 2 },
                 new() { Id = -1 },
@@ -296,23 +296,23 @@ public class OrderServiceTest
             .ReturnsAsync(false);
 
         // Act
-        var ex = await Assert.ThrowsAsync<ConsumerNotFoundException>(() => _orderService.UpdateOrderAsync(model, TestContext.Current.CancellationToken));
+        var ex = await Assert.ThrowsAsync<ParticipantNotFoundException>(() => _orderService.UpdateOrderAsync(model, TestContext.Current.CancellationToken));
 
         // Assert
         _orderRepositoryMock.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
-        Assert.Equal("Consumer not found", ex.Message);
+        Assert.Equal("Participant not found", ex.Message);
     }
 
     [Fact]
-    public async Task UpdateOrderAsync_DuplicateConsumers_ShouldThrowInvalidOperationException()
+    public async Task UpdateOrderAsync_DuplicateParticipants_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var model = new OrderDto
         {
             Id = 1,
-            IssuerId = 1,
-            Consumers =
+            BuyerId = 1,
+            Participants =
             [
                 new() { Id = 2 },
                 new() { Id = 2 },
@@ -326,12 +326,12 @@ public class OrderServiceTest
             .ReturnsAsync(true);
 
         // Act
-        var ex = await Assert.ThrowsAsync<ConsumerDuplicatedException>(() => _orderService.UpdateOrderAsync(model, TestContext.Current.CancellationToken));
+        var ex = await Assert.ThrowsAsync<ParticipantDuplicatedException>(() => _orderService.UpdateOrderAsync(model, TestContext.Current.CancellationToken));
 
         // Assert
         _orderRepositoryMock.Verify(o => o.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()));
         _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
-        Assert.Equal("Duplicated consumer", ex.Message);
+        Assert.Equal("Duplicated participant", ex.Message);
     }
 
     [Fact]

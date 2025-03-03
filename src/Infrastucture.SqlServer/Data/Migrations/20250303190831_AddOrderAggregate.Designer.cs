@@ -11,8 +11,8 @@ using MoneyGroup.Infrastucture.Data;
 namespace MoneyGroup.Infrastucture.SqlServer.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250303182125_AlterOrderTruncate")]
-    partial class AlterOrderTruncate
+    [Migration("20250303190831_AddOrderAggregate")]
+    partial class AddOrderAggregate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

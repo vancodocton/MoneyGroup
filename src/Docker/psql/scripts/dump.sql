@@ -164,11 +164,7 @@ COPY public."Users" ("Id", "Name") FROM stdin;
 --
 
 COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin;
-20240926144934_AddOrder	8.0.8
-20250225182052_AlterOrderRelationships	9.0.2
-20250225183547_AlterOrderAggregate	9.0.2
-20250225183625_AlterOrderAggregate1	9.0.2
-20250303180922_AlterOrderTruncate	9.0.2
+20250303190633_AddOrderAggregate	9.0.2
 \.
 
 

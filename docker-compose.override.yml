@@ -17,11 +17,26 @@ services:
     ports:
       - "1433:1433"
 
+  mssql-tools:
+    image: mcr.microsoft.com/mssql-tools:latest
+    restart: no
+    environment:
+      MSSQL_SA_PASSWORD: password123!
+    command: sh -c "/opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P $$MSSQL_SA_PASSWORD -C -i /tmp/dump.sql"
+    depends_on:
+      mssql:
+        condition: service_healthy
+    volumes:
+      - ./src/Docker/mssql/scripts/dump.sql:/tmp/dump.sql
+
   moneygroup.webapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
+    depends_on:
+      mssql-tools:
+        condition: service_completed_successfully
     ports:
       - "5200:8080"
       - "7428:8081"

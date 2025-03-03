@@ -97,7 +97,7 @@ namespace MoneyGroup.Infrastucture.SqlServer.Data.Migrations
                     b.HasOne("MoneyGroup.Core.Entities.Order", "Order")
                         .WithMany("Participants")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MoneyGroup.Core.Entities.User", "Participant")

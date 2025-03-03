@@ -40,7 +40,7 @@ public class ApplicationDbContext
                     join.HasOne(oc => oc.Order)
                         .WithMany(o => o.Participants)
                         .HasForeignKey(oc => oc.OrderId)
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                     join.HasOne(oc => oc.Participant)
                         .WithMany()
                         .HasForeignKey(oc => oc.ParticipantId)

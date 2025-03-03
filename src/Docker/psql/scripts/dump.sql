@@ -168,6 +168,7 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 20250225182052_AlterOrderRelationships	9.0.2
 20250225183547_AlterOrderAggregate	9.0.2
 20250225183625_AlterOrderAggregate1	9.0.2
+20250303180922_AlterOrderTruncate	9.0.2
 \.
 
 
@@ -236,7 +237,7 @@ CREATE INDEX "IX_Orders_BuyerId" ON public."Orders" USING btree ("BuyerId");
 --
 
 ALTER TABLE ONLY public."OrderParticipants"
-    ADD CONSTRAINT "FK_OrderParticipants_Orders_OrderId" FOREIGN KEY ("OrderId") REFERENCES public."Orders"("Id") ON DELETE RESTRICT;
+    ADD CONSTRAINT "FK_OrderParticipants_Orders_OrderId" FOREIGN KEY ("OrderId") REFERENCES public."Orders"("Id") ON DELETE CASCADE;
 
 
 --

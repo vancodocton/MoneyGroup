@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Infrastucture.PostgreSql\MoneyGroup.Infrastucture.PostgreSql.csproj" />
+    <ProjectReference Include="..\..\src\Infrastucture.SqlServer\MoneyGroup.Infrastucture.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\Infrastucture\MoneyGroup.Infrastucture.csproj" />
   </ItemGroup>
 

@@ -16,7 +16,7 @@ COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
 COPY ["src/WebApi/MoneyGroup.WebApi.csproj", "src/WebApi/"]
 COPY ["src/Core/MoneyGroup.Core.csproj", "src/Core/"]
-COPY ["src/Infrastucture.PostgreSql/MoneyGroup.Infrastucture.PostgreSql.csproj", "src/Infrastucture.PostgreSql/"]
+COPY ["src/Infrastucture.SqlServer/MoneyGroup.Infrastucture.SqlServer.csproj", "src/Infrastucture.SqlServer/"]
 COPY ["src/Infrastucture/MoneyGroup.Infrastucture.csproj", "src/Infrastucture/"]
 RUN dotnet restore "./src/WebApi/MoneyGroup.WebApi.csproj"
 COPY . .

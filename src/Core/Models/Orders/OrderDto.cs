@@ -10,7 +10,7 @@ public class OrderDto
 
     public decimal Total { get; set; }
 
-    public int IssuerId { get; set; }
+    public int BuyerId { get; set; }
 
-    public IEnumerable<ConsumerDto> Consumers { get; set; } = null!;
+    public IEnumerable<ParticipantDto> Participants { get; set; } = null!;
 }

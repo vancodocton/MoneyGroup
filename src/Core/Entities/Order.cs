@@ -9,9 +9,9 @@ public class Order
 
     public decimal Total { get; set; }
 
-    public int IssuerId { get; set; }
+    public int BuyerId { get; set; }
 
-    public User Issuer { get; set; } = null!;
+    public User Buyer { get; set; } = null!;
 
-    public List<OrderConsumer> Consumers { get; set; } = [];
+    public List<OrderParticipant> Participants { get; set; } = [];
 }

@@ -34,7 +34,7 @@ public sealed class OrderRepository
     public async Task<OrderDto> UpdateAsync(OrderDto dto, CancellationToken cancellationToken = default)
     {
         var entity = await _dbSet
-            .Include(o => o.Consumers)
+            .Include(o => o.Participants)
             .FirstAsync(o => o.Id == dto.Id, cancellationToken);
 
         _mapper.Map(dto, entity);

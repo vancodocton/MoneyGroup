@@ -1,6 +1,6 @@
 ﻿namespace MoneyGroup.Core.Models.Orders;
 
-public class ConsumerDto
+public class ParticipantDto
 {
     public int Id { get; set; }
 }

@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\MoneyGroup.Core.csproj" />
-    <ProjectReference Include="..\Infrastucture.PostgreSql\MoneyGroup.Infrastucture.PostgreSql.csproj" />
+    <ProjectReference Include="..\Infrastucture.SqlServer\MoneyGroup.Infrastucture.SqlServer.csproj" />
     <ProjectReference Include="..\Infrastucture\MoneyGroup.Infrastucture.csproj" />
   </ItemGroup>
 

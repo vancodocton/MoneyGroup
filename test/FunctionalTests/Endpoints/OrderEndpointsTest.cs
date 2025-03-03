@@ -88,8 +88,8 @@ public class OrderEndpointsTest
             Title = "New order",
             Description = "New order description",
             Total = 10_000,
-            IssuerId = 1,
-            Consumers = new List<object>()
+            BuyerId = 1,
+            Participants = new List<object>()
             {
                 new { Id = 1 },
                 new { Id = 2 },
@@ -109,9 +109,9 @@ public class OrderEndpointsTest
         Assert.Equal("New order", order.Title);
         Assert.Equal("New order description", order.Description);
         Assert.Equal(10_000, order.Total);
-        Assert.Equal(1, order.IssuerId);
-        Assert.Equal(1, order.Consumers.Skip(0).First().Id);
-        Assert.Equal(2, order.Consumers.Skip(1).First().Id);
+        Assert.Equal(1, order.BuyerId);
+        Assert.Equal(1, order.Participants.Skip(0).First().Id);
+        Assert.Equal(2, order.Participants.Skip(1).First().Id);
 
         Assert.Equal($"/api/Order/{order.Id}", response.Headers.Location?.PathAndQuery);
     }
@@ -136,12 +136,12 @@ public class OrderEndpointsTest
         Assert.NotNull(problemDetails);
         Assert.NotEmpty(problemDetails.Errors);
         Assert.Contains("Title", problemDetails.Errors.Keys);
-        Assert.Contains("IssuerId", problemDetails.Errors.Keys);
-        Assert.Contains("Consumers", problemDetails.Errors.Keys);
+        Assert.Contains("BuyerId", problemDetails.Errors.Keys);
+        Assert.Contains("Participants", problemDetails.Errors.Keys);
     }
 
     [Fact]
-    public async Task CreateOrder_NonExistedIssuerId_ReturnsProblemDetails()
+    public async Task CreateOrder_NonExistedBuyerId_ReturnsProblemDetails()
     {
         // Arrange
         var request = "/api/Order";
@@ -150,8 +150,8 @@ public class OrderEndpointsTest
             Title = "New order",
             Description = "New order description",
             Total = 10_000,
-            IssuerId = int.MaxValue, // Assuming an issuer Id that does not exist
-            Consumers = new List<object>()
+            BuyerId = int.MaxValue, // Assuming an Buyer Id that does not exist
+            Participants = new List<object>()
             {
                 new { Id = 1 },
                 new { Id = 2 },
@@ -167,11 +167,11 @@ public class OrderEndpointsTest
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
-        Assert.Equal("Issuer not found", problemDetails.Detail);
+        Assert.Equal("Buyer not found", problemDetails.Detail);
     }
 
     [Fact]
-    public async Task CreateOrder_NonExistedConsumerId_ReturnsProblemDetails()
+    public async Task CreateOrder_NonExistedParticipantId_ReturnsProblemDetails()
     {
         // Arrange
         var request = "/api/Order";
@@ -180,11 +180,11 @@ public class OrderEndpointsTest
             Title = "New order",
             Description = "New order description",
             Total = 10_000,
-            IssuerId = 1,
-            Consumers = new List<object>()
+            BuyerId = 1,
+            Participants = new List<object>()
             {
                 new { Id = 1 },
-                new { Id = int.MaxValue } , // Assuming a consumer Id that does not exist
+                new { Id = int.MaxValue } , // Assuming a participant Id that does not exist
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -197,11 +197,11 @@ public class OrderEndpointsTest
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
-        Assert.Equal("Consumer not found", problemDetails.Detail);
+        Assert.Equal("Participant not found", problemDetails.Detail);
     }
 
     [Fact]
-    public async Task CreateOrder_DuplicatedConsumers_ReturnsProblemDetails()
+    public async Task CreateOrder_DuplicatedParticipants_ReturnsProblemDetails()
     {
         // Arrange
         var request = "/api/Order";
@@ -210,11 +210,11 @@ public class OrderEndpointsTest
             Title = "New order",
             Description = "New order description",
             Total = 10_000,
-            IssuerId = 1,
-            Consumers = new List<object>()
+            BuyerId = 1,
+            Participants = new List<object>()
             {
                 new { Id = 1 },
-                new { Id = 1 }, // Duplicated consumer Id
+                new { Id = 1 }, // Duplicated participant Id
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -227,7 +227,7 @@ public class OrderEndpointsTest
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
-        Assert.Equal("Duplicated consumer", problemDetails.Detail);
+        Assert.Equal("Duplicated participant", problemDetails.Detail);
     }
     #endregion CreateOrder
 
@@ -245,8 +245,8 @@ public class OrderEndpointsTest
             Title = "Updated order",
             Description = "Updated order description",
             Total = 15_000,
-            IssuerId = 1,
-            Consumers = new List<object>()
+            BuyerId = 1,
+            Participants = new List<object>()
             {
                 new { Id = 2 },
                 new { Id = 3 },
@@ -266,13 +266,13 @@ public class OrderEndpointsTest
         Assert.Equal("Updated order", order.Title);
         Assert.Equal("Updated order description", order.Description);
         Assert.Equal(15_000, order.Total);
-        Assert.Equal(1, order.IssuerId);
-        Assert.Equal(2, order.Consumers.Skip(0).First().Id);
-        Assert.Equal(3, order.Consumers.Skip(1).First().Id);
+        Assert.Equal(1, order.BuyerId);
+        Assert.Equal(2, order.Participants.Skip(0).First().Id);
+        Assert.Equal(3, order.Participants.Skip(1).First().Id);
     }
 
     [Fact]
-    public async Task UpdateOrder_NonExistedIssuerId_ReturnsNotFound()
+    public async Task UpdateOrder_NonExistedBuyerId_ReturnsNotFound()
     {
         // Arrange
         var orderId = 2; // Assuming an order with Id 2 exists
@@ -284,8 +284,8 @@ public class OrderEndpointsTest
             Title = "Updated order",
             Description = "Updated order description",
             Total = 15_000,
-            IssuerId = int.MaxValue, // Assuming an issuer Id that does not exist
-            Consumers = new List<object>()
+            BuyerId = int.MaxValue, // Assuming an Buyer Id that does not exist
+            Participants = new List<object>()
             {
                 new { Id = 2 },
                 new { Id = 3 },
@@ -301,11 +301,11 @@ public class OrderEndpointsTest
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
-        Assert.Equal("Issuer not found", problemDetails.Detail);
+        Assert.Equal("Buyer not found", problemDetails.Detail);
     }
 
     [Fact]
-    public async Task UpdateOrder_NonExistedConsumerId_ReturnsNotFound()
+    public async Task UpdateOrder_NonExistedParticipantId_ReturnsNotFound()
     {
         // Arrange
         var orderId = 2; // Assuming an order with Id 2 exists
@@ -317,11 +317,11 @@ public class OrderEndpointsTest
             Title = "Updated order",
             Description = "Updated order description",
             Total = 15_000,
-            IssuerId = 1,
-            Consumers = new List<object>()
+            BuyerId = 1,
+            Participants = new List<object>()
             {
                 new { Id = 2 },
-                new { Id = int.MaxValue }, // Assuming a consumer Id that does not exist
+                new { Id = int.MaxValue }, // Assuming a participant Id that does not exist
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -334,11 +334,11 @@ public class OrderEndpointsTest
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
-        Assert.Equal("Consumer not found", problemDetails.Detail);
+        Assert.Equal("Participant not found", problemDetails.Detail);
     }
 
     [Fact]
-    public async Task UpdateOrder_DuplicatedConsumers_ReturnsProblemDetails()
+    public async Task UpdateOrder_DuplicatedParticipants_ReturnsProblemDetails()
     {
         // Arrange
         var orderId = 2; // Assuming an order with Id 2 exists
@@ -350,11 +350,11 @@ public class OrderEndpointsTest
             Title = "Updated order",
             Description = "Updated order description",
             Total = 15_000,
-            IssuerId = 1,
-            Consumers = new List<object>()
+            BuyerId = 1,
+            Participants = new List<object>()
             {
                 new { Id = 2 },
-                new { Id = 2 }, // Duplicated consumer Id
+                new { Id = 2 }, // Duplicated participant Id
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -367,7 +367,7 @@ public class OrderEndpointsTest
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
-        Assert.Equal("Duplicated consumer", problemDetails.Detail);
+        Assert.Equal("Duplicated participant", problemDetails.Detail);
     }
 
     [Fact]
@@ -393,8 +393,8 @@ public class OrderEndpointsTest
         Assert.NotNull(problemDetails);
         Assert.NotEmpty(problemDetails.Errors);
         Assert.Contains("Title", problemDetails.Errors.Keys);
-        Assert.Contains("IssuerId", problemDetails.Errors.Keys);
-        Assert.Contains("Consumers", problemDetails.Errors.Keys);
+        Assert.Contains("BuyerId", problemDetails.Errors.Keys);
+        Assert.Contains("Participants", problemDetails.Errors.Keys);
     }
 
     [Fact]
@@ -410,8 +410,8 @@ public class OrderEndpointsTest
             Title = "Updated order",
             Description = "Updated order description",
             Total = 15_000,
-            IssuerId = 1,
-            Consumers = new List<object>()
+            BuyerId = 1,
+            Participants = new List<object>()
             {
                 new { Id = 2 },
                 new { Id = 3 },

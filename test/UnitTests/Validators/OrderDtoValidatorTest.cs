@@ -11,7 +11,7 @@ public class OrderDtoValidatorTestFixture
 
     public OrderDtoValidatorTestFixture()
     {
-        Validator = new OrderDtoValidator(new ConsumerDtoValidator());
+        Validator = new OrderDtoValidator(new ParticipantDtoValidator());
     }
 }
 
@@ -32,10 +32,10 @@ public class OrderDtoValidatorTest
         var order = new OrderDto()
         {
             Title = "Title",
-            IssuerId = 1,
-            Consumers =
+            BuyerId = 1,
+            Participants =
             [
-                new ConsumerDto() { Id = 1 },
+                new ParticipantDto() { Id = 1 },
             ],
         };
 
@@ -79,19 +79,19 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenIssuerIdZero_ThenReturnError()
+    public async Task GivenOrderDto_WhenBuyerIdZero_ThenReturnError()
     {
         // Arrange
         var order = new OrderDto()
         {
-            IssuerId = 0,
+            BuyerId = 0,
         };
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(o => o.IssuerId);
+        result.ShouldHaveValidationErrorFor(o => o.BuyerId);
     }
 
     [Fact]
@@ -111,50 +111,50 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenConsumersNull_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsNull_ThenReturnError()
     {
         // Arrange
         var order = new OrderDto()
         {
-            Consumers = null!,
+            Participants = null!,
         };
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(o => o.Consumers);
+        result.ShouldHaveValidationErrorFor(o => o.Participants);
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenConsumersEmpty_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsEmpty_ThenReturnError()
     {
         // Arrange
         var order = new OrderDto()
         {
-            Consumers = [],
+            Participants = [],
         };
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(o => o.Consumers);
+        result.ShouldHaveValidationErrorFor(o => o.Participants);
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenConsumersContainsNull_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsContainsNull_ThenReturnError()
     {
         // Arrange
         var order = new OrderDto()
         {
-            Consumers = [null!],
+            Participants = [null!],
         };
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(o => o.Consumers);
+        result.ShouldHaveValidationErrorFor(o => o.Participants);
     }
 }

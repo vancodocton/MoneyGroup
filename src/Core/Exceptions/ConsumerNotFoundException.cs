@@ -1,12 +1,12 @@
 ﻿namespace MoneyGroup.Core.Exceptions;
 
 /// <summary>
-/// The exception that is thrown when Consumer not found.
+/// The exception that is thrown when Participant not found.
 /// </summary>
-public class ConsumerNotFoundException
+public class ParticipantNotFoundException
     : BussinessValidationException
 {
-    public ConsumerNotFoundException() : base("Consumer not found")
+    public ParticipantNotFoundException() : base("Participant not found")
     {
     }
 }

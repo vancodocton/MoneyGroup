@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17.0 (Debian 17.0-1.pgdg120+1)
--- Dumped by pg_dump version 17.0 (Debian 17.0-1.pgdg120+1)
+-- Dumped from database version 17.3 (Debian 17.3-3.pgdg120+1)
+-- Dumped by pg_dump version 17.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -45,16 +45,16 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: OrderConsumers; Type: TABLE; Schema: public; Owner: postgres
+-- Name: OrderParticipants; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."OrderConsumers" (
-    "ConsumerId" integer NOT NULL,
+CREATE TABLE public."OrderParticipants" (
+    "ParticipantId" integer NOT NULL,
     "OrderId" integer NOT NULL
 );
 
 
-ALTER TABLE public."OrderConsumers" OWNER TO postgres;
+ALTER TABLE public."OrderParticipants" OWNER TO postgres;
 
 --
 -- Name: Orders; Type: TABLE; Schema: public; Owner: postgres
@@ -65,7 +65,7 @@ CREATE TABLE public."Orders" (
     "Title" text NOT NULL,
     "Description" text,
     "Total" numeric NOT NULL,
-    "IssuerId" integer NOT NULL
+    "BuyerId" integer NOT NULL
 );
 
 
@@ -124,10 +124,10 @@ CREATE TABLE public."__EFMigrationsHistory" (
 ALTER TABLE public."__EFMigrationsHistory" OWNER TO postgres;
 
 --
--- Data for Name: OrderConsumers; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: OrderParticipants; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."OrderConsumers" ("ConsumerId", "OrderId") FROM stdin;
+COPY public."OrderParticipants" ("ParticipantId", "OrderId") FROM stdin;
 1	1
 2	1
 1	2
@@ -141,7 +141,7 @@ COPY public."OrderConsumers" ("ConsumerId", "OrderId") FROM stdin;
 -- Data for Name: Orders; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Orders" ("Id", "Title", "Description", "Total", "IssuerId") FROM stdin;
+COPY public."Orders" ("Id", "Title", "Description", "Total", "BuyerId") FROM stdin;
 1	Order 1	Order 1 description	10000	1
 2	Update order	Update order description	10000	1
 3	Delete order	Delete order description	10000	1
@@ -164,7 +164,7 @@ COPY public."Users" ("Id", "Name") FROM stdin;
 --
 
 COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin;
-20240926144934_AddOrder	8.0.8
+20250303190633_AddOrderAggregate	9.0.2
 \.
 
 
@@ -183,11 +183,11 @@ SELECT pg_catalog.setval('public."Users_Id_seq"', 1, false);
 
 
 --
--- Name: OrderConsumers PK_OrderConsumers; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: OrderParticipants PK_OrderParticipants; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."OrderConsumers"
-    ADD CONSTRAINT "PK_OrderConsumers" PRIMARY KEY ("OrderId", "ConsumerId");
+ALTER TABLE ONLY public."OrderParticipants"
+    ADD CONSTRAINT "PK_OrderParticipants" PRIMARY KEY ("OrderId", "ParticipantId");
 
 
 --
@@ -215,41 +215,41 @@ ALTER TABLE ONLY public."__EFMigrationsHistory"
 
 
 --
--- Name: IX_OrderConsumers_ConsumerId; Type: INDEX; Schema: public; Owner: postgres
+-- Name: IX_OrderParticipants_ParticipantId; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX "IX_OrderConsumers_ConsumerId" ON public."OrderConsumers" USING btree ("ConsumerId");
-
-
---
--- Name: IX_Orders_IssuerId; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX "IX_Orders_IssuerId" ON public."Orders" USING btree ("IssuerId");
+CREATE INDEX "IX_OrderParticipants_ParticipantId" ON public."OrderParticipants" USING btree ("ParticipantId");
 
 
 --
--- Name: OrderConsumers FK_OrderConsumers_Orders_OrderId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: IX_Orders_BuyerId; Type: INDEX; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."OrderConsumers"
-    ADD CONSTRAINT "FK_OrderConsumers_Orders_OrderId" FOREIGN KEY ("OrderId") REFERENCES public."Orders"("Id") ON DELETE CASCADE;
-
-
---
--- Name: OrderConsumers FK_OrderConsumers_Users_ConsumerId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."OrderConsumers"
-    ADD CONSTRAINT "FK_OrderConsumers_Users_ConsumerId" FOREIGN KEY ("ConsumerId") REFERENCES public."Users"("Id") ON DELETE CASCADE;
+CREATE INDEX "IX_Orders_BuyerId" ON public."Orders" USING btree ("BuyerId");
 
 
 --
--- Name: Orders FK_Orders_Users_IssuerId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: OrderParticipants FK_OrderParticipants_Orders_OrderId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."OrderParticipants"
+    ADD CONSTRAINT "FK_OrderParticipants_Orders_OrderId" FOREIGN KEY ("OrderId") REFERENCES public."Orders"("Id") ON DELETE CASCADE;
+
+
+--
+-- Name: OrderParticipants FK_OrderParticipants_Users_ParticipantId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."OrderParticipants"
+    ADD CONSTRAINT "FK_OrderParticipants_Users_ParticipantId" FOREIGN KEY ("ParticipantId") REFERENCES public."Users"("Id") ON DELETE RESTRICT;
+
+
+--
+-- Name: Orders FK_Orders_Users_BuyerId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."Orders"
-    ADD CONSTRAINT "FK_Orders_Users_IssuerId" FOREIGN KEY ("IssuerId") REFERENCES public."Users"("Id") ON DELETE CASCADE;
+    ADD CONSTRAINT "FK_Orders_Users_BuyerId" FOREIGN KEY ("BuyerId") REFERENCES public."Users"("Id") ON DELETE RESTRICT;
 
 
 --

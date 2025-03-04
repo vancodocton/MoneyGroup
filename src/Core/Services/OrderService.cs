@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using Ardalis.Specification;
+
+using FluentValidation;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Exceptions;
@@ -105,6 +107,6 @@ public class OrderService
     /// <inheritdoc />
     public Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(IPaginationOptions options)
     {
-        return _orderRepository.GetByPageAsync<OrderDto>(options.Page, options.Size);
+        return _orderRepository.GetByPageAsync<OrderDto>(new OrderPaginatedSpec(options));
     }
 }

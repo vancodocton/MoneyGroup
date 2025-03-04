@@ -1,5 +1,8 @@
 ﻿using System.Linq.Expressions;
 
+using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
@@ -7,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models;
+using MoneyGroup.Core.Services.Specifications;
 
 namespace MoneyGroup.Infrastucture.Data;
 public class EfRepository<TEntity>
@@ -23,41 +27,32 @@ public class EfRepository<TEntity>
         _mapper = mapper;
     }
 
-    public async Task<PaginationModel<TEntity>> GetByPageAsync(int page, int size, Expression<Func<TEntity, bool>>? predicate = null)
+    public async Task<PaginationModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification)
     {
-        IQueryable<TEntity> query = predicate is null
-            ? _dbSet
-            : _dbSet.Where(predicate);
+        IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
 
         var model = new PaginationModel<TEntity>()
         {
-            Page = page,
-            Count = size,
+            Page = specification.PaginatedOptions.Page,
+            Count = specification.PaginatedOptions.Size,
             Total = await query.CountAsync(),
-            Items = await query
-                .Skip((page - 1) * size)
-                .Take(size)
-                .ToListAsync(),
+            Items = await query.ToListAsync(),
         };
 
         return model;
     }
 
-    public async Task<PaginationModel<TResult>> GetByPageAsync<TResult>(int page, int size, Expression<Func<TEntity, bool>>? predicate = null)
+    public async Task<PaginationModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification)
     {
-        IQueryable<TEntity> query = predicate is null
-            ? (IQueryable<TEntity>)_dbSet
-            : _dbSet.Where(predicate);
+        IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
 
         var model = new PaginationModel<TResult>()
         {
-            Page = page,
-            Count = size,
+            Page = specification.PaginatedOptions.Page,
+            Count = specification.PaginatedOptions.Size,
             Total = await query.CountAsync(),
             Items = await query
                 .ProjectTo<TResult>(_mapper.ConfigurationProvider)
-                .Skip((page - 1) * size)
-                .Take(size)
                 .ToListAsync(),
         };
 

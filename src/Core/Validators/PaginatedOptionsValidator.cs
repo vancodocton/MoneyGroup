@@ -6,9 +6,8 @@ namespace MoneyGroup.Core.Validators;
 
 public class PaginatedOptionsValidator : AbstractValidator<IPaginatedOptions>
 {
-    public const string PageNumberNotPositiveErrorMessage = "Page number must be a non-negative integer.";
-    public const string PageSizeNotPositiveErrorMessage = "Page size must be a non-negative integer.";
-
+    public const string PageNumberNotPositiveErrorMessage = "Page number must be a positive integer.";
+    public const string PageSizeNotPositiveErrorMessage = "Page size must be a positive integer.";
     public PaginatedOptionsValidator()
     {
         RuleFor(x => x.Page).GreaterThan(0).WithMessage(PageNumberNotPositiveErrorMessage);

@@ -3,8 +3,28 @@ name: .NET CI
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - src/
+      - test/
+      - .github/workflows/dotnet.yml
+      - .config/dotnet-tools.json
+      - global.json
+      - *.sln
+      - Directory.*.props
+      - Directory.*.targets
+      - coverage.config
   pull_request:
     branches: [ "main" ]
+    paths:
+      - src/
+      - test/
+      - .github/workflows/dotnet.yml
+      - .config/dotnet-tools.json
+      - global.json
+      - *.sln
+      - Directory.*.props
+      - Directory.*.targets
+      - coverage.config
   workflow_dispatch:
 
 jobs:

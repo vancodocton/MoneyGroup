@@ -18,10 +18,10 @@ COPY ["src/WebApi/MoneyGroup.WebApi.csproj", "src/WebApi/"]
 COPY ["src/Core/MoneyGroup.Core.csproj", "src/Core/"]
 COPY ["src/Infrastucture.SqlServer/MoneyGroup.Infrastucture.SqlServer.csproj", "src/Infrastucture.SqlServer/"]
 COPY ["src/Infrastucture/MoneyGroup.Infrastucture.csproj", "src/Infrastucture/"]
-RUN dotnet restore "./src/WebApi/MoneyGroup.WebApi.csproj"
+RUN dotnet restore "./src/WebApi/MoneyGroup.WebApi.csproj" --locked-mode
 COPY . .
 WORKDIR "/src/src/WebApi"
-RUN dotnet build "./MoneyGroup.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./MoneyGroup.WebApi.csproj" -c $BUILD_CONFIGURATION --no-restore -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish

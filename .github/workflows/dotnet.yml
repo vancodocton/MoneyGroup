@@ -9,7 +9,7 @@ on:
       - .github/workflows/dotnet.yml
       - .config/dotnet-tools.json
       - global.json
-      - *.sln
+      - '*.sln'
       - Directory.*.props
       - Directory.*.targets
       - coverage.config
@@ -21,7 +21,7 @@ on:
       - .github/workflows/dotnet.yml
       - .config/dotnet-tools.json
       - global.json
-      - *.sln
+      - '*.sln'
       - Directory.*.props
       - Directory.*.targets
       - coverage.config

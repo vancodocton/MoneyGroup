@@ -8,7 +8,7 @@ namespace MoneyGroup.Core.Services;
 
 public class OrderPaginatedSpec : BasePaginatedSpecification<Order>
 {
-    public OrderPaginatedSpec(IPaginationOptions options)
+    public OrderPaginatedSpec(IPaginatedOptions options)
         : base(options)
     {
         Query.OrderByDescending(c => c.Id);

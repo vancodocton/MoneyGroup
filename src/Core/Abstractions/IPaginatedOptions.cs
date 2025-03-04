@@ -1,6 +1,6 @@
 ﻿namespace MoneyGroup.Core.Abstractions;
 
-public interface IPaginationOptions
+public interface IPaginatedOptions
 {
     public int Page { get; }
 

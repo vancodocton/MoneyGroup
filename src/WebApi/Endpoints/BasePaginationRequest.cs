@@ -8,7 +8,7 @@ using MoneyGroup.Core.Validators;
 namespace MoneyGroup.WebApi.Endpoints;
 
 public abstract class BasePaginationRequest
-    : IPaginationOptions
+    : IPaginatedOptions
 {
     protected BasePaginationRequest(int page, int size)
     {

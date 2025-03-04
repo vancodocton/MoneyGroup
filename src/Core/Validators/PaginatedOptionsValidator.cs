@@ -4,7 +4,7 @@ using MoneyGroup.Core.Abstractions;
 
 namespace MoneyGroup.Core.Validators;
 
-public class PaginatedOptionsValidator : AbstractValidator<IPaginationOptions>
+public class PaginatedOptionsValidator : AbstractValidator<IPaginatedOptions>
 {
     public const string PageNumberNotPositiveErrorMessage = "Page number must be a non-negative integer.";
     public const string PageSizeNotPositiveErrorMessage = "Page size must be a non-negative integer.";

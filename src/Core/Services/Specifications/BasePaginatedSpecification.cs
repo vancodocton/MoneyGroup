@@ -7,9 +7,9 @@ namespace MoneyGroup.Core.Services.Specifications;
 public class BasePaginatedSpecification<TEntity> : Specification<TEntity>
     , IPaginatedSpecification<TEntity>
 {
-    public IPaginationOptions PaginatedOptions { get; }
+    public IPaginatedOptions PaginatedOptions { get; }
 
-    public BasePaginatedSpecification(IPaginationOptions options)
+    public BasePaginatedSpecification(IPaginatedOptions options)
     {
         PaginatedOptions = options;
 

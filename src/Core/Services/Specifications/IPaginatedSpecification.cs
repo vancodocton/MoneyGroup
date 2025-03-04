@@ -6,5 +6,5 @@ namespace MoneyGroup.Core.Services.Specifications;
 
 public interface IPaginatedSpecification<TEntity> : ISpecification<TEntity>
 {
-    public IPaginationOptions PaginatedOptions { get; }
+    public IPaginatedOptions PaginatedOptions { get; }
 }

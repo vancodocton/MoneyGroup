@@ -801,6 +801,7 @@
       "moneygroup.core": {
         "type": "Project",
         "dependencies": {
+          "Ardalis.Specification": "[8.0.0, )",
           "FluentValidation": "[11.11.0, )",
           "Microsoft.Extensions.Logging.Abstractions": "[9.0.2, )"
         }
@@ -808,6 +809,7 @@
       "moneygroup.infrastucture": {
         "type": "Project",
         "dependencies": {
+          "Ardalis.Specification.EntityFrameworkCore": "[8.0.0, )",
           "AutoMapper": "[14.0.0, )",
           "AutoMapper.Collection": "[11.0.0, )",
           "Microsoft.EntityFrameworkCore": "[9.0.2, )",
@@ -832,6 +834,23 @@
           "MoneyGroup.Infrastucture": "[1.0.0, )",
           "MoneyGroup.Infrastucture.SqlServer": "[1.0.0, )",
           "Swashbuckle.AspNetCore": "[7.3.1, )"
+        }
+      },
+      "Ardalis.Specification": {
+        "type": "CentralTransitive",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "1/YP932oZJtaDlm85rWfqvgOjALbk2+VDZaj36sM2TdsJMNkVqMbF5UzY6f7OfzA8eymv3hnCXIgYmEBEiUOhQ=="
+      },
+      "Ardalis.Specification.EntityFrameworkCore": {
+        "type": "CentralTransitive",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "fDaCf5/7rm7Ul7yE8YafyWhxCSmWCPd+/4BUxM26Hbnb2PKZJssjAevzx9ZceASJKe4HUndSEKXJ8iz+R3rsIw==",
+        "dependencies": {
+          "Ardalis.Specification": "8.0.0",
+          "Microsoft.EntityFrameworkCore": "8.0.0",
+          "Microsoft.EntityFrameworkCore.Relational": "8.0.0"
         }
       },
       "AutoMapper": {

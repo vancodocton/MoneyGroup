@@ -68,7 +68,7 @@ public class OrderEndpointsTest
         Assert.NotNull(problemDetails);
         Assert.NotEmpty(problemDetails.Errors);
         Assert.Contains("Size", problemDetails.Errors.Keys);
-        Assert.Contains("Size", problemDetails.Errors.Keys);
+        Assert.Contains("Page", problemDetails.Errors.Keys);
     }
     #endregion GetOrders
 

@@ -11,7 +11,7 @@ public class PaginatedOptionsValidator : AbstractValidator<IPaginatedOptions>
 
     public PaginatedOptionsValidator()
     {
-        RuleFor(x => x.Page).GreaterThanOrEqualTo(0).WithMessage(PageNumberNotPositiveErrorMessage);
-        RuleFor(x => x.Size).GreaterThanOrEqualTo(0).WithMessage(PageSizeNotPositiveErrorMessage);
+        RuleFor(x => x.Page).GreaterThan(0).WithMessage(PageNumberNotPositiveErrorMessage);
+        RuleFor(x => x.Size).GreaterThan(0).WithMessage(PageSizeNotPositiveErrorMessage);
     }
 }

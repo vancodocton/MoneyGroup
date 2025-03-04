@@ -5,6 +5,7 @@ using System.Text.Json;
 
 using Microsoft.AspNetCore.Mvc;
 
+using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.FunctionalTests.Fixture;
 
@@ -28,6 +29,28 @@ public class OrderEndpointsTest
         _factory = factory;
         _client = _factory.CreateClient();
     }
+
+    #region GetOrders
+    [Fact]
+    public async Task GetOrders_ValidRequest_ReturnsPaginatedOrders()
+    {
+        // Arrange
+        var page = 1;
+        var size = 10;
+        var request = $"/api/Order?p={page}&s={size}";
+
+        // Act
+        var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var paginationModel = await response.Content.ReadFromJsonAsync<PaginationModel<OrderDto>>(TestContext.Current.CancellationToken);
+        Assert.NotNull(paginationModel);
+        Assert.Equal(1, paginationModel.Page);
+        Assert.Equal(10, paginationModel.Count);
+        Assert.NotEmpty(paginationModel.Items);
+    }
+    #endregion GetOrders
 
     #region GetOrderById
     [Fact]

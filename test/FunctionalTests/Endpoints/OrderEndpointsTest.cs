@@ -36,7 +36,7 @@ public class OrderEndpointsTest
     {
         // Arrange
         var page = 1;
-        var size = 10;
+        var size = 2;
         var request = $"/api/Order?p={page}&s={size}";
 
         // Act
@@ -49,6 +49,26 @@ public class OrderEndpointsTest
         Assert.Equal(1, paginationModel.Page);
         Assert.Equal(10, paginationModel.Count);
         Assert.NotEmpty(paginationModel.Items);
+    }
+
+    [Fact]
+    public async Task GetOrders_InvalidPageSize_ReturnsProblemDetails()
+    {
+        // Arrange
+        var page = 0; // Invalid page number
+        var size = -1; // Invalid page size
+        var request = $"/api/Order?p={page}&s={size}";
+
+        // Act
+        var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
+        Assert.NotNull(problemDetails);
+        Assert.NotEmpty(problemDetails.Errors);
+        Assert.Contains("Size", problemDetails.Errors.Keys);
+        Assert.Contains("Size", problemDetails.Errors.Keys);
     }
     #endregion GetOrders
 

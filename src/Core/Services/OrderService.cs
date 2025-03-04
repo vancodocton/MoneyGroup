@@ -13,15 +13,18 @@ public class OrderService
     : IOrderService
 {
     private readonly IValidator<OrderDto> _orderValidator;
+    private readonly IValidator<IPaginationOptions> _paginatedOptionsValidator;
     private readonly IOrderRepository _orderRepository;
     private readonly IUserRepository _userRepository;
 
     public OrderService(
         IValidator<OrderDto> orderValidator,
+        IValidator<IPaginationOptions> paginatedOptionsValidator,
         IOrderRepository orderRepository,
         IUserRepository userRepository)
     {
         _orderValidator = orderValidator;
+        _paginatedOptionsValidator = paginatedOptionsValidator;
         _orderRepository = orderRepository;
         _userRepository = userRepository;
     }
@@ -107,6 +110,7 @@ public class OrderService
     /// <inheritdoc />
     public Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(IPaginationOptions options)
     {
+        _paginatedOptionsValidator.ValidateAndThrow(options);
         return _orderRepository.GetByPageAsync<OrderDto>(new OrderPaginatedSpec(options));
     }
 }

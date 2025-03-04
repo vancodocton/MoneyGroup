@@ -43,7 +43,7 @@ public interface IOrderService
     /// <summary>
     /// Get orders by page.
     /// </summary>
-    /// param name="options"></param>
+    /// <param name="options">Pagination options for retrieving orders by page.</param>
     /// <returns></returns>
     Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(IPaginatedOptions options);
 }

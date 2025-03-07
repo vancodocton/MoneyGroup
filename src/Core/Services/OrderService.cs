@@ -1,7 +1,10 @@
-﻿using FluentValidation;
+﻿using Ardalis.Specification;
+
+using FluentValidation;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Exceptions;
+using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
 
 namespace MoneyGroup.Core.Services;
@@ -10,15 +13,18 @@ public class OrderService
     : IOrderService
 {
     private readonly IValidator<OrderDto> _orderValidator;
+    private readonly IValidator<IPaginatedOptions> _paginatedOptionsValidator;
     private readonly IOrderRepository _orderRepository;
     private readonly IUserRepository _userRepository;
 
     public OrderService(
         IValidator<OrderDto> orderValidator,
+        IValidator<IPaginatedOptions> paginatedOptionsValidator,
         IOrderRepository orderRepository,
         IUserRepository userRepository)
     {
         _orderValidator = orderValidator;
+        _paginatedOptionsValidator = paginatedOptionsValidator;
         _orderRepository = orderRepository;
         _userRepository = userRepository;
     }
@@ -99,5 +105,12 @@ public class OrderService
         }
 
         await _orderRepository.RemoveAsync(order, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(IPaginatedOptions options)
+    {
+        _paginatedOptionsValidator.ValidateAndThrow(options);
+        return _orderRepository.GetByPageAsync<OrderDto>(new OrderPaginatedSpec(options));
     }
 }

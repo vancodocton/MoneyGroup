@@ -1,11 +1,16 @@
 ﻿using System.Linq.Expressions;
 
+using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Core.Abstractions;
+using MoneyGroup.Core.Models;
+using MoneyGroup.Core.Services.Specifications;
 
 namespace MoneyGroup.Infrastucture.Data;
 public class EfRepository<TEntity>
@@ -20,6 +25,38 @@ public class EfRepository<TEntity>
         _dbContext = dbContext;
         _dbSet = _dbContext.Set<TEntity>();
         _mapper = mapper;
+    }
+
+    public async Task<PaginationModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification)
+    {
+        IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
+
+        var model = new PaginationModel<TEntity>()
+        {
+            Page = specification.PaginatedOptions.Page,
+            Count = specification.PaginatedOptions.Size,
+            Total = await query.CountAsync(),
+            Items = await query.ToListAsync(),
+        };
+
+        return model;
+    }
+
+    public async Task<PaginationModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification)
+    {
+        IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
+
+        var model = new PaginationModel<TResult>()
+        {
+            Page = specification.PaginatedOptions.Page,
+            Count = specification.PaginatedOptions.Size,
+            Total = await query.CountAsync(),
+            Items = await query
+                .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+                .ToListAsync(),
+        };
+
+        return model;
     }
 
     public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)

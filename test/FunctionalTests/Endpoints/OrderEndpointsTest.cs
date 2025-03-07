@@ -5,6 +5,7 @@ using System.Text.Json;
 
 using Microsoft.AspNetCore.Mvc;
 
+using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.FunctionalTests.Fixture;
 
@@ -28,6 +29,48 @@ public class OrderEndpointsTest
         _factory = factory;
         _client = _factory.CreateClient();
     }
+
+    #region GetOrders
+    [Fact]
+    public async Task GetOrders_ValidRequest_ReturnsPaginatedOrders()
+    {
+        // Arrange
+        var page = 1;
+        var size = 2;
+        var request = $"/api/Order?p={page}&s={size}";
+
+        // Act
+        var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var paginationModel = await response.Content.ReadFromJsonAsync<PaginationModel<OrderDto>>(TestContext.Current.CancellationToken);
+        Assert.NotNull(paginationModel);
+        Assert.Equal(page, paginationModel.Page);
+        Assert.Equal(size, paginationModel.Count);
+        Assert.NotEmpty(paginationModel.Items);
+    }
+
+    [Fact]
+    public async Task GetOrders_InvalidPageSize_ReturnsProblemDetails()
+    {
+        // Arrange
+        var page = 0; // Invalid page number
+        var size = -1; // Invalid page size
+        var request = $"/api/Order?p={page}&s={size}";
+
+        // Act
+        var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
+        Assert.NotNull(problemDetails);
+        Assert.NotEmpty(problemDetails.Errors);
+        Assert.Contains("Size", problemDetails.Errors.Keys);
+        Assert.Contains("Page", problemDetails.Errors.Keys);
+    }
+    #endregion GetOrders
 
     #region GetOrderById
     [Fact]

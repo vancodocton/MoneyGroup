@@ -18,6 +18,7 @@
     <Project Path="src/Infrastructure/MoneyGroup.Infrastructure.csproj" />
     <Project Path="src/Postgres.Migrator/MoneyGroup.Postgres.Migrator.csproj" />
     <Project Path="src/WebApi/MoneyGroup.WebApi.csproj" />
+    <Project Path="src/WebApp/MoneyGroup.WebApp.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/FunctionalTests/MoneyGroup.FunctionalTests.csproj" />

@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "bootstrap@5.3.3",
+      "destination": "wwwroot/lib/bootstrap/",
+      "files": [
+        "dist/css/*",
+        "dist/js/*",
+        "LICENSE"
+      ]
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/",
+      "files": [
+        "dist/*",
+        "LICENSE.txt"
+      ]
+    },
+    {
+      "library": "jquery-validation@1.21.0",
+      "destination": "wwwroot/lib/jquery-validation/",
+      "files": [
+        "dist/*",
+        "LICENSE.md"
+      ]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
+      "files": [
+        "dist/*",
+        "LICENSE.txt"
+      ]
+    }
+  ]
+}

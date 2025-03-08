@@ -9,6 +9,7 @@
       "src\\Infrastructure\\MoneyGroup.Infrastructure.csproj",
       "src\\Postgres.Migrator\\MoneyGroup.Postgres.Migrator.csproj",
       "src\\WebApi\\MoneyGroup.WebApi.csproj",
+      "src\\WebApp\\MoneyGroup.WebApp.csproj",
       "test\\FunctionalTests\\MoneyGroup.FunctionalTests.csproj",
       "test\\IntegrationTests\\MoneyGroup.IntegrationTests.csproj",
       "test\\UnitTests\\MoneyGroup.UnitTests.csproj"

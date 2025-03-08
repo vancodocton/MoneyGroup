@@ -1,0 +1,26 @@
+{
+  "descriptionHash": "E6A36988752E52365334C2ED7E7824F600714722684B2E531B8E658BAF17A084827146FDC0800A4ACFB103926B63CA1CB4E8F395EB03B6E8BC9D540C2A29C4F4",
+  "descriptionLocation": "../../WebApi/MoneyGroup.WebApi.json",
+  "lockFileVersion": "1.0.0",
+  "kiotaVersion": "1.23.0",
+  "clientClassName": "WebApiClient",
+  "typeAccessModifier": "Public",
+  "clientNamespaceName": "MoneyGroup.WebApi",
+  "language": "CSharp",
+  "usesBackingStore": false,
+  "excludeBackwardCompatible": true,
+  "includeAdditionalData": false,
+  "disableSSLValidation": false,
+  "serializers": [
+    "Microsoft.Kiota.Serialization.Json.JsonSerializationWriterFactory"
+  ],
+  "deserializers": [
+    "Microsoft.Kiota.Serialization.Json.JsonParseNodeFactory"
+  ],
+  "structuredMimeTypes": [
+    "application/json"
+  ],
+  "includePatterns": [],
+  "excludePatterns": [],
+  "disabledValidationRules": []
+}

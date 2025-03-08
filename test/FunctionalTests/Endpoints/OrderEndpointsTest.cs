@@ -21,13 +21,11 @@ public class OrderEndpointsTest
         WriteIndented = true,
     };
 
-    private readonly WebApiFactory _factory;
     private readonly HttpClient _client;
 
     public OrderEndpointsTest(WebApiFactory factory)
     {
-        _factory = factory;
-        _client = _factory.CreateClient();
+        _client = factory.CreateClient();
     }
 
     #region GetOrders

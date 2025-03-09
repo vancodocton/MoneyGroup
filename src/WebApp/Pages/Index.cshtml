@@ -4,7 +4,36 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (Model.OrdersPaginatedModel != null)
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Description</th>
+                    <th>Buyer</th>
+                    <th>Total Amount</th>
+                    <th>Participants</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.OrdersPaginatedModel.Items!)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.Description</td>
+                        <td>@order.BuyerName</td>
+                        <td>@order.Total</td>
+                        <td>
+                            @foreach (var participant in order.Participants!)
+                            {
+                                <span>@participant.Name |</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

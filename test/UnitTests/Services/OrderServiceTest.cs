@@ -35,20 +35,20 @@ public class OrderServiceTest
     {
         // Arrange
         int id = 1;
-        var orderDto = new OrderDto
+        var orderDto = new OrderDetailedDto
         {
             Id = id,
         };
         CancellationToken cancellationToken = default;
 
-        _orderRepositoryMock.Setup(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<int>(), cancellationToken))
+        _orderRepositoryMock.Setup(o => o.FirstOrDefaultAsync<OrderDetailedDto>(It.IsAny<int>(), cancellationToken))
             .ReturnsAsync(orderDto);
 
         // Act
         var result = await _orderService.GetOrderByIdAsync(id, cancellationToken);
 
         // Assert
-        _orderRepositoryMock.Verify(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<int>(), cancellationToken));
+        _orderRepositoryMock.Verify(o => o.FirstOrDefaultAsync<OrderDetailedDto>(It.IsAny<int>(), cancellationToken));
         Assert.NotNull(result);
         Assert.Equal(id, result.Id);
     }
@@ -60,14 +60,14 @@ public class OrderServiceTest
         int invalidId = -1;
         CancellationToken cancellationToken = default;
 
-        _orderRepositoryMock.Setup(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<Expression<Func<Order, bool>>>(), cancellationToken))
-            .ReturnsAsync((OrderDto?)null);
+        _orderRepositoryMock.Setup(o => o.FirstOrDefaultAsync<OrderDetailedDto>(It.IsAny<Expression<Func<Order, bool>>>(), cancellationToken))
+            .ReturnsAsync((OrderDetailedDto?)null);
 
         // Act
         var result = await _orderService.GetOrderByIdAsync(invalidId, cancellationToken);
 
         // Assert
-        _orderRepositoryMock.Verify(o => o.FirstOrDefaultAsync<OrderDto>(It.IsAny<int>(), cancellationToken));
+        _orderRepositoryMock.Verify(o => o.FirstOrDefaultAsync<OrderDetailedDto>(It.IsAny<int>(), cancellationToken));
         Assert.Null(result);
     }
 

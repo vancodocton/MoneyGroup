@@ -29,9 +29,9 @@ public class OrderService
         _userRepository = userRepository;
     }
 
-    public async Task<OrderDto?> GetOrderByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<OrderDetailedDto?> GetOrderByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _orderRepository.FirstOrDefaultAsync<OrderDto>(id, cancellationToken);
+        return await _orderRepository.FirstOrDefaultAsync<OrderDetailedDto>(id, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -108,9 +108,9 @@ public class OrderService
     }
 
     /// <inheritdoc />
-    public Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(IPaginatedOptions options)
+    public Task<PaginationModel<OrderDetailedDto>> GetOrdersByPageAsync(IPaginatedOptions options)
     {
         _paginatedOptionsValidator.ValidateAndThrow(options);
-        return _orderRepository.GetByPageAsync<OrderDto>(new OrderPaginatedSpec(options));
+        return _orderRepository.GetByPageAsync<OrderDetailedDto>(new OrderPaginatedSpec(options));
     }
 }

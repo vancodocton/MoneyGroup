@@ -6,7 +6,7 @@ namespace MoneyGroup.Core.Abstractions;
 
 public interface IOrderService
 {
-    Task<OrderDto?> GetOrderByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<OrderDetailedDto?> GetOrderByIdAsync(int id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Create a new order.
@@ -45,5 +45,5 @@ public interface IOrderService
     /// </summary>
     /// <param name="options">Pagination options for retrieving orders by page.</param>
     /// <returns></returns>
-    Task<PaginationModel<OrderDto>> GetOrdersByPageAsync(IPaginatedOptions options);
+    Task<PaginationModel<OrderDetailedDto>> GetOrdersByPageAsync(IPaginatedOptions options);
 }

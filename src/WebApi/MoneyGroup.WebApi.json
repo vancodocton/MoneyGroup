@@ -41,7 +41,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginationModelOfOrderDto"
+                  "$ref": "#/components/schemas/PaginationModelOfOrderDetailedDto"
                 }
               }
             }
@@ -120,7 +120,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderDto"
+                  "$ref": "#/components/schemas/OrderDetailedDto"
                 }
               }
             }
@@ -239,6 +239,39 @@
           }
         }
       },
+      "OrderDetailedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "total": {
+            "type": "number",
+            "format": "double"
+          },
+          "buyerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "buyerName": {
+            "type": "string"
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParticipantDetailedDto"
+            }
+          }
+        }
+      },
       "OrderDto": {
         "type": "object",
         "properties": {
@@ -269,7 +302,7 @@
           }
         }
       },
-      "PaginationModelOfOrderDto": {
+      "PaginationModelOfOrderDetailedDto": {
         "required": [
           "page",
           "count",
@@ -293,8 +326,20 @@
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OrderDto"
+              "$ref": "#/components/schemas/OrderDetailedDto"
             }
+          }
+        }
+      },
+      "ParticipantDetailedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
           }
         }
       },

@@ -35,7 +35,7 @@ public static class OrderEndpoints
         .WithOpenApi();
     }
 
-    private static async Task<Results<Ok<PaginationModel<OrderDto>>, ValidationProblem>> GetOrdersAsync([AsParameters] OrderPaginationRequest request, [FromServices] IOrderService orderService)
+    private static async Task<Results<Ok<PaginationModel<OrderDetailedDto>>, ValidationProblem>> GetOrdersAsync([AsParameters] OrderPaginationRequest request, [FromServices] IOrderService orderService)
     {
         var orders = await orderService.GetOrdersByPageAsync(request);
         return TypedResults.Ok(orders);
@@ -73,7 +73,7 @@ public static class OrderEndpoints
         }
     }
 
-    public static async Task<Results<Ok<OrderDto>, NotFound>> GetOrderByIdAsync(int id, IOrderService orderService)
+    public static async Task<Results<Ok<OrderDetailedDto>, NotFound>> GetOrderByIdAsync(int id, IOrderService orderService)
     {
         var order = await orderService.GetOrderByIdAsync(id);
         return order == null

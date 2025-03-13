@@ -17,5 +17,12 @@ internal class OrderProfile : Profile
             .ForPath(dest => dest.ParticipantId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.OrderId, opt => opt.UseDestinationValue())
             .ReverseMap();
+
+        CreateMap<Order, OrderDetailedDto>();
+
+        CreateMap<OrderParticipant, ParticipantDetailedDto>()
+            .IncludeMembers(src => src.Participant);
+
+        CreateMap<User, ParticipantDetailedDto>();
     }
 }

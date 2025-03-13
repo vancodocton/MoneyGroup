@@ -42,11 +42,27 @@ public class OrderEndpointsTest
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var paginationModel = await response.Content.ReadFromJsonAsync<PaginationModel<OrderDto>>(TestContext.Current.CancellationToken);
+        var paginationModel = await response.Content.ReadFromJsonAsync<PaginationModel<OrderDetailedDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(paginationModel);
         Assert.Equal(page, paginationModel.Page);
         Assert.Equal(size, paginationModel.Count);
         Assert.NotEmpty(paginationModel.Items);
+        Assert.All(paginationModel.Items, order =>
+        {
+            Assert.NotNull(order);
+            Assert.NotEqual(0, order.Id);
+            Assert.NotNull(order.Title);
+            Assert.NotEqual(0, order.Total);
+            Assert.NotEqual(0, order.BuyerId);
+            Assert.NotNull(order.BuyerName);
+            Assert.NotEmpty(order.Participants);
+            Assert.All(order.Participants, p =>
+            {
+                Assert.NotNull(p);
+                Assert.NotEqual(0, p.Id);
+                Assert.NotNull(p.Name);
+            });
+        });
     }
 
     [Fact]
@@ -83,9 +99,20 @@ public class OrderEndpointsTest
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var order = await response.Content.ReadFromJsonAsync<OrderDto>(TestContext.Current.CancellationToken);
+        var order = await response.Content.ReadFromJsonAsync<OrderDetailedDto>(TestContext.Current.CancellationToken);
         Assert.NotNull(order);
         Assert.Equal(orderId, order.Id);
+        Assert.NotNull(order.Title);
+        Assert.NotEqual(0, order.Total);
+        Assert.NotEqual(0, order.BuyerId);
+        Assert.NotNull(order.BuyerName);
+        Assert.NotEmpty(order.Participants);
+        Assert.All(order.Participants, p =>
+        {
+            Assert.NotNull(p);
+            Assert.NotEqual(0, p.Id);
+            Assert.NotNull(p.Name);
+        });
     }
 
     [Fact]

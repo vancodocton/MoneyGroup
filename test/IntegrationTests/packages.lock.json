@@ -663,7 +663,7 @@
       "moneygroup.core": {
         "type": "Project",
         "dependencies": {
-          "Ardalis.Specification": "[8.0.0, )",
+          "Ardalis.Specification": "[9.0.0, )",
           "FluentValidation": "[11.11.0, )",
           "Microsoft.Extensions.Logging.Abstractions": "[9.0.3, )"
         }
@@ -695,9 +695,9 @@
       },
       "Ardalis.Specification": {
         "type": "CentralTransitive",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "1/YP932oZJtaDlm85rWfqvgOjALbk2+VDZaj36sM2TdsJMNkVqMbF5UzY6f7OfzA8eymv3hnCXIgYmEBEiUOhQ=="
+        "requested": "[9.0.0, )",
+        "resolved": "9.0.0",
+        "contentHash": "n0GMY679rWQVYVh1rfxV/LPc31QiXBO+Zp9SOEXMnafetbMoYys8RQxdmJRKzwpzWYL850QKsOs/5mcnHLP9RA=="
       },
       "Ardalis.Specification.EntityFrameworkCore": {
         "type": "CentralTransitive",

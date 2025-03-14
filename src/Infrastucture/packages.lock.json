@@ -4,13 +4,13 @@
     "net9.0": {
       "Ardalis.Specification.EntityFrameworkCore": {
         "type": "Direct",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "fDaCf5/7rm7Ul7yE8YafyWhxCSmWCPd+/4BUxM26Hbnb2PKZJssjAevzx9ZceASJKe4HUndSEKXJ8iz+R3rsIw==",
+        "requested": "[9.0.0, )",
+        "resolved": "9.0.0",
+        "contentHash": "3Lnf0LgZhBVjB2aX8aXwFJP9gx34ciOhkDoDqgv9EoIs/34tr8WGYOo78X1mMgbl15ZzisJie7nXk4qr2mzV8w==",
         "dependencies": {
-          "Ardalis.Specification": "8.0.0",
-          "Microsoft.EntityFrameworkCore": "8.0.0",
-          "Microsoft.EntityFrameworkCore.Relational": "8.0.0"
+          "Ardalis.Specification": "9.0.0",
+          "Microsoft.EntityFrameworkCore": "9.0.2",
+          "Microsoft.EntityFrameworkCore.Relational": "9.0.2"
         }
       },
       "AutoMapper": {

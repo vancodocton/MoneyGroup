@@ -6,7 +6,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="Ardalis.Specification" Version="9.0.0" />
-    <PackageVersion Include="Ardalis.Specification.EntityFrameworkCore" Version="8.0.0" />
+    <PackageVersion Include="Ardalis.Specification.EntityFrameworkCore" Version="9.0.0" />
     <PackageVersion Include="AutoMapper" Version="14.0.0" />
     <PackageVersion Include="AutoMapper.Collection" Version="11.0.0" />
     <PackageVersion Include="FluentValidation" Version="11.11.0" />

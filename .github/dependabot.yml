@@ -20,7 +20,7 @@ updates:
     groups:
       all:
         patterns:
-          - *
+          - "*"
     #   microsoft:
     #     patterns:
     #       - "Microsoft.*"

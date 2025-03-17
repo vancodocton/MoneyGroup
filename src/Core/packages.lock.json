@@ -4,9 +4,9 @@
     "net9.0": {
       "Ardalis.Specification": {
         "type": "Direct",
-        "requested": "[9.0.0, )",
-        "resolved": "9.0.0",
-        "contentHash": "n0GMY679rWQVYVh1rfxV/LPc31QiXBO+Zp9SOEXMnafetbMoYys8RQxdmJRKzwpzWYL850QKsOs/5mcnHLP9RA=="
+        "requested": "[9.0.1, )",
+        "resolved": "9.0.1",
+        "contentHash": "bMVjiLaJbnmiaEn/oBoF8rTSRpnKMsA2JDQaCY/QZbC27r9b3gF+/qi6fcJdOROPoE6TjseNfCf42KnQKnkUiQ=="
       },
       "FluentValidation": {
         "type": "Direct",

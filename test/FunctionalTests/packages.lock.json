@@ -807,7 +807,7 @@
           "MoneyGroup.Core": "[1.0.0, )",
           "MoneyGroup.Infrastucture": "[1.0.0, )",
           "MoneyGroup.Infrastucture.SqlServer": "[1.0.0, )",
-          "Swashbuckle.AspNetCore.SwaggerUI": "[7.3.1, )"
+          "Swashbuckle.AspNetCore.SwaggerUI": "[7.3.2, )"
         }
       },
       "Ardalis.Specification": {
@@ -991,9 +991,9 @@
       },
       "Swashbuckle.AspNetCore.SwaggerUI": {
         "type": "CentralTransitive",
-        "requested": "[7.3.1, )",
-        "resolved": "7.3.1",
-        "contentHash": "hs6C+lmNEzipOA1WPQpIaGvvoXjUbnoevbv6l7o9ZQE8SNF8ggjOmK6NB6cYdMcEvk0uBeKl4Qq/BnRt5MFVqg=="
+        "requested": "[7.3.2, )",
+        "resolved": "7.3.2",
+        "contentHash": "SNQuFjYin9KhkoCSVOD5/Y4VEyAjKBDeZkIqqY6x+oI21HMKzzVkeJA9V7tWFXf5df4m/+pTIlbKO7g5W9UroQ=="
       }
     }
   }

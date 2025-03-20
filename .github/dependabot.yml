@@ -18,6 +18,9 @@ updates:
     schedule:
       interval: "daily"
     groups:
+      Swashbuckle:
+        patterns:
+          - "Swashbuckle*"
       all:
         patterns:
           - "*"

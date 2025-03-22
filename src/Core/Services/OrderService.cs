@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using MoneyGroup.Core.Abstractions;
+using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Exceptions;
 using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
@@ -31,7 +32,7 @@ public class OrderService
 
     public async Task<OrderDetailedDto?> GetOrderByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _orderRepository.FirstOrDefaultAsync<OrderDetailedDto>(id, cancellationToken);
+        return await _orderRepository.FirstOrDefaultAsync<OrderDetailedDto>(new EntityByIdSpec<Order>(id), cancellationToken);
     }
 
     /// <inheritdoc />
@@ -39,7 +40,7 @@ public class OrderService
     {
         await _orderValidator.ValidateAndThrowAsync(model, cancellationToken: cancellationToken);
 
-        if (!await _userRepository.AnyAsync(model.BuyerId, cancellationToken))
+        if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(model.BuyerId), cancellationToken))
         {
             throw new BuyerNotFoundException();
         }
@@ -48,7 +49,7 @@ public class OrderService
 
         foreach (var participantId in model.Participants.Select(c => c.Id))
         {
-            if (!await _userRepository.AnyAsync(participantId, cancellationToken))
+            if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(participantId), cancellationToken))
             {
                 throw new ParticipantNotFoundException();
             }
@@ -67,12 +68,12 @@ public class OrderService
     {
         await _orderValidator.ValidateAndThrowAsync(model, cancellationToken: cancellationToken);
 
-        if (!await _orderRepository.AnyAsync(model.Id, cancellationToken))
+        if (!await _orderRepository.AnyAsync(new EntityByIdSpec<Order>(model.Id), cancellationToken))
         {
             throw new OrderNotFoundException();
         }
 
-        if (!await _userRepository.AnyAsync(model.BuyerId, cancellationToken))
+        if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(model.BuyerId), cancellationToken))
         {
             throw new BuyerNotFoundException();
         }
@@ -81,7 +82,7 @@ public class OrderService
 
         foreach (var participantId in model.Participants.Select(c => c.Id))
         {
-            if (!await _userRepository.AnyAsync(participantId, cancellationToken))
+            if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(participantId), cancellationToken))
             {
                 throw new ParticipantNotFoundException();
             }
@@ -98,7 +99,7 @@ public class OrderService
     /// <inheritdoc />
     public async Task RemoveOrderAsync(int id, CancellationToken cancellationToken = default)
     {
-        var order = await _orderRepository.FirstOrDefaultAsync(id, cancellationToken);
+        var order = await _orderRepository.FirstOrDefaultAsync(new EntityByIdSpec<Order>(id), cancellationToken);
         if (order == null)
         {
             throw new OrderNotFoundException();

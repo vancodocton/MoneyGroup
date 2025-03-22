@@ -77,6 +77,13 @@ public class EfRepository<TEntity>
         return dto;
     }
 
+    public virtual async Task<bool> AnyAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .WithSpecification(specification)
+            .AnyAsync(cancellationToken);
+    }
+
     public virtual async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await _dbSet.AnyAsync(predicate, cancellationToken);
@@ -87,9 +94,31 @@ public class EfRepository<TEntity>
         return await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
+    public virtual async Task<TEntity?> FirstOrDefaultAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .WithSpecification(specification)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await _dbSet.Where(predicate).ProjectTo<TResult>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .WithSpecification(specification)
+            .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<TEntity, TResult> specification, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .WithSpecification(specification)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public virtual async Task RemoveAsync(TEntity entity, CancellationToken cancellationToken = default)

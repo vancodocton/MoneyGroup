@@ -2,7 +2,7 @@
 
 using MoneyGroup.Core.Entities;
 
-namespace MoneyGroup.Infrastucture.Data;
+namespace MoneyGroup.Infrastructure.Data;
 public class ApplicationDbContext
     : DbContext
 {

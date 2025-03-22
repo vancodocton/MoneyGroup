@@ -21,11 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Core", "src\Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.UnitTests", "test\UnitTests\MoneyGroup.UnitTests.csproj", "{516B9671-29C4-4EAC-8FEB-E664E2749BE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Infrastucture", "src\Infrastucture\MoneyGroup.Infrastucture.csproj", "{AC05EAFC-C471-42CE-95E1-E74C81E14107}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Infrastructure", "src\Infrastructure\MoneyGroup.Infrastructure.csproj", "{AC05EAFC-C471-42CE-95E1-E74C81E14107}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.IntegrationTests", "test\IntegrationTests\MoneyGroup.IntegrationTests.csproj", "{FCA39533-663C-4990-BD94-306AB16B26F2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Infrastucture.PostgreSql", "src\Infrastucture.PostgreSql\MoneyGroup.Infrastucture.PostgreSql.csproj", "{6ECAE430-A1EC-4315-A46F-CC886FB81BD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Infrastructure.PostgreSql", "src\Infrastructure.PostgreSql\MoneyGroup.Infrastructure.PostgreSql.csproj", "{6ECAE430-A1EC-4315-A46F-CC886FB81BD5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.WebApi", "src\WebApi\MoneyGroup.WebApi.csproj", "{0F03932C-BC42-4AA8-9D51-092AC254EE28}"
 EndProject
@@ -35,7 +35,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Postgres.Migrator", "src\Postgres.Migrator\MoneyGroup.Postgres.Migrator.csproj", "{CFF31754-355A-4903-9B55-A190437468EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyGroup.Infrastucture.SqlServer", "src\Infrastucture.SqlServer\MoneyGroup.Infrastucture.SqlServer.csproj", "{FCE09055-39E9-4A54-A331-D5B1850AF8C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyGroup.Infrastructure.SqlServer", "src\Infrastructure.SqlServer\MoneyGroup.Infrastructure.SqlServer.csproj", "{FCE09055-39E9-4A54-A331-D5B1850AF8C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

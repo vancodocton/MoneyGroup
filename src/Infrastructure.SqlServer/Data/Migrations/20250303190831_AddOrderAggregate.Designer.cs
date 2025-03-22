@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MoneyGroup.Infrastucture.Data;
+using MoneyGroup.Infrastructure.Data;
 
 #nullable disable
 
-namespace MoneyGroup.Infrastucture.SqlServer.Data.Migrations
+namespace MoneyGroup.Infrastructure.SqlServer.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250303190831_AddOrderAggregate")]

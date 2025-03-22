@@ -12,7 +12,7 @@ using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Services.Specifications;
 
-namespace MoneyGroup.Infrastucture.Data;
+namespace MoneyGroup.Infrastructure.Data;
 public class EfRepository<TEntity>
     : IRepository<TEntity> where TEntity : class
 {

@@ -3,8 +3,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-using MoneyGroup.Infrastucture.AutoMapper.Profiles;
-using MoneyGroup.Infrastucture.Data;
+using MoneyGroup.Infrastructure.AutoMapper.Profiles;
+using MoneyGroup.Infrastructure.Data;
 
 namespace MoneyGroup.IntegrationTests.Fixtures;
 

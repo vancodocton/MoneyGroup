@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MoneyGroup.Infrastucture.PostgreSql.Data.Migrations
+namespace MoneyGroup.Infrastructure.PostgreSql.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddOrderAggregate : Migration

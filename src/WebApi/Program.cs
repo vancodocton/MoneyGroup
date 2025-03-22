@@ -6,9 +6,9 @@ using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Services;
 using MoneyGroup.Core.Validators;
-using MoneyGroup.Infrastucture.AutoMapper.Profiles;
-using MoneyGroup.Infrastucture.Data;
-using MoneyGroup.Infrastucture.SqlServer;
+using MoneyGroup.Infrastructure.AutoMapper.Profiles;
+using MoneyGroup.Infrastructure.Data;
+using MoneyGroup.Infrastructure.SqlServer;
 using MoneyGroup.WebApi.Endpoints;
 using MoneyGroup.WebApi.Middlewares;
 

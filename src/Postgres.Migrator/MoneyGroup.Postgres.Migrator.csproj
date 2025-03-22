@@ -15,6 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastucture.SqlServer\MoneyGroup.Infrastucture.SqlServer.csproj" />
+    <ProjectReference Include="..\Infrastructure.SqlServer\MoneyGroup.Infrastructure.SqlServer.csproj" />
   </ItemGroup>
 </Project>

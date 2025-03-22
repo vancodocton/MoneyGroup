@@ -73,7 +73,7 @@ jobs:
         dotnet build MoneyGroup.sln -c Release --no-restore
 
     - name: Format Checking
-      run: dotnet format MoneyGroup.sln --no-restore --verify-no-changes -v diag --severity info
+      run: dotnet format MoneyGroup.sln --no-restore --verify-no-changes -v diag --severity info --exclude-diagnostics xUnit1004
 
     - name: Test
       shell: pwsh

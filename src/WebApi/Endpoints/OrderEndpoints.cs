@@ -6,13 +6,17 @@ using MoneyGroup.Core.Exceptions;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Models.Paginations;
 
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+
 namespace MoneyGroup.WebApi.Endpoints;
 
 public static class OrderEndpoints
 {
     public static void MapOrderEndpoints(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/api/Order").WithTags("Order");
+        var group = routes.MapGroup("/api/Order")
+            .AddFluentValidationAutoValidation()
+            .WithTags("Order");
 
         group.MapGet("/", GetOrdersAsync)
         .WithName("GetOrders")

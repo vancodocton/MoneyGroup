@@ -6,7 +6,7 @@ using MoneyGroup.Core.Specifications;
 
 namespace MoneyGroup.Core.Services;
 
-public class OrderPaginatedSpec : BasePaginatedSpecification<Order>
+public class OrderPaginatedSpec : BasePaginatedSpecification<IPaginatedOptions, Order>
 {
     public OrderPaginatedSpec(IPaginatedOptions options)
         : base(options)

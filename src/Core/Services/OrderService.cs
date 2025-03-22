@@ -100,6 +100,6 @@ public class OrderService
     /// <inheritdoc />
     public Task<PaginatedModel<OrderDetailedDto>> GetOrdersByPageAsync(IPaginatedOptions options)
     {
-        return _orderRepository.GetByPageAsync<OrderDetailedDto>(new OrderPaginatedSpec(options));
+        return _orderRepository.GetByPageAsync<IPaginatedOptions, OrderDetailedDto>(new OrderPaginatedSpec(options));
     }
 }

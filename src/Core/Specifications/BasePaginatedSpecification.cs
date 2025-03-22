@@ -4,12 +4,13 @@ using MoneyGroup.Core.Abstractions;
 
 namespace MoneyGroup.Core.Specifications;
 
-public class BasePaginatedSpecification<TEntity> : Specification<TEntity>
-    , IPaginatedSpecification<TEntity>
+public class BasePaginatedSpecification<TRequest, TEntity> : Specification<TEntity>
+    , IPaginatedSpecification<TRequest, TEntity>
+    where TRequest : IPaginatedOptions
 {
-    public IPaginatedOptions PaginatedOptions { get; }
+    public TRequest PaginatedOptions { get; }
 
-    public BasePaginatedSpecification(IPaginatedOptions options)
+    public BasePaginatedSpecification(TRequest options)
     {
         PaginatedOptions = options;
 

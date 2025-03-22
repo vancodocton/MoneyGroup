@@ -26,7 +26,8 @@ public class EfRepository<TEntity>
         _mapper = mapper;
     }
 
-    public async Task<PaginatedModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification)
+    public async Task<PaginatedModel<TEntity>> GetByPageAsync<TRequest>(IPaginatedSpecification<TRequest, TEntity> specification)
+        where TRequest : IPaginatedOptions
     {
         IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
 
@@ -41,7 +42,8 @@ public class EfRepository<TEntity>
         return model;
     }
 
-    public async Task<PaginatedModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification)
+    public async Task<PaginatedModel<TResult>> GetByPageAsync<TRequest, TResult>(IPaginatedSpecification<TRequest, TEntity> specification)
+        where TRequest : IPaginatedOptions
     {
         IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
 

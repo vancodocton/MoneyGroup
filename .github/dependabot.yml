@@ -14,25 +14,34 @@ updates:
       interval: "daily"
       
   - package-ecosystem: "nuget"
+    open-pull-requests-limit: 8
     directory: "/"
     schedule:
       interval: "daily"
     groups:
+      Ardalis.Specification:
+        patterns:
+          - "Ardalis.Specification*"
+      EntityFrameworkCore:
+        patterns:
+          - "*EntityFrameworkCore*"
+          - "dotnet-ef"
+      Microsoft:
+        patterns:
+          - "Microsoft.*"
+        exclude-patterns:
+          - "*Test*"
+      AutoMapper:
+        patterns:
+          - "AutoMapper*"
       Swashbuckle:
         patterns:
-          - "Swashbuckle*"
-      all:
+          - "*Swashbuckle*"
+      Test:
         patterns:
-          - "*"
-    #   microsoft:
-    #     patterns:
-    #       - "Microsoft.*"
-    #     exclude-patterns:
-    #       - "*EntityFrameworkCore*"
-    #   ef-core:
-    #     patterns:
-    #       - "*EntityFrameworkCore*"
-    #       - "dotnet-ef"
+          - "*Test*"
+          - "xunit*"
+          - "Moq"
 
   - package-ecosystem: "devcontainers"
     directory: "/"

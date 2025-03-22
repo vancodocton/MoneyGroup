@@ -5,6 +5,7 @@ using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Exceptions;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Services;
+using MoneyGroup.Core.Specifications;
 
 using Moq;
 

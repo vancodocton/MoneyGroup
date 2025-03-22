@@ -2,7 +2,7 @@
 
 using MoneyGroup.Core.Abstractions;
 
-namespace MoneyGroup.Core.Services;
+namespace MoneyGroup.Core.Specifications;
 public class EntityByIdSpec<TEntity>
     : Specification<TEntity>
     where TEntity : class, IEntity<int>

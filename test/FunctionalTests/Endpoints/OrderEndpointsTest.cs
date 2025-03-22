@@ -5,8 +5,8 @@ using System.Text.Json;
 
 using Microsoft.AspNetCore.Mvc;
 
-using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
+using MoneyGroup.Core.Models.Paginations;
 using MoneyGroup.FunctionalTests.Fixture;
 
 namespace MoneyGroup.FunctionalTests.Endpoints;

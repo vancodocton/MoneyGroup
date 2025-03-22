@@ -1,4 +1,4 @@
-﻿namespace MoneyGroup.Core.Models;
+﻿namespace MoneyGroup.Core.Models.Paginations;
 
 public class PaginatedModel<T>
 {

@@ -2,7 +2,7 @@
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
-using MoneyGroup.Core.Services.Specifications;
+using MoneyGroup.Core.Specifications;
 
 namespace MoneyGroup.Core.Services;
 

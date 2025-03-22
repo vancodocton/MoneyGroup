@@ -41,7 +41,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginationModelOfOrderDetailedDto"
+                  "$ref": "#/components/schemas/PaginatedModelOfOrderDetailedDto"
                 }
               }
             }
@@ -302,7 +302,7 @@
           }
         }
       },
-      "PaginationModelOfOrderDetailedDto": {
+      "PaginatedModelOfOrderDetailedDto": {
         "required": [
           "page",
           "count",

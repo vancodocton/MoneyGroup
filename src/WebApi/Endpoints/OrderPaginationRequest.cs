@@ -1,9 +1,9 @@
 ﻿namespace MoneyGroup.WebApi.Endpoints;
 
-public class OrderPaginationRequest
-    : BasePaginationRequest
+public class OrderPaginatedRequest
+    : BasePaginatedRequest
 {
-    public OrderPaginationRequest(int page = 1, int size = 10)
+    public OrderPaginatedRequest(int page = 1, int size = 10)
         : base(page, size)
     {
     }

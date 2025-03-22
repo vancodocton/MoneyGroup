@@ -35,7 +35,7 @@ public static class OrderEndpoints
         .WithOpenApi();
     }
 
-    private static async Task<Results<Ok<PaginationModel<OrderDetailedDto>>, ValidationProblem>> GetOrdersAsync([AsParameters] OrderPaginationRequest request, [FromServices] IOrderService orderService)
+    private static async Task<Results<Ok<PaginatedModel<OrderDetailedDto>>, ValidationProblem>> GetOrdersAsync([AsParameters] OrderPaginatedRequest request, [FromServices] IOrderService orderService)
     {
         var orders = await orderService.GetOrdersByPageAsync(request);
         return TypedResults.Ok(orders);

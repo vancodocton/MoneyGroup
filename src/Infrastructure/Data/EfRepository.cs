@@ -27,11 +27,11 @@ public class EfRepository<TEntity>
         _mapper = mapper;
     }
 
-    public async Task<PaginationModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification)
+    public async Task<PaginatedModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification)
     {
         IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
 
-        var model = new PaginationModel<TEntity>()
+        var model = new PaginatedModel<TEntity>()
         {
             Page = specification.PaginatedOptions.Page,
             Count = specification.PaginatedOptions.Size,
@@ -42,11 +42,11 @@ public class EfRepository<TEntity>
         return model;
     }
 
-    public async Task<PaginationModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification)
+    public async Task<PaginatedModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification)
     {
         IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
 
-        var model = new PaginationModel<TResult>()
+        var model = new PaginatedModel<TResult>()
         {
             Page = specification.PaginatedOptions.Page,
             Count = specification.PaginatedOptions.Size,

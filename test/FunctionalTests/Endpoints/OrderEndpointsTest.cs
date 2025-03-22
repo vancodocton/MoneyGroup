@@ -42,7 +42,7 @@ public class OrderEndpointsTest
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var paginationModel = await response.Content.ReadFromJsonAsync<PaginationModel<OrderDetailedDto>>(TestContext.Current.CancellationToken);
+        var paginationModel = await response.Content.ReadFromJsonAsync<PaginatedModel<OrderDetailedDto>>(TestContext.Current.CancellationToken);
         Assert.NotNull(paginationModel);
         Assert.Equal(page, paginationModel.Page);
         Assert.Equal(size, paginationModel.Count);

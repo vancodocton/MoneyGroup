@@ -1,6 +1,6 @@
 ﻿namespace MoneyGroup.Core.Models;
 
-public class PaginationModel<T>
+public class PaginatedModel<T>
 {
     public required int Page { get; init; }
 

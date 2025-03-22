@@ -2,8 +2,7 @@
 
 using Ardalis.Specification;
 
-using MoneyGroup.Core.Models;
-using MoneyGroup.Core.Services.Specifications;
+using MoneyGroup.Core.Models.Paginations;
 
 namespace MoneyGroup.Core.Abstractions;
 

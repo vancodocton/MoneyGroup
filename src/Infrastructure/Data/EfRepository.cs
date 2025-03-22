@@ -9,8 +9,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Core.Abstractions;
-using MoneyGroup.Core.Models;
-using MoneyGroup.Core.Services.Specifications;
+using MoneyGroup.Core.Models.Paginations;
 
 namespace MoneyGroup.Infrastructure.Data;
 public class EfRepository<TEntity>

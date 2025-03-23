@@ -66,12 +66,14 @@ public class OrderEndpointsTest
     }
 
     [Fact]
-    public async Task GetOrders_InvalidPageSize_ReturnsProblemDetails()
+    public async Task GetOrders_InvalidRequest_ReturnsProblemDetails()
     {
         // Arrange
         var page = 0; // Invalid page number
         var size = -1; // Invalid page size
-        var request = $"/api/Order?p={page}&s={size}";
+        var buyerId = -1; // Invalid buyer Id
+        var participantId = -1; // Invalid participant Id
+        var request = $"/api/Order?p={page}&s={size}&buyerId={buyerId}&participantId={participantId}";
 
         // Act
         var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
@@ -80,9 +82,11 @@ public class OrderEndpointsTest
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
         Assert.NotNull(problemDetails);
-        Assert.NotEmpty(problemDetails.Errors);
+        Assert.Equal(4, problemDetails.Errors.Count);
         Assert.Contains("Size", problemDetails.Errors.Keys);
         Assert.Contains("Page", problemDetails.Errors.Keys);
+        Assert.Contains("BuyerId", problemDetails.Errors.Keys);
+        Assert.Contains("ParticipantId", problemDetails.Errors.Keys);
     }
     #endregion GetOrders
 

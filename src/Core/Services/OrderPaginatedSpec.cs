@@ -2,6 +2,7 @@
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
+using MoneyGroup.Core.Models.Paginations;
 using MoneyGroup.Core.Specifications;
 
 namespace MoneyGroup.Core.Services;

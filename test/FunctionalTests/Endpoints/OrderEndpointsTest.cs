@@ -65,7 +65,7 @@ public class OrderEndpointsTest
         });
     }
 
-    [Fact(Skip = "TODO: Refactor to be integrated with SharpGrip.FluentValidation.AutoValidation.Endpoints")]
+    [Fact]
     public async Task GetOrders_InvalidPageSize_ReturnsProblemDetails()
     {
         // Arrange

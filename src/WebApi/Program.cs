@@ -11,6 +11,7 @@ using MoneyGroup.Infrastructure.Data;
 using MoneyGroup.Infrastructure.SqlServer;
 using MoneyGroup.WebApi.Endpoints;
 using MoneyGroup.WebApi.Middlewares;
+using MoneyGroup.WebApi.Validators;
 
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
@@ -41,6 +42,7 @@ builder.Services.AddProblemDetails();
 #region Validators
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddSingleton<IValidator<IPaginatedOptions>, PaginatedOptionsValidator>();
+builder.Services.AddSingleton<IValidator<OrderPaginatedRequest>, OrderPaginatedRequestValidator>();
 builder.Services.AddSingleton<IValidator<ParticipantDto>, ParticipantDtoValidator>();
 builder.Services.AddSingleton<IValidator<OrderDto>, OrderDtoValidator>();
 builder.Services.AddExceptionHandler<BusinessValidationExceptionHandler>();

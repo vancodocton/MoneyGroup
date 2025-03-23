@@ -3,7 +3,7 @@
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
 
-namespace MoneyGroup.Infrastucture.Data;
+namespace MoneyGroup.Infrastructure.Data;
 
 public sealed class UserRepository
     : EfRepository<User>

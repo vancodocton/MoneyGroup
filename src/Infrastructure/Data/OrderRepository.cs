@@ -6,7 +6,7 @@ using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Models.Orders;
 
-namespace MoneyGroup.Infrastucture.Data;
+namespace MoneyGroup.Infrastructure.Data;
 
 public sealed class OrderRepository
     : EfRepository<Order>

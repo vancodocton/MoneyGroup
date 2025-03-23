@@ -4,7 +4,7 @@ using AutoMapper.EquivalencyExpression;
 using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Models.Orders;
 
-namespace MoneyGroup.Infrastucture.AutoMapper.Profiles;
+namespace MoneyGroup.Infrastructure.AutoMapper.Profiles;
 internal class OrderProfile : Profile
 {
     public OrderProfile()

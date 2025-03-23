@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace MoneyGroup.Infrastucture.SqlServer.Data.Migrations
+namespace MoneyGroup.Infrastructure.SqlServer.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddOrderAggregate : Migration

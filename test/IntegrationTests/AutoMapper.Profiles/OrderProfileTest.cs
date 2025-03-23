@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-using MoneyGroup.Infrastucture.AutoMapper.Profiles;
+using MoneyGroup.Infrastructure.AutoMapper.Profiles;
 
 namespace MoneyGroup.IntegrationTests.AutoMapper.Profiles;
 public class OrderProfileTest

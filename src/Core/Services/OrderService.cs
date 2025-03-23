@@ -108,7 +108,7 @@ public class OrderService
     }
 
     /// <inheritdoc />
-    public Task<PaginationModel<OrderDetailedDto>> GetOrdersByPageAsync(IPaginatedOptions options)
+    public Task<PaginatedModel<OrderDetailedDto>> GetOrdersByPageAsync(IPaginatedOptions options)
     {
         _paginatedOptionsValidator.ValidateAndThrow(options);
         return _orderRepository.GetByPageAsync<OrderDetailedDto>(new OrderPaginatedSpec(options));

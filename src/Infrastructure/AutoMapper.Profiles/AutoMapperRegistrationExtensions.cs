@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MoneyGroup.Infrastucture.AutoMapper.Profiles;
+namespace MoneyGroup.Infrastructure.AutoMapper.Profiles;
 
 public static class AutoMapperExtensions
 {

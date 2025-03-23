@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
-using MoneyGroup.Infrastucture.Data;
-using MoneyGroup.Infrastucture.SqlServer;
+using MoneyGroup.Infrastructure.Data;
+using MoneyGroup.Infrastructure.SqlServer;
 
 var builder = Host.CreateApplicationBuilder(args);
 

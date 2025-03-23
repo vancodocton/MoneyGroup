@@ -28,8 +28,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\MoneyGroup.Core.csproj" />
-    <ProjectReference Include="..\Infrastucture.SqlServer\MoneyGroup.Infrastucture.SqlServer.csproj" />
-    <ProjectReference Include="..\Infrastucture\MoneyGroup.Infrastucture.csproj" />
+    <ProjectReference Include="..\Infrastructure.SqlServer\MoneyGroup.Infrastructure.SqlServer.csproj" />
+    <ProjectReference Include="..\Infrastructure\MoneyGroup.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

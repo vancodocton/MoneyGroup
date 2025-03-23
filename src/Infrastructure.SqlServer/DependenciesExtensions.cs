@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-using MoneyGroup.Infrastucture.Data;
+using MoneyGroup.Infrastructure.Data;
 
-namespace MoneyGroup.Infrastucture.PostgreSql;
+namespace MoneyGroup.Infrastructure.SqlServer;
 public static class DependenciesExtensions
 {
     private static string? MigrationsAssembly => typeof(DependenciesExtensions).Assembly.GetName().Name;
 
-    public static IServiceCollection AddApplicationDbContextNpgsql(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddApplicationDbContextSqlServer(this IServiceCollection services, string connectionString)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(connectionString, config =>
+            options.UseSqlServer(connectionString, config =>
             {
                 config.MigrationsAssembly(MigrationsAssembly);
             }));

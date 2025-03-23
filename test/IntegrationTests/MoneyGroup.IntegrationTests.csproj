@@ -35,9 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Infrastucture.PostgreSql\MoneyGroup.Infrastucture.PostgreSql.csproj" />
-    <ProjectReference Include="..\..\src\Infrastucture.SqlServer\MoneyGroup.Infrastucture.SqlServer.csproj" />
-    <ProjectReference Include="..\..\src\Infrastucture\MoneyGroup.Infrastucture.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructure.PostgreSql\MoneyGroup.Infrastructure.PostgreSql.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructure.SqlServer\MoneyGroup.Infrastructure.SqlServer.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructure\MoneyGroup.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

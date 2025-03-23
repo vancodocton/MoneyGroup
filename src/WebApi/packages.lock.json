@@ -676,7 +676,7 @@
           "Microsoft.Extensions.Logging.Abstractions": "[9.0.3, )"
         }
       },
-      "moneygroup.infrastucture": {
+      "moneygroup.infrastructure": {
         "type": "Project",
         "dependencies": {
           "Ardalis.Specification.EntityFrameworkCore": "[9.0.1, )",
@@ -687,11 +687,11 @@
           "MoneyGroup.Core": "[1.0.0, )"
         }
       },
-      "moneygroup.infrastucture.sqlserver": {
+      "moneygroup.infrastructure.sqlserver": {
         "type": "Project",
         "dependencies": {
           "Microsoft.EntityFrameworkCore.SqlServer": "[9.0.3, )",
-          "MoneyGroup.Infrastucture": "[1.0.0, )"
+          "MoneyGroup.Infrastructure": "[1.0.0, )"
         }
       },
       "Ardalis.Specification": {

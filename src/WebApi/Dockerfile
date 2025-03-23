@@ -16,8 +16,8 @@ COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
 COPY ["src/WebApi/MoneyGroup.WebApi.csproj", "src/WebApi/"]
 COPY ["src/Core/MoneyGroup.Core.csproj", "src/Core/"]
-COPY ["src/Infrastucture.SqlServer/MoneyGroup.Infrastucture.SqlServer.csproj", "src/Infrastucture.SqlServer/"]
-COPY ["src/Infrastucture/MoneyGroup.Infrastucture.csproj", "src/Infrastucture/"]
+COPY ["src/Infrastructure.SqlServer/MoneyGroup.Infrastructure.SqlServer.csproj", "src/Infrastructure.SqlServer/"]
+COPY ["src/Infrastructure/MoneyGroup.Infrastructure.csproj", "src/Infrastructure/"]
 RUN dotnet restore "./src/WebApi/MoneyGroup.WebApi.csproj" --locked-mode
 COPY . .
 WORKDIR "/src/src/WebApi"

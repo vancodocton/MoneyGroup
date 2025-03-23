@@ -11,8 +11,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Postgres.Migrator/MoneyGroup.Postgres.Migrator.csproj", "src/Postgres.Migrator/"]
-COPY ["src/Infrastucture.PostgreSql/MoneyGroup.Infrastucture.PostgreSql.csproj", "src/Infrastucture.PostgreSql/"]
-COPY ["src/Infrastucture/MoneyGroup.Infrastucture.csproj", "src/Infrastucture/"]
+COPY ["src/Infrastructure.PostgreSql/MoneyGroup.Infrastructure.PostgreSql.csproj", "src/Infrastructure.PostgreSql/"]
+COPY ["src/Infrastructure/MoneyGroup.Infrastructure.csproj", "src/Infrastructure/"]
 COPY ["src/Core/MoneyGroup.Core.csproj", "src/Core/"]
 RUN dotnet restore "./src/Postgres.Migrator/MoneyGroup.Postgres.Migrator.csproj"
 COPY . .

@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "main", "dev" ]
     paths:
-      - src/
-      - test/
+      - src/**
+      - test/**
       - .github/workflows/dotnet.yml
       - .config/dotnet-tools.json
       - global.json
@@ -16,8 +16,8 @@ on:
   pull_request:
     branches: [ "main" ]
     paths:
-      - src/
-      - test/
+      - src/**
+      - test/**
       - .github/workflows/dotnet.yml
       - .config/dotnet-tools.json
       - global.json

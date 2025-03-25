@@ -9,7 +9,7 @@ namespace MoneyGroup.IntegrationTests.Fixtures;
 
 public abstract class NonGenericDbContextFactory
 {
-    protected static readonly IMapper MapperConfiguration = new MapperConfiguration(cfg =>
+    protected static readonly IMapper StaticMapper = new MapperConfiguration(cfg =>
     {
         cfg.AddMaps(typeof(AutoMapperExtensions).Assembly);
     }).CreateMapper();
@@ -30,7 +30,7 @@ public abstract class DbContextFactory<TDbContext>
     private static readonly SemaphoreSlim SemaphoreSlim = new(1, 1);
 #pragma warning restore S2743 // Static fields should not be used in generic types
 
-    public IMapper Mapper { get; private set; } = MapperConfiguration;
+    public IMapper Mapper { get; private set; } = StaticMapper;
 
     private TDbContext? _dbContext;
     private bool _disposedValue;

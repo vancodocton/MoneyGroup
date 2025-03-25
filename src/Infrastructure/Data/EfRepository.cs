@@ -15,6 +15,7 @@ namespace MoneyGroup.Infrastructure.Data;
 public class EfRepository<TEntity>
     : IRepository<TEntity> where TEntity : class
 {
+    protected readonly ISpecificationEvaluator _evaluator = SpecificationEvaluator.Default;
     protected readonly DbContext _dbContext;
     protected readonly DbSet<TEntity> _dbSet;
     protected readonly IMapper _mapper;
@@ -28,14 +29,19 @@ public class EfRepository<TEntity>
 
     public async Task<PaginatedModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification)
     {
-        IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
+        IQueryable<TEntity> query = _dbSet;
+
+        var total = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: true)
+            .CountAsync();
+        var items = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: false)
+            .ToListAsync();
 
         var model = new PaginatedModel<TEntity>()
         {
             Page = specification.PaginatedOptions.Page,
-            Count = specification.PaginatedOptions.Size,
-            Total = await query.CountAsync(),
-            Items = await query.ToListAsync(),
+            Count = items.Count,
+            Total = total,
+            Items = items,
         };
 
         return model;
@@ -43,16 +49,20 @@ public class EfRepository<TEntity>
 
     public async Task<PaginatedModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification)
     {
-        IQueryable<TEntity> query = _dbSet.AsQueryable().WithSpecification(specification);
+        IQueryable<TEntity> query = _dbSet;
+
+        var total = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: true)
+            .CountAsync();
+        var items = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: false)
+            .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+            .ToListAsync();
 
         var model = new PaginatedModel<TResult>()
         {
             Page = specification.PaginatedOptions.Page,
-            Count = specification.PaginatedOptions.Size,
-            Total = await query.CountAsync(),
-            Items = await query
-                .ProjectTo<TResult>(_mapper.ConfigurationProvider)
-                .ToListAsync(),
+            Count = items.Count,
+            Total = total,
+            Items = items,
         };
 
         return model;

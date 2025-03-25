@@ -46,11 +46,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
+    - name: Cache SonarQube Cloud packages
+      id: cache-sonar-scanner
+      uses: actions/cache@v4
       with:
-        java-version: 17
-        distribution: 'zulu' # Alternative distribution options are available.
+        path: ~/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -63,7 +65,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
       run: |
-        dotnet sonarscanner begin /k:"vancodocton_MoneyGroup" /o:"vancodocton" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        dotnet sonarscanner begin /k:"vancodocton_MoneyGroup" /o:"vancodocton" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.skipJreProvisioning=true
 
     - name: Restore and Build
       run: |

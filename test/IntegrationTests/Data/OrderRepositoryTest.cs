@@ -7,14 +7,14 @@ using MoneyGroup.IntegrationTests.Fixtures;
 
 namespace MoneyGroup.IntegrationTests.Data;
 public class OrderRepositoryTest
-    : IClassFixture<EfRepositoryFixture>
+    : IClassFixture<ApplicationDbContextFactory>
 {
-    private readonly EfRepositoryFixture _dbContextFixture;
+    private readonly ApplicationDbContextFactory _factory;
     private readonly ITestOutputHelper _output;
 
-    public OrderRepositoryTest(EfRepositoryFixture dbContextFixture, ITestOutputHelper output)
+    public OrderRepositoryTest(ApplicationDbContextFactory factory, ITestOutputHelper output)
     {
-        _dbContextFixture = dbContextFixture;
+        _factory = factory;
         _output = output;
     }
 
@@ -22,9 +22,9 @@ public class OrderRepositoryTest
     public async Task AddOrder_ValidDto_ShouldAddedOrder()
     {
         // Arrange
-        await using var dbContext = _dbContextFixture.CreateDbContext();
+        await using var dbContext = _factory.CreateDbContext();
         await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
-        var mapper = _dbContextFixture.Mapper;
+        var mapper = _factory.Mapper;
         var repository = new OrderRepository(dbContext, mapper);
         var orderDto = new OrderDto
         {
@@ -61,9 +61,9 @@ public class OrderRepositoryTest
     public async Task UpdateOrder_ValidDto_ShouldAddedOrder()
     {
         // Arrange
-        await using var dbContext = _dbContextFixture.CreateDbContext();
+        await using var dbContext = _factory.CreateDbContext();
         await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
-        var mapper = _dbContextFixture.Mapper;
+        var mapper = _factory.Mapper;
         var repository = new OrderRepository(dbContext, mapper);
         var orderDto = new OrderDto
         {
@@ -111,9 +111,9 @@ public class OrderRepositoryTest
     public async Task DeleteOrder_QueriedEntity_ShouldSuccess()
     {
         // Arrange
-        using var dbContext = _dbContextFixture.CreateDbContext();
+        using var dbContext = _factory.CreateDbContext();
         await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
-        var mapper = _dbContextFixture.Mapper;
+        var mapper = _factory.Mapper;
         var repository = new OrderRepository(dbContext, mapper);
         var newOrder = new Order
         {
@@ -143,9 +143,9 @@ public class OrderRepositoryTest
     public async Task DeleteOrder_ValidId_ShouldSuccess()
     {
         // Arrange
-        using var dbContext = _dbContextFixture.CreateDbContext();
+        using var dbContext = _factory.CreateDbContext();
         await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
-        var mapper = _dbContextFixture.Mapper;
+        var mapper = _factory.Mapper;
         var repository = new OrderRepository(dbContext, mapper);
         var newOrder = new Order
         {

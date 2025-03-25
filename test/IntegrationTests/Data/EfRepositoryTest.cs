@@ -9,13 +9,13 @@ using MoneyGroup.IntegrationTests.Fixtures;
 namespace MoneyGroup.IntegrationTests.Data;
 
 public class EfRepositoryTest
-    : IClassFixture<EfRepositoryFixture>
+    : IClassFixture<ApplicationDbContextFactory>
 {
-    private readonly EfRepositoryFixture _dbContextFixture;
+    private readonly ApplicationDbContextFactory _factory;
 
-    public EfRepositoryTest(EfRepositoryFixture efRepositoryFixture)
+    public EfRepositoryTest(ApplicationDbContextFactory factory)
     {
-        _dbContextFixture = efRepositoryFixture;
+        _factory = factory;
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public class EfRepositoryTest
     {
         // Arrange
         var spec = new OrderPaginatedSpec(new PaginatedOptions(page, size));
-        await using var dbContext = _dbContextFixture.CreateDbContext();
+        await using var dbContext = _factory.CreateDbContext();
         await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
         await dbContext.Orders.ExecuteDeleteAsync(TestContext.Current.CancellationToken);
         for (int i = 0; i < total; i++) // Seed 10 order
@@ -79,7 +79,7 @@ public class EfRepositoryTest
             await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
             dbContext.ChangeTracker.Clear();
         }
-        var mapper = _dbContextFixture.Mapper;
+        var mapper = _factory.Mapper;
         var repository = new OrderRepository(dbContext, mapper);
 
         // Act

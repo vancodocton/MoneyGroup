@@ -12,9 +12,4 @@ public sealed class UserRepository
     public UserRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
     {
     }
-
-    public Task<bool> AnyAsync(int id, CancellationToken cancellationToken = default)
-    {
-        return AnyAsync(x => x.Id == id, cancellationToken);
-    }
 }

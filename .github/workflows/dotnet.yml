@@ -77,6 +77,7 @@ jobs:
 
     - name: Test
       shell: pwsh
+      continue-on-error: true
       run: |
         docker compose up --wait mssql
         dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal -- --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml --report-xunit

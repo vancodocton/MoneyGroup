@@ -2,18 +2,18 @@
 
 using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Models.Paginations;
-using MoneyGroup.Core.Services;
+using MoneyGroup.Core.Specifications;
 using MoneyGroup.Infrastructure.Data;
 using MoneyGroup.IntegrationTests.Fixtures;
 
 namespace MoneyGroup.IntegrationTests.Data;
 
 public class EfRepositoryTest
-    : IClassFixture<ApplicationDbContextFactory>
+    : IClassFixture<SQLiteDbContextFactory>
 {
-    private readonly ApplicationDbContextFactory _factory;
+    private readonly SQLiteDbContextFactory _factory;
 
-    public EfRepositoryTest(ApplicationDbContextFactory factory)
+    public EfRepositoryTest(SQLiteDbContextFactory factory)
     {
         _factory = factory;
     }
@@ -55,32 +55,25 @@ public class EfRepositoryTest
         Assert.Equal(2, model.Count); // total - (page - 1) * size
     }
 
-    private async Task<PaginatedModel<Order>> ActAsync(int total, int page, int size)
+    private async Task<PaginatedModel<SimpleEntity>> ActAsync(int total, int page, int size)
     {
         // Arrange
-        var spec = new OrderPaginatedSpec(new PaginatedOptions(page, size));
+        var spec = new BasePaginatedSpecification<SimpleEntity>(new PaginatedOptions(page, size));
         await using var dbContext = _factory.CreateDbContext();
         await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
-        await dbContext.Orders.ExecuteDeleteAsync(TestContext.Current.CancellationToken);
-        for (int i = 0; i < total; i++) // Seed 10 order
+        await dbContext.SimpleEntities.ExecuteDeleteAsync(TestContext.Current.CancellationToken);
+        for (int i = 0; i < total; i++) // Seed 10 entity
         {
-            var orderDto = new Order
+            var entity = new SimpleEntity
             {
-                Title = "SeedOrder",
-                Description = $"SeedOrder{i}",
-                Total = 100.00m,
-                BuyerId = 1,
-                Participants = [
-                    new() { ParticipantId = 1 },
-                    new() { ParticipantId = 3 },
-                ],
+                Name = $"SeedEntity{i}",
             };
-            dbContext.Add(orderDto);
+            dbContext.Add(entity);
             await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
             dbContext.ChangeTracker.Clear();
         }
         var mapper = _factory.Mapper;
-        var repository = new OrderRepository(dbContext, mapper);
+        var repository = new EfRepository<SimpleEntity>(dbContext, mapper);
 
         // Act
         return await repository.GetByPageAsync(spec, TestContext.Current.CancellationToken);

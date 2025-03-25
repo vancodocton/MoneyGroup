@@ -20,7 +20,7 @@ public class EfRepository<TEntity>
     protected readonly DbSet<TEntity> _dbSet;
     protected readonly IMapper _mapper;
 
-    public EfRepository(ApplicationDbContext dbContext, IMapper mapper)
+    public EfRepository(DbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
         _dbSet = _dbContext.Set<TEntity>();

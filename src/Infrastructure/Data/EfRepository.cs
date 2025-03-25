@@ -27,14 +27,14 @@ public class EfRepository<TEntity>
         _mapper = mapper;
     }
 
-    public async Task<PaginatedModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification)
+    public async Task<PaginatedModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification, CancellationToken cancellationToken = default)
     {
         IQueryable<TEntity> query = _dbSet;
 
         var total = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: true)
-            .CountAsync();
+            .CountAsync(cancellationToken);
         var items = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: false)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         var model = new PaginatedModel<TEntity>()
         {
@@ -47,15 +47,15 @@ public class EfRepository<TEntity>
         return model;
     }
 
-    public async Task<PaginatedModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification)
+    public async Task<PaginatedModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification, CancellationToken cancellationToken = default)
     {
         IQueryable<TEntity> query = _dbSet;
 
         var total = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: true)
-            .CountAsync();
+            .CountAsync(cancellationToken);
         var items = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: false)
             .ProjectTo<TResult>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         var model = new PaginatedModel<TResult>()
         {

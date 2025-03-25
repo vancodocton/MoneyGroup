@@ -8,9 +8,9 @@ namespace MoneyGroup.Core.Abstractions;
 
 public interface IRepository<TEntity>
 {
-    public Task<PaginatedModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification);
+    public Task<PaginatedModel<TEntity>> GetByPageAsync(IPaginatedSpecification<TEntity> specification, CancellationToken cancellationToken = default);
 
-    public Task<PaginatedModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification);
+    public Task<PaginatedModel<TResult>> GetByPageAsync<TResult>(IPaginatedSpecification<TEntity> specification, CancellationToken cancellationToken = default);
 
     public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 

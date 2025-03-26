@@ -2,6 +2,7 @@
 
 using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Models.Orders;
+using MoneyGroup.Core.Specifications;
 using MoneyGroup.Infrastructure.Data;
 using MoneyGroup.IntegrationTests.Fixtures;
 
@@ -151,5 +152,50 @@ public class OrderRepositoryTest
         // Assert
         var deletedOrder = await dbContext.Orders.FindAsync([order.Id], TestContext.Current.CancellationToken);
         Assert.Null(deletedOrder);
+    }
+
+    [Fact]
+    public async Task GetByPage_ValidFilter_ShouldSuccess()
+    {
+        // Arrange
+        var buyerId = 1;
+        var participantId = 1;
+        var totalMax = 10_000_000M;
+        var totalMin = 0M;
+        int page = 1;
+        int size = 10;
+        var options = new OrderPaginatedOptions(buyerId, participantId, totalMax, totalMin, page, size);
+        var spec = new OrderPaginatedSpec(options);
+        await using var dbContext = _factory.CreateDbContext();
+        await dbContext.Database.BeginTransactionAsync(TestContext.Current.CancellationToken);
+        var order = new Order
+        {
+            Title = "NotInFilterOrder",
+            BuyerId = 2,
+            Participants = [
+                new() { ParticipantId = 2 },
+            ],
+            Total = 100_000_000M,
+        };
+        dbContext.Orders.Add(order);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        dbContext.ChangeTracker.Clear();
+
+        var mapper = _factory.Mapper;
+        var repository = new OrderRepository(dbContext, mapper);
+
+        // Act
+        var model = await repository.GetByPageAsync<OrderDetailedDto>(spec, TestContext.Current.CancellationToken);
+
+        // Assert
+        Assert.NotNull(model);
+        Assert.NotEmpty(model.Items);
+        Assert.All(model.Items, o =>
+        {
+            Assert.NotEqual(order.Id, o.Id);
+            Assert.Equal(buyerId, o.BuyerId);
+            Assert.Contains(o.Participants, o => o.Id == participantId);
+            Assert.InRange(o.Total, totalMin, totalMax);
+        });
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System.Linq.Expressions;
 
-using FluentValidation;
-
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Exceptions;
@@ -16,8 +14,6 @@ public class OrderServiceTest
 {
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<IOrderRepository> _orderRepositoryMock;
-    private readonly Mock<IValidator<OrderDto>> _orderValidatorMock;
-    private readonly Mock<IValidator<IPaginatedOptions>> _paginatedOptionsValidatorMock;
 #pragma warning disable CA1859 // Use concrete types when possible for improved performance
     private readonly IOrderService _orderService;
 #pragma warning restore CA1859 // Use concrete types when possible for improved performance
@@ -26,9 +22,7 @@ public class OrderServiceTest
     {
         _userRepositoryMock = new Mock<IUserRepository>();
         _orderRepositoryMock = new Mock<IOrderRepository>();
-        _orderValidatorMock = new Mock<IValidator<OrderDto>>();
-        _paginatedOptionsValidatorMock = new Mock<IValidator<IPaginatedOptions>>();
-        _orderService = new OrderService(_orderValidatorMock.Object, _paginatedOptionsValidatorMock.Object, _orderRepositoryMock.Object, _userRepositoryMock.Object);
+        _orderService = new OrderService(_orderRepositoryMock.Object, _userRepositoryMock.Object);
     }
 
     [Fact]

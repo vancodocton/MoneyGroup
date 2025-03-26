@@ -1,7 +1,5 @@
 ﻿using Ardalis.Specification;
 
-using FluentValidation;
-
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Exceptions;
@@ -14,19 +12,13 @@ namespace MoneyGroup.Core.Services;
 public class OrderService
     : IOrderService
 {
-    private readonly IValidator<OrderDto> _orderValidator;
-    private readonly IValidator<IPaginatedOptions> _paginatedOptionsValidator;
     private readonly IOrderRepository _orderRepository;
     private readonly IUserRepository _userRepository;
 
     public OrderService(
-        IValidator<OrderDto> orderValidator,
-        IValidator<IPaginatedOptions> paginatedOptionsValidator,
         IOrderRepository orderRepository,
         IUserRepository userRepository)
     {
-        _orderValidator = orderValidator;
-        _paginatedOptionsValidator = paginatedOptionsValidator;
         _orderRepository = orderRepository;
         _userRepository = userRepository;
     }
@@ -39,8 +31,6 @@ public class OrderService
     /// <inheritdoc />
     public async Task CreateOrderAsync(OrderDto model, CancellationToken cancellationToken = default)
     {
-        await _orderValidator.ValidateAndThrowAsync(model, cancellationToken: cancellationToken);
-
         if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(model.BuyerId), cancellationToken))
         {
             throw new BuyerNotFoundException();
@@ -67,8 +57,6 @@ public class OrderService
     /// <inheritdoc />
     public async Task UpdateOrderAsync(OrderDto model, CancellationToken cancellationToken = default)
     {
-        await _orderValidator.ValidateAndThrowAsync(model, cancellationToken: cancellationToken);
-
         if (!await _orderRepository.AnyAsync(new EntityByIdSpec<Order>(model.Id), cancellationToken))
         {
             throw new OrderNotFoundException();
@@ -112,7 +100,6 @@ public class OrderService
     /// <inheritdoc />
     public Task<PaginatedModel<OrderDetailedDto>> GetOrdersByPageAsync(IPaginatedOptions options)
     {
-        _paginatedOptionsValidator.ValidateAndThrow(options);
         return _orderRepository.GetByPageAsync<OrderDetailedDto>(new OrderPaginatedSpec(options));
     }
 }

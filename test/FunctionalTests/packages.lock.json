@@ -530,6 +530,14 @@
         "resolved": "13.0.1",
         "contentHash": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A=="
       },
+      "SharpGrip.FluentValidation.AutoValidation.Shared": {
+        "type": "Transitive",
+        "resolved": "1.5.0",
+        "contentHash": "vTZhTWRrTk051yXEOmkU9jMbHuckcBTW7P/3o1SX7R7arJ+JhTNinVeECkLJRcliW6qMto5aYRI2GEOP+DR4Dg==",
+        "dependencies": {
+          "FluentValidation": "10.0.0"
+        }
+      },
       "System.ClientModel": {
         "type": "Transitive",
         "resolved": "1.0.0",
@@ -807,6 +815,7 @@
           "MoneyGroup.Core": "[1.0.0, )",
           "MoneyGroup.Infrastructure": "[1.0.0, )",
           "MoneyGroup.Infrastructure.SqlServer": "[1.0.0, )",
+          "SharpGrip.FluentValidation.AutoValidation.Endpoints": "[1.5.0, )",
           "Swashbuckle.AspNetCore.SwaggerUI": "[8.0.0, )"
         }
       },
@@ -988,6 +997,15 @@
         "requested": "[1.21.1, )",
         "resolved": "1.21.1",
         "contentHash": "uOr+MTuP+/RccXnWptvh7D34GVWMsRPC/qRnEm38xsdMGZnWU7oWgJi+m4sIWLa5l5PHTcXuhMY/sT+UO/BKRw=="
+      },
+      "SharpGrip.FluentValidation.AutoValidation.Endpoints": {
+        "type": "CentralTransitive",
+        "requested": "[1.5.0, )",
+        "resolved": "1.5.0",
+        "contentHash": "yHzwvFI89/vA8kfFnRuR+CZIBhKWUCa/Qye9YpgB6lhQnV4WNKB5S1YblMdTq2Q/XYqiWlXVaO+Vr5t6GpmHKA==",
+        "dependencies": {
+          "SharpGrip.FluentValidation.AutoValidation.Shared": "1.5.0"
+        }
       },
       "Swashbuckle.AspNetCore.SwaggerUI": {
         "type": "CentralTransitive",

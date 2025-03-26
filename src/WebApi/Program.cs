@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models.Orders;
@@ -30,7 +31,32 @@ builder.Services.AddAuthorizationBuilder();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApi(); // Document name is v1
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
+        document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.OpenIdConnect,
+            In = ParameterLocation.Header,
+            OpenIdConnectUrl = new Uri(builder.Configuration["Authentication:Schemes:Google:MetadataAddress"]!),
+            BearerFormat = "Json Web Token",
+            Scheme = "bearer",
+        });
+        return Task.CompletedTask;
+    });
+    options.AddOperationTransformer((operation, context, cancellationToken) =>
+    {
+        operation.Security.Add(new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "Bearer", Type = ReferenceType.SecurityScheme } }] = []
+        });
+
+        return Task.CompletedTask;
+    });
+});
 
 builder.Services.AddAutoMapper();
 

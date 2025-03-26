@@ -16,21 +16,6 @@ public sealed class OrderRepository
     {
     }
 
-    public Task<bool> AnyAsync(int id, CancellationToken cancellationToken = default)
-    {
-        return AnyAsync(x => x.Id == id, cancellationToken);
-    }
-
-    public Task<Order?> FirstOrDefaultAsync(int id, CancellationToken cancellationToken = default)
-    {
-        return FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
-    }
-
-    public Task<TResult?> FirstOrDefaultAsync<TResult>(int id, CancellationToken cancellationToken = default)
-    {
-        return FirstOrDefaultAsync<TResult>(o => o.Id == id, cancellationToken);
-    }
-
     public async Task<OrderDto> UpdateAsync(OrderDto dto, CancellationToken cancellationToken = default)
     {
         var entity = await _dbSet

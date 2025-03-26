@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Exceptions;
-using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
+using MoneyGroup.Core.Models.Paginations;
 
 namespace MoneyGroup.WebApi.Endpoints;
 

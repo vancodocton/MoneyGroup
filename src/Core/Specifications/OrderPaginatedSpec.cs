@@ -2,9 +2,9 @@
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
-using MoneyGroup.Core.Services.Specifications;
+using MoneyGroup.Core.Models.Paginations;
 
-namespace MoneyGroup.Core.Services;
+namespace MoneyGroup.Core.Specifications;
 
 public class OrderPaginatedSpec : BasePaginatedSpecification<Order>
 {

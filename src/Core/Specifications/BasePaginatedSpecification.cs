@@ -2,7 +2,7 @@
 
 using MoneyGroup.Core.Abstractions;
 
-namespace MoneyGroup.Core.Services.Specifications;
+namespace MoneyGroup.Core.Specifications;
 
 public class BasePaginatedSpecification<TEntity> : Specification<TEntity>
     , IPaginatedSpecification<TEntity>

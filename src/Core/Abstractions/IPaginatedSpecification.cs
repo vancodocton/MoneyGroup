@@ -1,8 +1,6 @@
 ﻿using Ardalis.Specification;
 
-using MoneyGroup.Core.Abstractions;
-
-namespace MoneyGroup.Core.Services.Specifications;
+namespace MoneyGroup.Core.Abstractions;
 
 public interface IPaginatedSpecification<TEntity> : ISpecification<TEntity>
 {

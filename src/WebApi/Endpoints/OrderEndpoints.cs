@@ -16,6 +16,7 @@ public static class OrderEndpoints
     {
         var group = routes.MapGroup("/api/Order")
             .AddFluentValidationAutoValidation()
+            .RequireAuthorization()
             .WithTags("Order");
 
         group.MapGet("/", GetOrdersAsync)

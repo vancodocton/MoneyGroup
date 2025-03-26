@@ -20,6 +20,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddHealthChecks();
 
+builder.Services.AddAuthentication()
+    .AddJwtBearer("Google", options =>
+    {
+        // Configuration is loaded from appsettings.json
+    });
+
+builder.Services.AddAuthorizationBuilder();    
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(); // Document name is v1
@@ -69,6 +77,9 @@ app.UseExceptionHandler();
 app.MapHealthChecks("/healthz");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapOrderEndpoints();
 

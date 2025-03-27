@@ -22,8 +22,10 @@ public class DenyUnauthorizedUserHandler
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, DenyUnauthorizedUserRequirement requirement)
     {
-        if (context.User == null)
+        if (context.User.Identity?.IsAuthenticated != true)
+        {
             return;
+        }
 
         var userEmail = context.User.FindFirstValue(ClaimTypes.Email);
         if (userEmail == null || string.IsNullOrWhiteSpace(userEmail))

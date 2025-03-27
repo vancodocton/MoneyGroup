@@ -2,11 +2,11 @@ USE [MoneyGroup]
 GO
 SET IDENTITY_INSERT [dbo].[Users] ON 
 GO
-INSERT [dbo].[Users] ([Id], [Name]) VALUES (1, N'Truong')
+INSERT [dbo].[Users] ([Id], [Name], [Email]) VALUES (1, N'Truong', N'duongtruong.nguyenky@gmail.com')
 GO
-INSERT [dbo].[Users] ([Id], [Name]) VALUES (2, N'Duc')
+INSERT [dbo].[Users] ([Id], [Name], [Email]) VALUES (2, N'Duc', NULL)
 GO
-INSERT [dbo].[Users] ([Id], [Name]) VALUES (3, N'Manh')
+INSERT [dbo].[Users] ([Id], [Name], [Email]) VALUES (3, N'Manh', NULL)
 GO
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO

@@ -25,15 +25,7 @@ public class DenyUnauthorizedUserRequirementHandler
         if (context.User == null)
             return;
 
-        string? userEmail = null;
-        foreach (var claim in context.User.Claims)
-        {
-            if (string.Equals(claim.Type, ClaimTypes.Email, StringComparison.OrdinalIgnoreCase))
-            {
-                userEmail = claim.Value;
-                break;
-            }
-        }
+        var userEmail = context.User.FindFirstValue(ClaimTypes.Email);
         if (userEmail == null || string.IsNullOrWhiteSpace(userEmail))
         {
             _logger.LogDebug("Require `{JwtRegisteredClaimName}` claim", JwtRegisteredClaimNames.Email);
@@ -41,15 +33,7 @@ public class DenyUnauthorizedUserRequirementHandler
         }
         _logger.LogDebug("User email: `{UserEmail}`", userEmail);
 
-        string? emailVerified = null;
-        foreach (var claim in context.User.Claims)
-        {
-            if (string.Equals(claim.Type, JwtRegisteredClaimNames.EmailVerified, StringComparison.OrdinalIgnoreCase))
-            {
-                emailVerified = claim.Value;
-                break;
-            }
-        }
+        var emailVerified = context.User.FindFirstValue(JwtRegisteredClaimNames.EmailVerified);
         if (emailVerified == null)
         {
             _logger.LogDebug("Require `{JwtRegisteredClaimName}` claim", JwtRegisteredClaimNames.EmailVerified);

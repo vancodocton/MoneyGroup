@@ -14,7 +14,6 @@ public sealed class WebApiFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment(Environments.Production);
         builder.ConfigureAppConfiguration((context, config) =>
         {
             config.AddUserSecrets<WebApiFactory>();

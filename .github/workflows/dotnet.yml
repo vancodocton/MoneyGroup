@@ -91,6 +91,7 @@ jobs:
 
     - name: Upload TestResults Artifacts
       uses: actions/upload-artifact@v4
+      if: success() || failure()
       with:
         name: ${{ runner.os }}-TestResults
         path: |

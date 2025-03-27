@@ -30,7 +30,7 @@ builder.Services.AddAuthentication()
     });
 
 builder.Services.AddAuthorizationBuilder()
-    .AddDefaultPolicy("DefaultPolity", policy =>
+    .AddDefaultPolicy("DefaultPolicy", policy =>
     {
         policy.AddAuthenticationSchemes("Google");
         policy.RequireAuthenticatedUser();

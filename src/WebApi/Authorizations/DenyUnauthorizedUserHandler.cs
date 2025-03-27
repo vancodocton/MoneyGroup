@@ -8,13 +8,13 @@ using MoneyGroup.Core.Specifications;
 
 namespace MoneyGroup.WebApi.Authorizations;
 
-public class DenyUnauthorizedUserRequirementHandler
+public class DenyUnauthorizedUserHandler
     : AuthorizationHandler<DenyUnauthorizedUserRequirement>
 {
-    private readonly ILogger<DenyUnauthorizedUserRequirementHandler> _logger;
+    private readonly ILogger<DenyUnauthorizedUserHandler> _logger;
     private readonly IUserRepository _userRepository;
 
-    public DenyUnauthorizedUserRequirementHandler(ILogger<DenyUnauthorizedUserRequirementHandler> logger, IUserRepository userRepository)
+    public DenyUnauthorizedUserHandler(ILogger<DenyUnauthorizedUserHandler> logger, IUserRepository userRepository)
     {
         _logger = logger;
         _userRepository = userRepository;

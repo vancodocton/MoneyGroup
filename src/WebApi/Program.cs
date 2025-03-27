@@ -36,7 +36,7 @@ builder.Services.AddAuthorizationBuilder()
         policy.RequireAuthenticatedUser();
         policy.RequireAuthorizedUser();
     });
-builder.Services.AddScoped<IAuthorizationHandler, DenyUnauthorizedUserRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, DenyUnauthorizedUserHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

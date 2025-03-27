@@ -1,5 +1,6 @@
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -10,6 +11,7 @@ using MoneyGroup.Core.Validators;
 using MoneyGroup.Infrastructure.AutoMapper.Profiles;
 using MoneyGroup.Infrastructure.Data;
 using MoneyGroup.Infrastructure.SqlServer;
+using MoneyGroup.WebApi.Authorizations;
 using MoneyGroup.WebApi.Endpoints;
 using MoneyGroup.WebApi.Middlewares;
 using MoneyGroup.WebApi.Validators;
@@ -27,7 +29,14 @@ builder.Services.AddAuthentication()
         // Configuration is loaded from appsettings.json
     });
 
-builder.Services.AddAuthorizationBuilder();    
+builder.Services.AddAuthorizationBuilder()
+    .AddDefaultPolicy("DefaultPolity", policy =>
+    {
+        policy.AddAuthenticationSchemes("Google");
+        policy.RequireAuthenticatedUser();
+        policy.RequireAuthorizedUser();
+    });
+builder.Services.AddScoped<IAuthorizationHandler, DenyUnauthorizedUserRequirementHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -115,6 +115,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    if: ${{ github.event_name != 'pull_request' }}
     steps:
       - name: Log in to Azure
         uses: azure/login@a65d910e8af852a8061c627c456678983e180302 # 2.2.0
@@ -133,4 +134,4 @@ jobs:
           containerAppName: api-moneygroup
           resourceGroup: DefaultGroup
           registryUrl: ${{ env.REGISTRY }}
-          imageToDeploy: ghcr.io/vancodocton/moneygroup:main
+          imageToDeploy: ${{ steps.meta.outputs.tags }}

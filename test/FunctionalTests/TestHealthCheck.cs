@@ -1,4 +1,6 @@
-﻿using MoneyGroup.FunctionalTests.Fixture;
+﻿using System.Net.Http.Json;
+
+using MoneyGroup.FunctionalTests.Fixture;
 
 namespace MoneyGroup.FunctionalTests;
 public class TestHealthCheck
@@ -24,5 +26,20 @@ public class TestHealthCheck
         response.EnsureSuccessStatusCode();
         var responseString = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("Healthy", responseString);
+    }
+
+    [Fact]
+    public async Task OpenApiSpecification_ReturnsOk()
+    {
+        // Arrange
+        var client = _webApiFactory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/openapi/v1.json", TestContext.Current.CancellationToken);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        var oas = await response.Content.ReadFromJsonAsync<dynamic>(TestContext.Current.CancellationToken);
+        Assert.NotNull(oas);
     }
 }

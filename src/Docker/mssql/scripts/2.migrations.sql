@@ -43,6 +43,11 @@ CREATE INDEX [IX_Orders_BuyerId] ON [Orders] ([BuyerId]);
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
 VALUES (N'20250303190831_AddOrderAggregate', N'9.0.3');
 
+ALTER TABLE [Users] ADD [Email] nvarchar(max) NULL;
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250327132057_AlterUser', N'9.0.3');
+
 COMMIT;
 GO
 

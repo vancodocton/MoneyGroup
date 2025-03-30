@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 using MoneyGroup.Core.Abstractions;
+using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Services;
 using MoneyGroup.Core.Validators;
@@ -37,6 +38,12 @@ builder.Services.AddAuthorizationBuilder()
         policy.RequireAuthorizedUser();
     });
 builder.Services.AddScoped<IAuthorizationHandler, DenyUnauthorizedUserHandler>();
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+    options.SerializerOptions.Encoder = null;
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

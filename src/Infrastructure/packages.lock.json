@@ -37,6 +37,12 @@
           "Microsoft.Extensions.Logging": "9.0.4"
         }
       },
+      "Microsoft.NET.ILLink.Tasks": {
+        "type": "Direct",
+        "requested": "[9.0.4, )",
+        "resolved": "9.0.4",
+        "contentHash": "xUdlUxiFwXhTYhB4VxKg/IA0+jlZXJPo70LYuMryWbJHdonIpZjw+7DO2B0pWwpXIOs6MlH5WVXPEtfrGEcVZA=="
+      },
       "Riok.Mapperly": {
         "type": "Direct",
         "requested": "[4.2.0, )",

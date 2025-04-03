@@ -7,12 +7,16 @@ public class ApplicationDbContext
     : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+#pragma warning disable IL2026,IL3050
         : base(options)
+#pragma warning restore IL2026,IL3050 // RequiresDynamicCodeAttribute + RequiresUnreferencedCodeAttribute
     {
     }
 
     protected ApplicationDbContext(DbContextOptions options)
+#pragma warning disable IL2026,IL3050
         : base(options)
+#pragma warning restore IL2026,IL3050 // RequiresDynamicCodeAttribute + RequiresUnreferencedCodeAttribute    
     {
     }
 

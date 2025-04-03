@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 
 using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using MoneyGroup.Core.Models.Paginations;
 using MoneyGroup.Infrastructure.Mapperly;
 
 namespace MoneyGroup.Infrastructure.Data;
-public class EfRepository<TEntity>
+public class EfRepository<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields | DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.Interfaces)] TEntity>
     : IRepository<TEntity> where TEntity : class
 {
     protected readonly ISpecificationEvaluator _evaluator = SpecificationEvaluator.Default;

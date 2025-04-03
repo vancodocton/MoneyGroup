@@ -40,7 +40,7 @@ public static class OrderEndpoints
     private static async Task<Results<CreatedAtRoute<OrderDto>, ValidationProblem>> CreateOrderAsync(OrderDto input, IOrderService orderService)
     {
         await orderService.CreateOrderAsync(input);
-        return TypedResults.CreatedAtRoute(input, "GetOrderById", new { id = input.Id });
+        return TypedResults.CreatedAtRoute(input, "GetOrderById", new RouteValueDictionary() { { "id", input.Id } });
     }
 
     private static async Task<Results<NoContent, NotFound>> DeleteOrderAsync(int id, IOrderService orderService, CancellationToken cancellationToken)

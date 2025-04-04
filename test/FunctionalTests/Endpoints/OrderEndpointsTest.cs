@@ -59,8 +59,8 @@ public class OrderEndpointsTest
             Assert.All(order.Participants, p =>
             {
                 Assert.NotNull(p);
-                Assert.NotEqual(0, p.Id);
-                Assert.NotNull(p.Name);
+                Assert.NotEqual(0, p.ParticipantId);
+                Assert.NotNull(p.ParticipantName);
             });
         });
     }
@@ -114,8 +114,8 @@ public class OrderEndpointsTest
         Assert.All(order.Participants, p =>
         {
             Assert.NotNull(p);
-            Assert.NotEqual(0, p.Id);
-            Assert.NotNull(p.Name);
+            Assert.NotEqual(0, p.ParticipantId);
+            Assert.NotNull(p.ParticipantName);
         });
     }
 
@@ -163,8 +163,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { Id = 1 },
-                new { Id = 2 },
+                new { ParticipantId = 1 },
+                new { ParticipantId = 2 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -182,8 +182,8 @@ public class OrderEndpointsTest
         Assert.Equal("New order description", order.Description);
         Assert.Equal(10_000, order.Total);
         Assert.Equal(1, order.BuyerId);
-        Assert.Equal(1, order.Participants.Skip(0).First().Id);
-        Assert.Equal(2, order.Participants.Skip(1).First().Id);
+        Assert.Equal(1, order.Participants.Skip(0).First().ParticipantId);
+        Assert.Equal(2, order.Participants.Skip(1).First().ParticipantId);
 
         Assert.Equal($"/api/Order/{order.Id}", response.Headers.Location?.PathAndQuery);
     }
@@ -225,8 +225,8 @@ public class OrderEndpointsTest
             BuyerId = int.MaxValue, // Assuming an Buyer Id that does not exist
             Participants = new List<object>()
             {
-                new { Id = 1 },
-                new { Id = 2 },
+                new { ParticipantId = 1 },
+                new { ParticipantId = 2 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -255,8 +255,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { Id = 1 },
-                new { Id = int.MaxValue } , // Assuming a participant Id that does not exist
+                new { ParticipantId = 1 },
+                new { ParticipantId = int.MaxValue } , // Assuming a participant Id that does not exist
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -285,8 +285,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { Id = 1 },
-                new { Id = 1 }, // Duplicated participant Id
+                new { ParticipantId = 1 },
+                new { ParticipantId = 1 }, // Duplicated participant Id
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -320,8 +320,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { Id = 2 },
-                new { Id = 3 },
+                new { ParticipantId = 2 },
+                new { ParticipantId = 3 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -339,8 +339,8 @@ public class OrderEndpointsTest
         Assert.Equal("Updated order description", order.Description);
         Assert.Equal(15_000, order.Total);
         Assert.Equal(1, order.BuyerId);
-        Assert.Equal(2, order.Participants.Skip(0).First().Id);
-        Assert.Equal(3, order.Participants.Skip(1).First().Id);
+        Assert.Equal(2, order.Participants.Skip(0).First().ParticipantId);
+        Assert.Equal(3, order.Participants.Skip(1).First().ParticipantId);
     }
 
     [Fact]
@@ -359,8 +359,8 @@ public class OrderEndpointsTest
             BuyerId = int.MaxValue, // Assuming an Buyer Id that does not exist
             Participants = new List<object>()
             {
-                new { Id = 2 },
-                new { Id = 3 },
+                new { ParticipantId = 2 },
+                new { ParticipantId = 3 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -392,8 +392,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { Id = 2 },
-                new { Id = int.MaxValue }, // Assuming a participant Id that does not exist
+                new { ParticipantId = 2 },
+                new { ParticipantId = int.MaxValue }, // Assuming a participant Id that does not exist
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -425,8 +425,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { Id = 2 },
-                new { Id = 2 }, // Duplicated participant Id
+                new { ParticipantId = 2 },
+                new { ParticipantId = 2 }, // Duplicated participant Id
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -485,8 +485,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { Id = 2 },
-                new { Id = 3 },
+                new { ParticipantId = 2 },
+                new { ParticipantId = 3 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");

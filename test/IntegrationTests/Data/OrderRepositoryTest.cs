@@ -46,8 +46,8 @@ public class OrderRepositoryTest
             Total = 100.00m,
             BuyerId = 1,
             Participants = [
-                new() { Id = 1 },
-                new() { Id = 3 },
+                new() { ParticipantId = 1 },
+                new() { ParticipantId = 3 },
             ],
         };
 
@@ -67,7 +67,7 @@ public class OrderRepositoryTest
         Assert.NotNull(createdOrder);
         Assert.Equal(orderDto.Id, createdOrder.Id);
         Assert.Equal(1, createdOrder.BuyerId);
-        Assert.Equal(orderDto.Participants.Select(o => o.Id), createdOrder.Participants.Select(c => c.ParticipantId));
+        Assert.Equal(orderDto.Participants.Select(o => o.ParticipantId), createdOrder.Participants.Select(c => c.ParticipantId));
     }
 
     [Fact]
@@ -90,9 +90,9 @@ public class OrderRepositoryTest
             Total = 100.00m,
             BuyerId = 2,
             Participants = [
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
+                new() { ParticipantId = 1 },
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = 3 },
             ],
         };
 
@@ -108,7 +108,7 @@ public class OrderRepositoryTest
             .FirstOrDefaultAsync(o => o.Id == order.Id, TestContext.Current.CancellationToken);
         Assert.NotNull(updatedOrder);
         Assert.Equal(2, updatedOrder.BuyerId);
-        Assert.Equal(updateOrderDto.Participants.Select(o => o.Id), updatedOrder.Participants.Select(c => c.ParticipantId));
+        Assert.Equal(updateOrderDto.Participants.Select(o => o.ParticipantId), updatedOrder.Participants.Select(c => c.ParticipantId));
     }
 
     [Fact]
@@ -194,7 +194,7 @@ public class OrderRepositoryTest
         {
             Assert.NotEqual(order.Id, o.Id);
             Assert.Equal(buyerId, o.BuyerId);
-            Assert.Contains(o.Participants, o => o.Id == participantId);
+            Assert.Contains(o.Participants, o => o.ParticipantId == participantId);
             Assert.InRange(o.Total, totalMin, totalMax);
         });
     }

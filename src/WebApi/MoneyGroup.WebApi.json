@@ -391,11 +391,11 @@
       "ParticipantDetailedDto": {
         "type": "object",
         "properties": {
-          "id": {
+          "participantId": {
             "type": "integer",
             "format": "int32"
           },
-          "name": {
+          "participantName": {
             "type": "string"
           }
         }
@@ -403,7 +403,7 @@
       "ParticipantDto": {
         "type": "object",
         "properties": {
-          "id": {
+          "participantId": {
             "type": "integer",
             "format": "int32"
           }

@@ -13,16 +13,12 @@ internal class OrderProfile : Profile
             .ReverseMap();
 
         CreateMap<ParticipantDto, OrderParticipant>(MemberList.Source)
-            .EqualityComparison((dto, entity) => dto.Id == entity.ParticipantId)
-            .ForPath(dest => dest.ParticipantId, opt => opt.MapFrom(src => src.Id))
+            .EqualityComparison((dto, entity) => dto.ParticipantId == entity.ParticipantId)
             .ForMember(dest => dest.OrderId, opt => opt.UseDestinationValue())
             .ReverseMap();
 
         CreateMap<Order, OrderDetailedDto>();
 
-        CreateMap<OrderParticipant, ParticipantDetailedDto>()
-            .IncludeMembers(src => src.Participant);
-
-        CreateMap<User, ParticipantDetailedDto>();
+        CreateMap<OrderParticipant, ParticipantDetailedDto>();
     }
 }

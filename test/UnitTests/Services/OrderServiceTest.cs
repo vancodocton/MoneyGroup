@@ -76,8 +76,8 @@ public class OrderServiceTest
             BuyerId = 1,
             Participants =
             [
-                new() { Id = 2 },
-                new() { Id = 3 },
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = 3 },
             ],
         };
 
@@ -109,8 +109,8 @@ public class OrderServiceTest
             BuyerId = -1,
             Participants =
             [
-                new() { Id = 2 },
-                new() { Id = 3 },
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = 3 },
             ]
         };
 
@@ -135,8 +135,8 @@ public class OrderServiceTest
             BuyerId = 1,
             Participants =
             [
-                new() { Id = 2 },
-                new() { Id = -1 },
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = -1 },
             ]
         };
 
@@ -163,8 +163,8 @@ public class OrderServiceTest
             BuyerId = 1,
             Participants =
             [
-                new() { Id = 2 },
-                new() { Id = 2 },
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = 2 },
             ]
         };
 
@@ -190,8 +190,8 @@ public class OrderServiceTest
             BuyerId = 1,
             Participants =
                 [
-                    new() { Id = 2 },
-                    new() { Id = 3 },
+                    new() { ParticipantId = 2 },
+                    new() { ParticipantId = 3 },
                 ]
         };
 
@@ -223,8 +223,8 @@ public class OrderServiceTest
             BuyerId = -1,
             Participants =
             [
-                new() { Id = 2 },
-                new() { Id = 3 },
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = 3 },
             ]
         };
 
@@ -253,8 +253,8 @@ public class OrderServiceTest
             BuyerId = 1,
             Participants =
             [
-                new() { Id = 2 },
-                new() { Id = 3 }
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = 3 }
             ]
         };
 
@@ -279,8 +279,8 @@ public class OrderServiceTest
             BuyerId = 1,
             Participants =
             [
-                new() { Id = 2 },
-                new() { Id = -1 },
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = -1 },
             ]
         };
 
@@ -311,8 +311,8 @@ public class OrderServiceTest
             BuyerId = 1,
             Participants =
             [
-                new() { Id = 2 },
-                new() { Id = 2 },
+                new() { ParticipantId = 2 },
+                new() { ParticipantId = 2 },
             ]
         };
 

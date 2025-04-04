@@ -35,7 +35,7 @@ public class OrderDtoValidatorTest
             BuyerId = 1,
             Participants =
             [
-                new ParticipantDto() { Id = 1 },
+                new ParticipantDto() { ParticipantId = 1 },
             ],
         };
 

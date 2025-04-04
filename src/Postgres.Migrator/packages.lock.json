@@ -614,8 +614,6 @@
         "type": "Project",
         "dependencies": {
           "Ardalis.Specification.EntityFrameworkCore": "[9.0.1, )",
-          "AutoMapper": "[14.0.0, )",
-          "AutoMapper.Collection": "[11.0.0, )",
           "Microsoft.EntityFrameworkCore": "[9.0.3, )",
           "Microsoft.EntityFrameworkCore.Relational": "[9.0.3, )",
           "MoneyGroup.Core": "[1.0.0, )"
@@ -643,24 +641,6 @@
           "Ardalis.Specification": "9.0.1",
           "Microsoft.EntityFrameworkCore": "9.0.2",
           "Microsoft.EntityFrameworkCore.Relational": "9.0.2"
-        }
-      },
-      "AutoMapper": {
-        "type": "CentralTransitive",
-        "requested": "[14.0.0, )",
-        "resolved": "14.0.0",
-        "contentHash": "OC+1neAPM4oCCqQj3g2GJ2shziNNhOkxmNB9cVS8jtx4JbgmRzLcUOxB9Tsz6cVPHugdkHgCaCrTjjSI0Z5sCQ==",
-        "dependencies": {
-          "Microsoft.Extensions.Options": "8.0.0"
-        }
-      },
-      "AutoMapper.Collection": {
-        "type": "CentralTransitive",
-        "requested": "[11.0.0, )",
-        "resolved": "11.0.0",
-        "contentHash": "26CXTuPsIbfk121na1sWt/QcJ4EkXtlWy6R+LJFvsxiF80d2srbUgL0WgZn9mDyrJo4Hvvyqr/WFwNrVOKMiHQ==",
-        "dependencies": {
-          "AutoMapper": "[14.0.0, 15.0.0)"
         }
       },
       "FluentValidation": {

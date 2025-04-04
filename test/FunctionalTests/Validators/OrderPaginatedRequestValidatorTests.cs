@@ -1,5 +1,3 @@
-using System.Collections;
-
 using FluentValidation.TestHelper;
 
 using MoneyGroup.WebApi.Endpoints;

@@ -75,17 +75,6 @@ public class EfRepository<TEntity>
         return entity;
     }
 
-    public virtual async Task<TResult> AddAsync<TResult>(TResult dto, CancellationToken cancellationToken = default)
-    {
-        var entity = _mapper.Map<TEntity>(dto);
-
-        await _dbSet.AddAsync(entity, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        _mapper.Map(entity, dto);
-        return dto;
-    }
-
     public virtual async Task<bool> AnyAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
     {
         return await _dbSet
@@ -142,16 +131,5 @@ public class EfRepository<TEntity>
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return entity;
-    }
-
-    public virtual async Task<TResult> UpdateAsync<TResult>(TResult dto, CancellationToken cancellationToken = default)
-    {
-        var entity = _mapper.Map<TEntity>(dto);
-
-        _dbSet.Update(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        _mapper.Map(entity, dto);
-        return dto;
     }
 }

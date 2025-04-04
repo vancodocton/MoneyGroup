@@ -16,10 +16,22 @@ public sealed class OrderRepository
     {
     }
 
+    public async Task<OrderDto> AddAsync(OrderDto dto, CancellationToken cancellationToken)
+    {
+        var entity = _mapper.Map<Order>(dto);
+
+        await _dbSet.AddAsync(entity, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        _mapper.Map(entity, dto);
+        return dto;
+    }
+
     public async Task<OrderDto> UpdateAsync(OrderDto dto, CancellationToken cancellationToken = default)
     {
         var entity = await _dbSet
             .Include(o => o.Participants)
+            .ThenInclude(op => op.Participant)
             .FirstAsync(o => o.Id == dto.Id, cancellationToken);
 
         _mapper.Map(dto, entity);

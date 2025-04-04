@@ -3,7 +3,7 @@ using MoneyGroup.Core.Models.Orders;
 
 using Riok.Mapperly.Abstractions;
 
-namespace MoneyGroup.Infrastructure;
+namespace MoneyGroup.Infrastructure.Mapperly;
 
 [Mapper]
 public partial class Mapper

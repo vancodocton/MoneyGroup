@@ -3,6 +3,7 @@
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Models.Orders;
+using MoneyGroup.Infrastructure.Mapperly;
 
 namespace MoneyGroup.Infrastructure.Data;
 

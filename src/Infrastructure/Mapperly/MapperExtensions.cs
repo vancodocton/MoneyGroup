@@ -2,7 +2,7 @@
 
 using MoneyGroup.Core.Abstractions;
 
-namespace MoneyGroup.Infrastructure;
+namespace MoneyGroup.Infrastructure.Mapperly;
 
 public static class MapperExtensions
 {

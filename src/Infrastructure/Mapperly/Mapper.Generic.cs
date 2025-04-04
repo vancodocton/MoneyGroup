@@ -1,6 +1,6 @@
 ﻿using MoneyGroup.Core.Abstractions;
 
-namespace MoneyGroup.Infrastructure;
+namespace MoneyGroup.Infrastructure.Mapperly;
 
 public partial class Mapper
     : IMapper

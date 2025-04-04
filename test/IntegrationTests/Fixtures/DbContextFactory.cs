@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 
 using MoneyGroup.Core.Abstractions;
-using MoneyGroup.Infrastructure;
+using MoneyGroup.Infrastructure.Mapperly;
 
 namespace MoneyGroup.IntegrationTests.Fixtures;
 

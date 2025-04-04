@@ -11,7 +11,7 @@ public class PaginatedOptions
         Size = size;
     }
 
-    public int Page { get; }
+    public virtual int Page { get; init; }
 
-    public int Size { get; }
+    public virtual int Size { get; init; }
 }

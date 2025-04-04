@@ -14,11 +14,11 @@ public class OrderPaginatedOptions
         TotalMin = totalMin;
     }
 
-    public int? BuyerId { get; }
+    public virtual int? BuyerId { get; init; }
 
-    public int? ParticipantId { get; }
+    public virtual int? ParticipantId { get; init; }
 
-    public decimal? TotalMax { get; }
+    public virtual decimal? TotalMax { get; init; }
 
-    public decimal? TotalMin { get; }
+    public virtual decimal? TotalMin { get; init; }
 }

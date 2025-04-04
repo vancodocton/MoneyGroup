@@ -163,8 +163,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { ParticipantId = 1 },
-                new { ParticipantId = 2 },
+                new { Id = 1 },
+                new { Id = 2 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -225,8 +225,8 @@ public class OrderEndpointsTest
             BuyerId = int.MaxValue, // Assuming an Buyer Id that does not exist
             Participants = new List<object>()
             {
-                new { ParticipantId = 1 },
-                new { ParticipantId = 2 },
+                new { Id = 1 },
+                new { Id = 2 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -255,8 +255,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { ParticipantId = 1 },
-                new { ParticipantId = int.MaxValue } , // Assuming a participant Id that does not exist
+                new { Id = 1 },
+                new { Id = int.MaxValue } , // Assuming a participant Id that does not exist
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -285,8 +285,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { ParticipantId = 1 },
-                new { ParticipantId = 1 }, // Duplicated participant Id
+                new { Id = 1 },
+                new { Id = 1 }, // Duplicated participant Id
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(newOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -320,8 +320,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { ParticipantId = 2 },
-                new { ParticipantId = 3 },
+                new { Id = 2 },
+                new { Id = 3 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -359,8 +359,8 @@ public class OrderEndpointsTest
             BuyerId = int.MaxValue, // Assuming an Buyer Id that does not exist
             Participants = new List<object>()
             {
-                new { ParticipantId = 2 },
-                new { ParticipantId = 3 },
+                new { Id = 2 },
+                new { Id = 3 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -392,8 +392,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { ParticipantId = 2 },
-                new { ParticipantId = int.MaxValue }, // Assuming a participant Id that does not exist
+                new { Id = 2 },
+                new { Id = int.MaxValue }, // Assuming a participant Id that does not exist
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -425,8 +425,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { ParticipantId = 2 },
-                new { ParticipantId = 2 }, // Duplicated participant Id
+                new { Id = 2 },
+                new { Id = 2 }, // Duplicated participant Id
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");
@@ -485,8 +485,8 @@ public class OrderEndpointsTest
             BuyerId = 1,
             Participants = new List<object>()
             {
-                new { ParticipantId = 2 },
-                new { ParticipantId = 3 },
+                new { Id = 2 },
+                new { Id = 3 },
             },
         };
         var content = new StringContent(JsonSerializer.Serialize(updatedOrder, JsonSerializerOptions), Encoding.UTF8, "application/json");

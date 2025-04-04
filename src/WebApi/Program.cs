@@ -9,7 +9,7 @@ using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Services;
 using MoneyGroup.Core.Validators;
-using MoneyGroup.Infrastructure.AutoMapper.Profiles;
+using MoneyGroup.Infrastructure;
 using MoneyGroup.Infrastructure.Data;
 using MoneyGroup.Infrastructure.SqlServer;
 using MoneyGroup.WebApi.Authorizations;
@@ -74,7 +74,7 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
-builder.Services.AddAutoMapper();
+builder.Services.AddMapper();
 
 var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection")
     ?? throw new InvalidOperationException();

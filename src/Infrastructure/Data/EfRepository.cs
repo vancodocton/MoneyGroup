@@ -3,9 +3,6 @@
 using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-
 using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Core.Abstractions;
@@ -54,7 +51,7 @@ public class EfRepository<TEntity>
         var total = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: true)
             .CountAsync(cancellationToken);
         var items = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: false)
-            .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+            .ProjectTo<TResult>(_mapper)
             .ToListAsync(cancellationToken);
 
         var model = new PaginatedModel<TResult>()
@@ -101,14 +98,14 @@ public class EfRepository<TEntity>
 
     public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
-        return await _dbSet.Where(predicate).ProjectTo<TResult>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
+        return await _dbSet.Where(predicate).ProjectTo<TResult>(_mapper).FirstOrDefaultAsync(cancellationToken);
     }
 
     public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
     {
         return await _dbSet
             .WithSpecification(specification)
-            .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+            .ProjectTo<TResult>(_mapper)
             .FirstOrDefaultAsync(cancellationToken);
     }
 

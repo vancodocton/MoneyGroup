@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
@@ -23,7 +21,8 @@ public sealed class OrderRepository
         await _dbSet.AddAsync(entity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        _mapper.Map(entity, dto);
+        // Missing feature: tracking issue https://github.com/riok/mapperly/issues/884
+        dto.Id = entity.Id;
         return dto;
     }
 
@@ -34,7 +33,8 @@ public sealed class OrderRepository
             .ThenInclude(op => op.Participant)
             .FirstAsync(o => o.Id == dto.Id, cancellationToken);
 
-        _mapper.Map(dto, entity);
+        // Missing feature: tracking issue https://github.com/riok/mapperly/issues/884
+        ((Mapper)_mapper).Map(dto, entity);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 

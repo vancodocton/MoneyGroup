@@ -3,13 +3,11 @@
 using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-
 using Microsoft.EntityFrameworkCore;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models.Paginations;
+using MoneyGroup.Infrastructure.Mapperly;
 
 namespace MoneyGroup.Infrastructure.Data;
 public class EfRepository<TEntity>
@@ -54,7 +52,7 @@ public class EfRepository<TEntity>
         var total = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: true)
             .CountAsync(cancellationToken);
         var items = await _evaluator.GetQuery(query, specification, evaluateCriteriaOnly: false)
-            .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+            .ProjectTo<TResult>(_mapper)
             .ToListAsync(cancellationToken);
 
         var model = new PaginatedModel<TResult>()
@@ -73,17 +71,6 @@ public class EfRepository<TEntity>
         await _dbSet.AddAsync(entity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return entity;
-    }
-
-    public virtual async Task<TResult> AddAsync<TResult>(TResult dto, CancellationToken cancellationToken = default)
-    {
-        var entity = _mapper.Map<TEntity>(dto);
-
-        await _dbSet.AddAsync(entity, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        _mapper.Map(entity, dto);
-        return dto;
     }
 
     public virtual async Task<bool> AnyAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
@@ -112,14 +99,14 @@ public class EfRepository<TEntity>
 
     public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
-        return await _dbSet.Where(predicate).ProjectTo<TResult>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
+        return await _dbSet.Where(predicate).ProjectTo<TResult>(_mapper).FirstOrDefaultAsync(cancellationToken);
     }
 
     public virtual async Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
     {
         return await _dbSet
             .WithSpecification(specification)
-            .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+            .ProjectTo<TResult>(_mapper)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -142,16 +129,5 @@ public class EfRepository<TEntity>
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return entity;
-    }
-
-    public virtual async Task<TResult> UpdateAsync<TResult>(TResult dto, CancellationToken cancellationToken = default)
-    {
-        var entity = _mapper.Map<TEntity>(dto);
-
-        _dbSet.Update(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        _mapper.Map(entity, dto);
-        return dto;
     }
 }

@@ -59,8 +59,8 @@ public class OrderEndpointsTest
             Assert.All(order.Participants, p =>
             {
                 Assert.NotNull(p);
-                Assert.NotEqual(0, p.Id);
-                Assert.NotNull(p.Name);
+                Assert.NotEqual(0, p.ParticipantId);
+                Assert.NotNull(p.ParticipantName);
             });
         });
     }
@@ -114,8 +114,8 @@ public class OrderEndpointsTest
         Assert.All(order.Participants, p =>
         {
             Assert.NotNull(p);
-            Assert.NotEqual(0, p.Id);
-            Assert.NotNull(p.Name);
+            Assert.NotEqual(0, p.ParticipantId);
+            Assert.NotNull(p.ParticipantName);
         });
     }
 
@@ -182,8 +182,8 @@ public class OrderEndpointsTest
         Assert.Equal("New order description", order.Description);
         Assert.Equal(10_000, order.Total);
         Assert.Equal(1, order.BuyerId);
-        Assert.Equal(1, order.Participants.Skip(0).First().Id);
-        Assert.Equal(2, order.Participants.Skip(1).First().Id);
+        Assert.Equal(1, order.Participants.Skip(0).First().ParticipantId);
+        Assert.Equal(2, order.Participants.Skip(1).First().ParticipantId);
 
         Assert.Equal($"/api/Order/{order.Id}", response.Headers.Location?.PathAndQuery);
     }
@@ -339,8 +339,8 @@ public class OrderEndpointsTest
         Assert.Equal("Updated order description", order.Description);
         Assert.Equal(15_000, order.Total);
         Assert.Equal(1, order.BuyerId);
-        Assert.Equal(2, order.Participants.Skip(0).First().Id);
-        Assert.Equal(3, order.Participants.Skip(1).First().Id);
+        Assert.Equal(2, order.Participants.Skip(0).First().ParticipantId);
+        Assert.Equal(3, order.Participants.Skip(1).First().ParticipantId);
     }
 
     [Fact]

@@ -38,7 +38,7 @@ public class OrderService
 
         var idsHashSet = new HashSet<int>();
 
-        foreach (var participantId in model.Participants.Select(c => c.Id))
+        foreach (var participantId in model.Participants.Select(c => c.ParticipantId))
         {
             if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(participantId), cancellationToken))
             {
@@ -69,7 +69,7 @@ public class OrderService
 
         var idsHashSet = new HashSet<int>();
 
-        foreach (var participantId in model.Participants.Select(c => c.Id))
+        foreach (var participantId in model.Participants.Select(c => c.ParticipantId))
         {
             if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(participantId), cancellationToken))
             {

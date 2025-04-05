@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Models.Paginations;
 using MoneyGroup.Core.Specifications;
 using MoneyGroup.Infrastructure.Data;

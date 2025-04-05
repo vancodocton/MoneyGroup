@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-using MoneyGroup.Core.Abstractions;
+﻿using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
 
 namespace MoneyGroup.Infrastructure.Data;

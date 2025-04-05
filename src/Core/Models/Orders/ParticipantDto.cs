@@ -1,13 +1,18 @@
-﻿namespace MoneyGroup.Core.Models.Orders;
+﻿using System.Text.Json.Serialization;
+
+namespace MoneyGroup.Core.Models.Orders;
 
 public class ParticipantDto
 {
-    public int Id { get; set; }
+    [JsonPropertyName("id")]
+    public int ParticipantId { get; set; }
 }
 
 public class ParticipantDetailedDto
 {
-    public int Id { get; set; }
+    [JsonPropertyName("id")]
+    public int ParticipantId { get; set; }
 
-    public string Name { get; set; } = null!;
+    [JsonPropertyName("name")]
+    public string ParticipantName { get; set; } = null!;
 }

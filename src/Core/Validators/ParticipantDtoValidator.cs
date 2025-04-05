@@ -9,7 +9,7 @@ public class ParticipantDtoValidator : AbstractValidator<ParticipantDto>
 {
     public ParticipantDtoValidator()
     {
-        RuleFor(c => c.Id)
+        RuleFor(c => c.ParticipantId)
             .GreaterThan(0);
     }
 

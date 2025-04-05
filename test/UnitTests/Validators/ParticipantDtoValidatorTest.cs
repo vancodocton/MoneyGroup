@@ -21,7 +21,7 @@ public class ParticipantDtoValidatorTest
         // Arrange
         var participant = new ParticipantDto()
         {
-            Id = 0,
+            ParticipantId = 0,
         };
 
 
@@ -29,6 +29,6 @@ public class ParticipantDtoValidatorTest
         var result = await _validator.TestValidateAsync(participant, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(c => c.Id);
+        result.ShouldHaveValidationErrorFor(c => c.ParticipantId);
     }
 }

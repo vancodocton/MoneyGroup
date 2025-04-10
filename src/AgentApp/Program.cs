@@ -5,6 +5,7 @@ using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 
 using MoneyGroup.AgentApp;
 using MoneyGroup.AgentApp.Options;
+using MoneyGroup.AgentApp.Plugins;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
@@ -20,10 +21,14 @@ builder.Services.AddSingleton<IChatCompletionService>(sp =>
     return new AzureOpenAIChatCompletionService(azureOpenAIOptions.ChatDeploymentName, azureOpenAIOptions.Endpoint, azureOpenAIOptions.ApiKey);
 });
 
+builder.Services.AddSingleton<OrderPlugin>();
+
 builder.Services.AddTransient(sp =>
 {
     // Create a collection of plugins that the kernel will use
     KernelPluginCollection pluginCollection = [];
+    var orderPlugin = sp.GetRequiredService<OrderPlugin>();
+    pluginCollection.AddFromObject(orderPlugin);
 
     // When created by the dependency injection container, Semantic Kernel logging is included by default
     return new Kernel(sp, pluginCollection);

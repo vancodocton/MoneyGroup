@@ -36,6 +36,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyGroup.Postgres.Migrato
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyGroup.Infrastructure.SqlServer", "src\Infrastructure.SqlServer\MoneyGroup.Infrastructure.SqlServer.csproj", "{FCE09055-39E9-4A54-A331-D5B1850AF8C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyGroup.AgentApp", "src\AgentApp\MoneyGroup.AgentApp.csproj", "{C65302E7-65DE-A245-D97E-E363B54924B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,6 +164,18 @@ Global
 		{FCE09055-39E9-4A54-A331-D5B1850AF8C0}.Release|x64.Build.0 = Release|Any CPU
 		{FCE09055-39E9-4A54-A331-D5B1850AF8C0}.Release|x86.ActiveCfg = Release|Any CPU
 		{FCE09055-39E9-4A54-A331-D5B1850AF8C0}.Release|x86.Build.0 = Release|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Debug|x64.Build.0 = Debug|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Debug|x86.Build.0 = Debug|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Release|x64.ActiveCfg = Release|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Release|x64.Build.0 = Release|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Release|x86.ActiveCfg = Release|Any CPU
+		{C65302E7-65DE-A245-D97E-E363B54924B3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +190,7 @@ Global
 		{7BD6D644-4BF4-4006-AA33-4EC1FEAE7A48} = {3B9DF5DA-A093-4638-B04A-54BEFED607CC}
 		{CFF31754-355A-4903-9B55-A190437468EB} = {7B9E362D-B973-45BD-B4FC-D7946634464E}
 		{FCE09055-39E9-4A54-A331-D5B1850AF8C0} = {7B9E362D-B973-45BD-B4FC-D7946634464E}
+		{C65302E7-65DE-A245-D97E-E363B54924B3} = {7B9E362D-B973-45BD-B4FC-D7946634464E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D511F8F-6BB6-40AB-85A8-21F0B44DC038}

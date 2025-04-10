@@ -29,6 +29,14 @@ builder.Services.AddTransient(sp =>
     return new Kernel(sp, pluginCollection);
 });
 
+
+builder.Services.AddHttpClient<IMoneyGroup_WebApiClient, MoneyGroup_WebApiClient>(options =>
+{
+    var url = builder.Configuration["Services:WebApi:Url"];
+    ArgumentException.ThrowIfNullOrEmpty(url);
+    options.BaseAddress = new Uri(url);
+});
+
 var host = builder.Build();
 
 await host.RunAsync();

@@ -1,21 +1,21 @@
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.ChatCompletion;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 namespace MoneyGroup.AgentApp;
 
 public class Worker : BackgroundService
 {
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
-    private readonly Kernel _kernel;
+    private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<Worker> _logger;
 
     public Worker(IHostApplicationLifetime hostApplicationLifetime,
-        Kernel kernel,
+        IServiceProvider serviceProvider,
         ILogger<Worker> logger)
     {
         _hostApplicationLifetime = hostApplicationLifetime;
-        _kernel = kernel;
+        _serviceProvider = serviceProvider;
         _logger = logger;
     }
 
@@ -25,12 +25,9 @@ public class Worker : BackgroundService
             Task.Delay(Timeout.Infinite, stoppingToken),
             Task.Delay(Timeout.Infinite, _hostApplicationLifetime.ApplicationStarted));
 
-        var chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
+        var agent = _serviceProvider.GetRequiredKeyedService<Agent>("MoneyGroupAgent");
 
-        OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
-        {
-            FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
-        };
+        AgentThread thread = new ChatHistoryAgentThread();
 
         string? input;
 
@@ -40,8 +37,13 @@ public class Worker : BackgroundService
             _logger.LogDebug("Input: {ChatInput}", input);
             await Console.Out.WriteLineAsync();
 
-            ChatMessageContent chatResult = await chatCompletionService.GetChatMessageContentAsync(input,
-                    openAIPromptExecutionSettings, _kernel, stoppingToken).ConfigureAwait(false);
+            string chatResult = "";
+            var message = new ChatMessageContent(AuthorRole.User, input);
+            await foreach (var response in agent.InvokeAsync(message, thread, null, stoppingToken))
+            {
+                _logger.LogInformation("Response: {Response}", response);
+                chatResult += response.Message.Content;
+            }
 
             _logger.LogDebug("Result: {ChatResult}", chatResult);
             await Console.Out.WriteAsync($"\n>>> Result: {chatResult}\n\n> ");

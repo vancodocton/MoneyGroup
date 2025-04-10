@@ -62,6 +62,16 @@
           "Microsoft.SemanticKernel.Core": "1.45.0"
         }
       },
+      "Microsoft.SemanticKernel.Agents.Core": {
+        "type": "Direct",
+        "requested": "[1.45.0, )",
+        "resolved": "1.45.0",
+        "contentHash": "ealVecPr8YS4ybMw/nfwwqZFQ0cPmCvc8PXz1DKcnxNehYs1jkDWVDUBU2/KfgyuvbUATNpOi4QSOSzEKflvCA==",
+        "dependencies": {
+          "Microsoft.SemanticKernel.Agents.Abstractions": "1.45.0",
+          "Microsoft.SemanticKernel.Core": "1.45.0"
+        }
+      },
       "Newtonsoft.Json": {
         "type": "Direct",
         "requested": "[13.0.3, )",
@@ -348,6 +358,17 @@
           "System.Text.Json": "8.0.5"
         }
       },
+      "Microsoft.SemanticKernel.Agents.Abstractions": {
+        "type": "Transitive",
+        "resolved": "1.45.0",
+        "contentHash": "N5To9Izz3V+CM+07sj0tiPxUfZpeXV+HCm0IzbGUad/mzEAey19eFEzpDEQW/hyS0Nf1A7jRN1zql2bfQKWOCg==",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.2",
+          "Microsoft.SemanticKernel.Abstractions": "1.45.0",
+          "System.Linq.Async": "6.0.1",
+          "System.Text.Json": "8.0.5"
+        }
+      },
       "Microsoft.SemanticKernel.Connectors.AzureOpenAI": {
         "type": "Transitive",
         "resolved": "1.45.0",
@@ -410,6 +431,14 @@
         "type": "Transitive",
         "resolved": "9.0.4",
         "contentHash": "getRQEXD8idlpb1KW56XuxImMy0FKp2WJPDf3Qr0kI/QKxxJSftqfDFVo0DZ3HCJRLU73qHSruv5q2l5O47jQQ=="
+      },
+      "System.Linq.Async": {
+        "type": "Transitive",
+        "resolved": "6.0.1",
+        "contentHash": "0YhHcaroWpQ9UCot3Pizah7ryAzQhNvobLMSxeDIGmnXfkQn8u5owvpOH0K6EVB+z9L7u6Cc4W17Br/+jyttEQ==",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "6.0.0"
+        }
       },
       "System.Memory.Data": {
         "type": "Transitive",

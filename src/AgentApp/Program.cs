@@ -1,3 +1,5 @@
+using Duende.IdentityModel.OidcClient;
+
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
@@ -67,11 +69,33 @@ builder.Services.AddTransient(sp =>
 });
 
 
+var browser = new SystemBrowser();
+string redirectUri = string.Format($"http://127.0.0.1:{browser.Port}");
+var oidcClientOptions = new OidcClientOptions
+{
+    Authority = "https://accounts.google.com",
+    ClientId = builder.Configuration["ClientId"],
+    ClientSecret = builder.Configuration["ClientSecret"],
+    RedirectUri = redirectUri,
+    Scope = "openid email",
+    Browser = browser,
+};
+oidcClientOptions.Policy.Discovery.ValidateEndpoints = false;
+
+var oidcClient = new OidcClient(oidcClientOptions);
+
+var result = await oidcClient.LoginAsync(new LoginRequest()).ConfigureAwait(false);
+
+if (result.IsError)
+    throw new InvalidOperationException(result.Error);
+
 builder.Services.AddHttpClient<IMoneyGroup_WebApiClient, MoneyGroup_WebApiClient>(options =>
 {
     var url = builder.Configuration["Services:WebApi:Url"];
     ArgumentException.ThrowIfNullOrEmpty(url);
     options.BaseAddress = new Uri(url);
+
+    options.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", result.IdentityToken);
 });
 
 var host = builder.Build();

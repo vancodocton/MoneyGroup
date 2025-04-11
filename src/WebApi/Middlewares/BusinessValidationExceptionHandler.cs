@@ -17,7 +17,7 @@ public class BusinessValidationExceptionHandler(IProblemDetailsService problemDe
             return false;
         }
 
-        var validationProblemDetails = new ValidationProblemDetails()
+        var problemDetails = new ProblemDetails()
         {
             Detail = validationException.Message,
         };
@@ -27,7 +27,7 @@ public class BusinessValidationExceptionHandler(IProblemDetailsService problemDe
         await _problemDetailsService.WriteAsync(new ProblemDetailsContext
         {
             HttpContext = httpContext,
-            ProblemDetails = validationProblemDetails,
+            ProblemDetails = problemDetails,
             Exception = validationException,
         });
 

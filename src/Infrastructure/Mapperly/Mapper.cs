@@ -16,9 +16,6 @@ public partial class Mapper
     [MapperIgnoreTarget(nameof(Order.Buyer))]
     public partial Order Map(OrderDto dto);
 
-    [MapperIgnoreTarget(nameof(Order.Buyer))]
-    public partial void Map(OrderDto dto, Order entity);
-
     [MapperIgnoreSource(nameof(OrderParticipant.Order))]
     [MapperIgnoreSource(nameof(OrderParticipant.OrderId))]
     public partial ParticipantDetailedDto Map(OrderParticipant entity);

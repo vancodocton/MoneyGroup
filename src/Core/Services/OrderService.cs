@@ -55,37 +55,6 @@ public class OrderService
     }
 
     /// <inheritdoc />
-    public async Task UpdateOrderAsync(OrderDto model, CancellationToken cancellationToken = default)
-    {
-        if (!await _orderRepository.AnyAsync(new EntityByIdSpec<Order>(model.Id), cancellationToken))
-        {
-            throw new OrderNotFoundException();
-        }
-
-        if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(model.BuyerId), cancellationToken))
-        {
-            throw new BuyerNotFoundException();
-        }
-
-        var idsHashSet = new HashSet<int>();
-
-        foreach (var participantId in model.Participants.Select(c => c.ParticipantId))
-        {
-            if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(participantId), cancellationToken))
-            {
-                throw new ParticipantNotFoundException();
-            }
-
-            if (!idsHashSet.Add(participantId))
-            {
-                throw new ParticipantDuplicatedException();
-            }
-        }
-
-        await _orderRepository.UpdateAsync(model, cancellationToken);
-    }
-
-    /// <inheritdoc />
     public async Task RemoveOrderAsync(int id, CancellationToken cancellationToken = default)
     {
         var order = await _orderRepository.FirstOrDefaultAsync(new EntityByIdSpec<Order>(id), cancellationToken);

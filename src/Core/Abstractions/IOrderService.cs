@@ -16,7 +16,6 @@ public interface IOrderService
     /// <returns></returns>
     /// <exception cref="BuyerNotFoundException"></exception>
     /// <exception cref="ParticipantNotFoundException"></exception>
-    /// <exception cref="ParticipantDuplicatedException"></exception>
     Task CreateOrderAsync(OrderDto model, CancellationToken cancellationToken = default);
 
     /// <summary>

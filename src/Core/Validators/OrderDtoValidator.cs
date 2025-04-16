@@ -18,10 +18,26 @@ public class OrderDtoValidator : AbstractValidator<OrderDto>
             .GreaterThanOrEqualTo(0);
 
         RuleFor(o => o.Participants)
-            .NotEmpty();
-
-        RuleForEach(o => o.Participants)
-            .NotNull()
-            .SetValidator(participantDtoValidator);
+            .NotEmpty()
+            .ForEach(o => o
+                .NotNull()
+                .SetValidator(participantDtoValidator)
+            ).DependentRules(() =>
+            {
+                RuleFor(o => o.Participants)
+                .Must(l =>
+                {
+                    var idsHashSet = new HashSet<int>(l.Count());
+                    foreach (var participantId in l.Select(c => c.ParticipantId))
+                    {
+                        if (!idsHashSet.Add(participantId))
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                })
+                .WithMessage("Duplicated participant");
+            });
     }
 }

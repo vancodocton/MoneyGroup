@@ -36,18 +36,11 @@ public class OrderService
             throw new BuyerNotFoundException();
         }
 
-        var idsHashSet = new HashSet<int>();
-
         foreach (var participantId in model.Participants.Select(c => c.ParticipantId))
         {
             if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(participantId), cancellationToken))
             {
                 throw new ParticipantNotFoundException();
-            }
-
-            if (!idsHashSet.Add(participantId))
-            {
-                throw new ParticipantDuplicatedException();
             }
         }
 

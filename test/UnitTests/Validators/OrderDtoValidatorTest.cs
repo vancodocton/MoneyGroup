@@ -148,7 +148,7 @@ public class OrderDtoValidatorTest
         // Arrange
         var order = new OrderDto()
         {
-            Participants = [null!],
+            Participants = [null!, null!],
         };
 
         // Act
@@ -156,5 +156,24 @@ public class OrderDtoValidatorTest
 
         // Assert
         result.ShouldHaveValidationErrorFor(o => o.Participants);
+    }
+
+    [Fact]
+    public async Task GivenOrderDto_WhenParticipantsDuplicate_ThenReturnError()
+    {
+        // Arrange
+        var order = new OrderDto()
+        {
+            Participants = [
+                new ParticipantDto() { ParticipantId = 1 },
+                new ParticipantDto() { ParticipantId = 1 },
+                ],
+        };
+
+        // Act
+        var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(o => o.Participants).WithErrorMessage("Duplicated participant");
     }
 }

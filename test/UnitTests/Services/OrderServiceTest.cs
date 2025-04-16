@@ -155,32 +155,6 @@ public class OrderServiceTest
     }
 
     [Fact]
-    public async Task CreateOrderAsync_DuplicateParticipants_ShouldThrowInvalidOperationException()
-    {
-        // Arrange
-        var model = new OrderDto
-        {
-            BuyerId = 1,
-            Participants =
-            [
-                new() { ParticipantId = 2 },
-                new() { ParticipantId = 2 },
-            ]
-        };
-
-        _userRepositoryMock.Setup(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
-
-        // Act
-        var ex = await Assert.ThrowsAsync<ParticipantDuplicatedException>(() => _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken));
-
-        // Assert
-        _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
-        _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
-        Assert.Equal("Duplicated participant", ex.Message);
-    }
-
-    [Fact]
     public async Task RemoveOrderAsync_OrderExists_ShouldRemoveOrder()
     {
         // Arrange

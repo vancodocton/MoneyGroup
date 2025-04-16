@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using MoneyGroup.Core.Models.Orders;
@@ -296,10 +297,10 @@ public class OrderEndpointsTest
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(TestContext.Current.CancellationToken);
+        var problemDetails = await response.Content.ReadFromJsonAsync<HttpValidationProblemDetails>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(problemDetails);
-        Assert.Equal("Duplicated participant", problemDetails.Detail);
+        Assert.Contains("Duplicated participant", problemDetails.Errors["Participants"]);
     }
     #endregion CreateOrder
 

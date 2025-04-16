@@ -27,10 +27,6 @@ public static class OrderEndpoints
         .WithName("GetOrderById")
         .WithOpenApi();
 
-        group.MapPut("/{id:int}", UpdateOrderAsync)
-        .WithName("UpdateOrder")
-        .WithOpenApi();
-
         group.MapPost("/", CreateOrderAsync)
         .WithName("CreateOrder")
         .WithOpenApi();
@@ -50,19 +46,6 @@ public static class OrderEndpoints
     {
         await orderService.CreateOrderAsync(input);
         return TypedResults.CreatedAtRoute(input, "GetOrderById", new { id = input.Id });
-    }
-
-    public static async Task<Results<NoContent, ValidationProblem, NotFound>> UpdateOrderAsync(int id, OrderDto input, IOrderService orderService)
-    {
-        try
-        {
-            await orderService.UpdateOrderAsync(input);
-            return TypedResults.NoContent();
-        }
-        catch (OrderNotFoundException)
-        {
-            return TypedResults.NotFound();
-        }
     }
 
     private static async Task<Results<NoContent, NotFound>> DeleteOrderAsync(int id, IOrderService orderService, CancellationToken cancellationToken)

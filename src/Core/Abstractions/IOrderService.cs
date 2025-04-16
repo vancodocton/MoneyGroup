@@ -20,18 +20,6 @@ public interface IOrderService
     Task CreateOrderAsync(OrderDto model, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Update order.
-    /// </summary>
-    /// <param name="model"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    /// <exception cref="OrderNotFoundException"></exception>
-    /// <exception cref="BuyerNotFoundException"></exception>
-    /// <exception cref="ParticipantNotFoundException"></exception>
-    /// <exception cref="ParticipantDuplicatedException"></exception>
-    Task UpdateOrderAsync(OrderDto model, CancellationToken cancellationToken = default);
-
-    /// <summary>
     /// Remove order by id.
     /// </summary>
     /// <param name="id"></param>

@@ -4,7 +4,7 @@
 /// The exception that is thrown when Buyer not found.
 /// </summary>
 public class BuyerNotFoundException
-    : BussinessValidationException
+    : BusinessValidationException
 {
     public BuyerNotFoundException() : base("Buyer not found")
     {

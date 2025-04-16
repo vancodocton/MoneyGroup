@@ -4,7 +4,7 @@
 /// The exception that is thrown when Order not found.
 /// </summary>
 public class OrderNotFoundException
-    : BussinessValidationException
+    : BusinessValidationException
 {
     public OrderNotFoundException() : base("Order not found")
     {

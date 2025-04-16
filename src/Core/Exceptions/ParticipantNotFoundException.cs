@@ -4,7 +4,7 @@
 /// The exception that is thrown when Participant not found.
 /// </summary>
 public class ParticipantNotFoundException
-    : BussinessValidationException
+    : BusinessValidationException
 {
     public ParticipantNotFoundException() : base("Participant not found")
     {

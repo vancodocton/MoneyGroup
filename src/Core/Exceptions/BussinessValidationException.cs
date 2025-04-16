@@ -1,11 +1,11 @@
 namespace MoneyGroup.Core.Exceptions;
 
 /// <inheritdoc />
-public abstract class BussinessValidationException
+public abstract class BusinessValidationException
     : Exception
 {
     /// <inheritdoc />
-    protected BussinessValidationException(string? message) : base(message)
+    protected BusinessValidationException(string? message) : base(message)
     {
     }
 }

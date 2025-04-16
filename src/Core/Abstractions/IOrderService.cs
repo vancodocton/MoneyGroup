@@ -16,7 +16,6 @@ public interface IOrderService
     /// <returns></returns>
     /// <exception cref="BuyerNotFoundException"></exception>
     /// <exception cref="ParticipantNotFoundException"></exception>
-    /// <exception cref="ParticipantDuplicatedException"></exception>
     Task CreateOrderAsync(OrderDto model, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -25,8 +24,7 @@ public interface IOrderService
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    /// <exception cref="OrderNotFoundException"></exception>
-    Task RemoveOrderAsync(int id, CancellationToken cancellationToken = default);
+    ValueTask<bool> RemoveOrderAsync(int id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Get orders by page.

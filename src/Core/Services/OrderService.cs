@@ -36,18 +36,11 @@ public class OrderService
             throw new BuyerNotFoundException();
         }
 
-        var idsHashSet = new HashSet<int>();
-
         foreach (var participantId in model.Participants.Select(c => c.ParticipantId))
         {
             if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(participantId), cancellationToken))
             {
                 throw new ParticipantNotFoundException();
-            }
-
-            if (!idsHashSet.Add(participantId))
-            {
-                throw new ParticipantDuplicatedException();
             }
         }
 
@@ -55,15 +48,17 @@ public class OrderService
     }
 
     /// <inheritdoc />
-    public async Task RemoveOrderAsync(int id, CancellationToken cancellationToken = default)
+    public async ValueTask<bool> RemoveOrderAsync(int id, CancellationToken cancellationToken = default)
     {
         var order = await _orderRepository.FirstOrDefaultAsync(new EntityByIdSpec<Order>(id), cancellationToken);
         if (order == null)
         {
-            throw new OrderNotFoundException();
+            return false;
         }
 
         await _orderRepository.RemoveAsync(order, cancellationToken);
+
+        return true;
     }
 
     /// <inheritdoc />

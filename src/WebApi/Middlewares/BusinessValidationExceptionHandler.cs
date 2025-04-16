@@ -12,7 +12,7 @@ public class BusinessValidationExceptionHandler(IProblemDetailsService problemDe
 
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        if (exception is not BussinessValidationException validationException)
+        if (exception is not BusinessValidationException validationException)
         {
             return false;
         }

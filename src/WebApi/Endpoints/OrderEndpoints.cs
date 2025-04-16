@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 
 using MoneyGroup.Core.Abstractions;
-using MoneyGroup.Core.Exceptions;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Models.Paginations;
 
@@ -50,15 +49,10 @@ public static class OrderEndpoints
 
     private static async Task<Results<NoContent, NotFound>> DeleteOrderAsync(int id, IOrderService orderService, CancellationToken cancellationToken)
     {
-        try
-        {
-            await orderService.RemoveOrderAsync(id, cancellationToken);
-            return TypedResults.NoContent();
-        }
-        catch (OrderNotFoundException)
-        {
-            return TypedResults.NotFound();
-        }
+        var result = await orderService.RemoveOrderAsync(id, cancellationToken);
+        return !result
+            ? TypedResults.NotFound()
+            : TypedResults.NoContent();
     }
 
     public static async Task<Results<Ok<OrderDetailedDto>, NotFound>> GetOrderByIdAsync(int id, IOrderService orderService)

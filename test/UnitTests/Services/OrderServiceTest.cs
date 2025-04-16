@@ -168,9 +168,10 @@ public class OrderServiceTest
             .Returns(Task.CompletedTask);
 
         // Act
-        await _orderService.RemoveOrderAsync(orderId, TestContext.Current.CancellationToken);
+        var result = await _orderService.RemoveOrderAsync(orderId, TestContext.Current.CancellationToken);
 
         // Assert
+        Assert.True(result);
         _orderRepositoryMock.Verify(o => o.FirstOrDefaultAsync(It.IsAny<EntityByIdSpec<Order>>(), It.IsAny<CancellationToken>()));
         _orderRepositoryMock.Verify(o => o.RemoveAsync(It.IsAny<Order>(), It.IsAny<CancellationToken>()));
     }
@@ -185,10 +186,10 @@ public class OrderServiceTest
             .ReturnsAsync((Order?)null);
 
         // Act
-        var ex = await Assert.ThrowsAsync<OrderNotFoundException>(() => _orderService.RemoveOrderAsync(orderId, TestContext.Current.CancellationToken));
+        var result = await _orderService.RemoveOrderAsync(orderId, TestContext.Current.CancellationToken);
 
         // Assert
+        Assert.False(result);
         _orderRepositoryMock.Verify(o => o.FirstOrDefaultAsync(It.IsAny<EntityByIdSpec<Order>>(), It.IsAny<CancellationToken>()));
-        Assert.Equal("Order not found", ex.Message);
     }
 }

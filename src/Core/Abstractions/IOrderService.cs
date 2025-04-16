@@ -24,8 +24,7 @@ public interface IOrderService
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    /// <exception cref="OrderNotFoundException"></exception>
-    Task RemoveOrderAsync(int id, CancellationToken cancellationToken = default);
+    ValueTask<bool> RemoveOrderAsync(int id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Get orders by page.

@@ -48,15 +48,17 @@ public class OrderService
     }
 
     /// <inheritdoc />
-    public async Task RemoveOrderAsync(int id, CancellationToken cancellationToken = default)
+    public async ValueTask<bool> RemoveOrderAsync(int id, CancellationToken cancellationToken = default)
     {
         var order = await _orderRepository.FirstOrDefaultAsync(new EntityByIdSpec<Order>(id), cancellationToken);
         if (order == null)
         {
-            throw new OrderNotFoundException();
+            return false;
         }
 
         await _orderRepository.RemoveAsync(order, cancellationToken);
+
+        return true;
     }
 
     /// <inheritdoc />

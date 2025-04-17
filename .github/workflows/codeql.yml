@@ -59,18 +59,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Cache Nuget packages
-      if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
-      uses: actions/cache@v4
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/dotnet-tools.json') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
-
     - name: Setup .NET
       if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
       uses: actions/setup-dotnet@v4
+      with:
+        cache: true
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL

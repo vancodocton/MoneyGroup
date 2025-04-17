@@ -64,6 +64,7 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         cache: true
+        cache-dependency-path: '**/packages.lock.json'
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL

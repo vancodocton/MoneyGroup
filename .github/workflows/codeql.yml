@@ -46,7 +46,7 @@ jobs:
         - language: actions
           build-mode: none
         - language: csharp
-          build-mode: autobuild
+          build-mode: manual
         # CodeQL supports the following values keywords for 'language': 'actions', 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
         # Use `c-cpp` to analyze code written in C, C++ or both
         # Use 'java-kotlin' to analyze code written in Java, Kotlin or both
@@ -59,11 +59,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # Add any setup steps before running the `github/codeql-action/init` action.
-    # This includes steps like installing compilers or runtimes (`actions/setup-node`
-    # or others). This is typically only required for manual builds.
-    # - name: Setup runtime (example)
-    #   uses: actions/setup-example@v1
+    - name: Cache Nuget packages
+      if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/dotnet-tools.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Setup .NET
+      if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
+      uses: actions/setup-dotnet@v4
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
@@ -84,15 +91,10 @@ jobs:
     # to build your code.
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
-    - if: matrix.build-mode == 'manual'
+    - if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
       shell: bash
       run: |
-        echo 'If you are using a "manual" build mode for one or more of the' \
-          'languages you are analyzing, replace this with the commands to build' \
-          'your code, for example:'
-        echo '  make bootstrap'
-        echo '  make release'
-        exit 1
+        dotnet build --configuration Release MoneyGroup.slnx
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

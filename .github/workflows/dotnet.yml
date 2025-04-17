@@ -69,7 +69,7 @@ jobs:
 
     - name: Restore and Build
       run: |
-        dotnet restore MoneyGroup.slnx --locked-mode
+        dotnet restore MoneyGroup.slnx
         dotnet build MoneyGroup.slnx -c Release --no-restore
 
     - name: Format Checking

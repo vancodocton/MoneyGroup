@@ -9,7 +9,7 @@ on:
       - .github/workflows/dotnet.yml
       - .config/dotnet-tools.json
       - global.json
-      - '*.sln'
+      - '*.slnx'
       - Directory.*.props
       - Directory.*.targets
       - coverage.config
@@ -21,7 +21,7 @@ on:
       - .github/workflows/dotnet.yml
       - .config/dotnet-tools.json
       - global.json
-      - '*.sln'
+      - '*.slnx'
       - Directory.*.props
       - Directory.*.targets
       - coverage.config
@@ -69,11 +69,11 @@ jobs:
 
     - name: Restore and Build
       run: |
-        dotnet restore MoneyGroup.sln --locked-mode
-        dotnet build MoneyGroup.sln -c Release --no-restore
+        dotnet restore MoneyGroup.slnx --locked-mode
+        dotnet build MoneyGroup.slnx -c Release --no-restore
 
     - name: Format Checking
-      run: dotnet format MoneyGroup.sln --no-restore --verify-no-changes -v diag --severity info --exclude-diagnostics xUnit1004
+      run: dotnet format MoneyGroup.slnf --no-restore --verify-no-changes -v diag --severity info --exclude-diagnostics xUnit1004
 
     - name: Test
       shell: pwsh
@@ -83,7 +83,7 @@ jobs:
         Test__Google__RefreshToken: ${{ secrets.Test__Google__RefreshToken }}
       run: |
         docker compose up --wait mssql
-        dotnet test MoneyGroup.sln -c Release --no-build --verbosity normal -- --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml --report-xunit
+        dotnet test MoneyGroup.slnx -c Release --no-build --verbosity normal -- --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml --report-xunit
 
     - name: End Analyze
       env:

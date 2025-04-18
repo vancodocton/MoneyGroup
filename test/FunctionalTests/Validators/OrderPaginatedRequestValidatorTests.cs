@@ -1,5 +1,6 @@
 using FluentValidation.TestHelper;
 
+using MoneyGroup.Core.Validators;
 using MoneyGroup.WebApi.Endpoints;
 using MoneyGroup.WebApi.Validators;
 
@@ -11,7 +12,7 @@ public class OrderPaginatedRequestValidatorTests
 
     public OrderPaginatedRequestValidatorTests()
     {
-        _validator = new OrderPaginatedRequestValidator();
+        _validator = new OrderPaginatedRequestValidator(new PaginatedOptionsValidator());
     }
 
     [Fact]

@@ -1,5 +1,6 @@
 ﻿using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Models.Orders;
+using MoneyGroup.Core.Models.Users;
 
 using Riok.Mapperly.Abstractions;
 
@@ -25,4 +26,6 @@ public partial class Mapper
     public partial IQueryable<ParticipantDetailedDto> Project(IQueryable<OrderParticipant> source);
 
     public partial IQueryable<OrderDetailedDto> Project(IQueryable<Order> source);
+
+    public partial IQueryable<UserDto> Project(IQueryable<User> source);
 }

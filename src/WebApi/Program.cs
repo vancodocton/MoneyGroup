@@ -86,6 +86,7 @@ builder.Services.AddHealthChecks()
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddProblemDetails();
 
@@ -93,6 +94,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddSingleton<IValidator<IPaginatedOptions>, PaginatedOptionsValidator>();
 builder.Services.AddSingleton<IValidator<OrderPaginatedRequest>, OrderPaginatedRequestValidator>();
+builder.Services.AddSingleton<IValidator<UserPaginatedRequest>, UserPaginatedRequestValidator>();
 builder.Services.AddSingleton<IValidator<ParticipantDto>, ParticipantDtoValidator>();
 builder.Services.AddSingleton<IValidator<OrderDto>, OrderDtoValidator>();
 builder.Services.AddExceptionHandler<BusinessValidationExceptionHandler>();
@@ -124,6 +126,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapOrderEndpoints();
+app.MapUserEndpoints();
 
 await app.RunAsync();
 

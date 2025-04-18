@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models.Paginations;
 using MoneyGroup.Core.Models.Users;
+using MoneyGroup.WebApi.Features;
 
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
@@ -28,7 +29,7 @@ public static class UserEndpoints
         .WithName("GetUserById")
         .WithOpenApi();
 
-        group.MapGet("/my", GetExecutingUserAsync)
+        group.MapGet("/my", GetExecutingUser)
         .WithName("GetExecutingUser")
         .WithOpenApi();
     }
@@ -47,16 +48,9 @@ public static class UserEndpoints
             : TypedResults.Ok(user);
     }
 
-    public static async Task<Results<Ok<UserDto>, UnauthorizedHttpResult>> GetExecutingUserAsync([FromServices] IUserService userService, HttpContext httpContext)
+    public static Results<Ok<UserDto>, UnauthorizedHttpResult> GetExecutingUser(HttpContext httpContext)
     {
-        var userEmail = httpContext.User.FindFirstValue(ClaimTypes.Email);
-
-        if (string.IsNullOrEmpty(userEmail))
-        {
-            return TypedResults.Unauthorized();
-        }
-
-        var user = await userService.GetUserByEmailAsync(userEmail, httpContext.RequestAborted);
+        var user = httpContext.Features.Get<ICurrentUserFeature>()?.User;
         return user == null
             ? TypedResults.Unauthorized()
             : TypedResults.Ok(user);

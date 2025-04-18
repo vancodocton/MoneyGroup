@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 using MoneyGroup.Core.Abstractions;
+using MoneyGroup.WebApi.Features;
 
 namespace MoneyGroup.WebApi.Authorizations;
 
@@ -46,6 +47,14 @@ public class DenyUnauthorizedUserHandler
         {
             _logger.LogDebug("User with email `{UserEmail}` not existed", userEmail);
             return;
+        }
+
+        if (context.Resource is DefaultHttpContext httpContext)
+        {
+            httpContext.Features.Set<ICurrentUserFeature>(new CurrentUserFeature()
+            {
+                User = user,
+            });
         }
 
         context.Succeed(requirement);

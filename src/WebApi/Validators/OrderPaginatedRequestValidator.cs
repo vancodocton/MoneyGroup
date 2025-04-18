@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 
-using MoneyGroup.Core.Validators;
+using MoneyGroup.Core.Abstractions;
 using MoneyGroup.WebApi.Endpoints;
 
 namespace MoneyGroup.WebApi.Validators;
 
 public class OrderPaginatedRequestValidator : AbstractValidator<OrderPaginatedRequest>
 {
-    public OrderPaginatedRequestValidator()
+    public OrderPaginatedRequestValidator(IValidator<IPaginatedOptions> paginatedOptionsValidator)
     {
         RuleFor(r => r.BuyerId)
             .GreaterThan(0);
@@ -27,6 +27,6 @@ public class OrderPaginatedRequestValidator : AbstractValidator<OrderPaginatedRe
                 .LessThan(r => r.TotalMax);
         });
 
-        Include(new PaginatedOptionsValidator());
+        Include(paginatedOptionsValidator);
     }
 }

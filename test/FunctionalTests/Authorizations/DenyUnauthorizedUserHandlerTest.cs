@@ -13,14 +13,14 @@ using Moq;
 
 namespace MoneyGroup.FunctionalTests.Authorizations;
 
-public class DenyUnauthoredUserHandlerTest
+public class DenyUnauthorizedUserHandlerTest
 {
     private readonly Mock<IUserService> _userServiceMock;
     private readonly Mock<ClaimsPrincipal> _userMock;
     private readonly DenyUnauthorizedUserHandler _handler;
     private readonly AuthorizationHandlerContext _authContext;
 
-    public DenyUnauthoredUserHandlerTest()
+    public DenyUnauthorizedUserHandlerTest()
     {
         var requirement = new DenyUnauthorizedUserRequirement();
         _userServiceMock = new();

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 using MoneyGroup.Core.Abstractions;
-using MoneyGroup.Core.Specifications;
 
 namespace MoneyGroup.WebApi.Authorizations;
 
@@ -12,12 +11,12 @@ public class DenyUnauthorizedUserHandler
     : AuthorizationHandler<DenyUnauthorizedUserRequirement>
 {
     private readonly ILogger<DenyUnauthorizedUserHandler> _logger;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
 
-    public DenyUnauthorizedUserHandler(ILogger<DenyUnauthorizedUserHandler> logger, IUserRepository userRepository)
+    public DenyUnauthorizedUserHandler(ILogger<DenyUnauthorizedUserHandler> logger, IUserService userService)
     {
         _logger = logger;
-        _userRepository = userRepository;
+        _userService = userService;
     }
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, DenyUnauthorizedUserRequirement requirement)
@@ -42,7 +41,7 @@ public class DenyUnauthorizedUserHandler
             return;
         }
 
-        var user = await _userRepository.FirstOrDefaultAsync(new UserByEmailSpec(userEmail));
+        var user = await _userService.GetUserByEmailAsync(userEmail);
         if (user is null)
         {
             _logger.LogDebug("User with email `{UserEmail}` not existed", userEmail);

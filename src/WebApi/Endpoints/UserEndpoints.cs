@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 using MoneyGroup.Core.Abstractions;
@@ -48,11 +46,10 @@ public static class UserEndpoints
             : TypedResults.Ok(user);
     }
 
-    public static Results<Ok<UserDto>, UnauthorizedHttpResult> GetExecutingUser(HttpContext httpContext)
+    public static Ok<UserDto> GetExecutingUser(HttpContext httpContext)
     {
-        var user = httpContext.Features.Get<ICurrentUserFeature>()?.User;
-        return user == null
-            ? TypedResults.Unauthorized()
-            : TypedResults.Ok(user);
+        var feature = httpContext.Features.Get<ICurrentUserFeature>();
+        ArgumentNullException.ThrowIfNull(feature?.User);
+        return TypedResults.Ok(feature.User);
     }
 }

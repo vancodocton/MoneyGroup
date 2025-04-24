@@ -39,9 +39,9 @@
       },
       "Riok.Mapperly": {
         "type": "Direct",
-        "requested": "[4.2.0, )",
-        "resolved": "4.2.0",
-        "contentHash": "gr8HJNC0eEg8k5oY6QbpGMZgu8Y4/PeA51RlI1q4HEdK/YKasuUV+4C4eR5ZNm3wYf6+UgHjR3+yl02+hNkyew=="
+        "requested": "[4.2.1, )",
+        "resolved": "4.2.1",
+        "contentHash": "UZeQSieVlHr48t64J4k2s/lvbMeCXvzsXqV2A/0wyNdPpW8Cyn47+9mfWFJjouPxoSFfEhDbxg+WRbFIHvq4Zw=="
       },
       "Microsoft.EntityFrameworkCore.Abstractions": {
         "type": "Transitive",

@@ -598,7 +598,7 @@
       "moneygroup.core": {
         "type": "Project",
         "dependencies": {
-          "Ardalis.Specification": "[9.0.1, )",
+          "Ardalis.Specification": "[9.1.0, )",
           "FluentValidation": "[11.11.0, )",
           "Microsoft.Extensions.Logging.Abstractions": "[9.0.4, )"
         }
@@ -606,7 +606,7 @@
       "moneygroup.infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Ardalis.Specification.EntityFrameworkCore": "[9.0.1, )",
+          "Ardalis.Specification.EntityFrameworkCore": "[9.1.0, )",
           "Microsoft.EntityFrameworkCore": "[9.0.4, )",
           "Microsoft.EntityFrameworkCore.Relational": "[9.0.4, )",
           "MoneyGroup.Core": "[1.0.0, )"
@@ -614,17 +614,17 @@
       },
       "Ardalis.Specification": {
         "type": "CentralTransitive",
-        "requested": "[9.0.1, )",
-        "resolved": "9.0.1",
-        "contentHash": "bMVjiLaJbnmiaEn/oBoF8rTSRpnKMsA2JDQaCY/QZbC27r9b3gF+/qi6fcJdOROPoE6TjseNfCf42KnQKnkUiQ=="
+        "requested": "[9.1.0, )",
+        "resolved": "9.1.0",
+        "contentHash": "ncH34MGz8XOQr7HaJz6U0iGiy9RTuzUAYAI2C+PkbfL4L7qrruR9mUrmg9nE2wa3ZbO88dZMpuwEuLiY7lvxbA=="
       },
       "Ardalis.Specification.EntityFrameworkCore": {
         "type": "CentralTransitive",
-        "requested": "[9.0.1, )",
-        "resolved": "9.0.1",
-        "contentHash": "z/IlP/P8EB2DYqridrlH5/TbxWwWCl66GAopF9NzLLljTaB8vm+16e+tMmBTosCtelwui+2vVr1BGaJGUFr2Xw==",
+        "requested": "[9.1.0, )",
+        "resolved": "9.1.0",
+        "contentHash": "9cPBhu+h40k0smi6o/ga6dx3hOeziEnnO8/CJA7j5JKHavbTWUq1uqtxqky90IJdGYRd8zvC/aKCqpTME6DG9Q==",
         "dependencies": {
-          "Ardalis.Specification": "9.0.1",
+          "Ardalis.Specification": "9.1.0",
           "Microsoft.EntityFrameworkCore": "9.0.2",
           "Microsoft.EntityFrameworkCore.Relational": "9.0.2"
         }

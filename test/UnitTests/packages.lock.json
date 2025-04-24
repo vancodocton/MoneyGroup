@@ -234,16 +234,16 @@
       "moneygroup.core": {
         "type": "Project",
         "dependencies": {
-          "Ardalis.Specification": "[9.0.1, )",
+          "Ardalis.Specification": "[9.1.0, )",
           "FluentValidation": "[11.11.0, )",
           "Microsoft.Extensions.Logging.Abstractions": "[9.0.4, )"
         }
       },
       "Ardalis.Specification": {
         "type": "CentralTransitive",
-        "requested": "[9.0.1, )",
-        "resolved": "9.0.1",
-        "contentHash": "bMVjiLaJbnmiaEn/oBoF8rTSRpnKMsA2JDQaCY/QZbC27r9b3gF+/qi6fcJdOROPoE6TjseNfCf42KnQKnkUiQ=="
+        "requested": "[9.1.0, )",
+        "resolved": "9.1.0",
+        "contentHash": "ncH34MGz8XOQr7HaJz6U0iGiy9RTuzUAYAI2C+PkbfL4L7qrruR9mUrmg9nE2wa3ZbO88dZMpuwEuLiY7lvxbA=="
       },
       "FluentValidation": {
         "type": "CentralTransitive",

@@ -5,8 +5,8 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Ardalis.Specification" Version="9.1.0" />
-    <PackageVersion Include="Ardalis.Specification.EntityFrameworkCore" Version="9.1.0" />
+    <PackageVersion Include="Ardalis.Specification" Version="9.2.0" />
+    <PackageVersion Include="Ardalis.Specification.EntityFrameworkCore" Version="9.2.0" />
     <PackageVersion Include="Duende.IdentityModel" Version="7.0.0" />
     <PackageVersion Include="FluentValidation" Version="12.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
@@ -39,10 +39,10 @@
     <PackageVersion Include="Riok.Mapperly" Version="4.2.1" />
     <PackageVersion Include="SharpGrip.FluentValidation.AutoValidation.Endpoints" Version="1.5.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.4" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0">
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
-    <PackageVersion Include="xunit.v3" Version="2.0.2" />
+    <PackageVersion Include="xunit.v3" Version="2.0.3" />
   </ItemGroup>
 </Project>

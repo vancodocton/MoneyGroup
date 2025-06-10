@@ -461,8 +461,8 @@
       },
       "Microsoft.OpenApi": {
         "type": "Transitive",
-        "resolved": "1.6.17",
-        "contentHash": "Le+kehlmrlQfuDFUt1zZ2dVwrhFQtKREdKBo+rexOwaCoYP0/qpgT9tLxCsZjsgR5Itk1UKPcbgO+FyaNid/bA=="
+        "resolved": "2.0.0-preview.17",
+        "contentHash": "jeTjhKn8yZjrROb0OibINAp4pTfZ0qRsnXdsq2RkHlczHScDEc8oG3BfTKfTtfpcpi0wO8F/GNCYbN59rOjVzg=="
       },
       "Microsoft.SqlServer.Server": {
         "type": "Transitive",
@@ -678,7 +678,7 @@
         "type": "Project",
         "dependencies": {
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[9.0.5, )",
-          "Microsoft.AspNetCore.OpenApi": "[9.0.5, )",
+          "Microsoft.AspNetCore.OpenApi": "[10.0.0-preview.4.25258.110, )",
           "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore": "[9.0.5, )",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "[1.21.2, )",
           "MoneyGroup.Core": "[1.0.0, )",
@@ -722,11 +722,11 @@
       },
       "Microsoft.AspNetCore.OpenApi": {
         "type": "CentralTransitive",
-        "requested": "[9.0.5, )",
-        "resolved": "9.0.5",
-        "contentHash": "yZLOciYlpaOO/mHPOpgeSZTv8Lc7fOOVX40eWJJoGs/S9Ny9CymDuKKQofGE9stXGGM9EEnnuPeq0fhR8kdFfg==",
+        "requested": "[10.0.0-preview.4.25258.110, )",
+        "resolved": "10.0.0-preview.4.25258.110",
+        "contentHash": "c280RbgoGrRwYozFvE/E4I0nag7MMyfsSv92wx+ZeZ1P7J6D0eMzZD889EADCVFWttZvf8oKiY84eZBj79K0VA==",
         "dependencies": {
-          "Microsoft.OpenApi": "1.6.17"
+          "Microsoft.OpenApi": "2.0.0-preview.17"
         }
       },
       "Microsoft.EntityFrameworkCore": {

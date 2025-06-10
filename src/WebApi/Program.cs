@@ -3,6 +3,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Models.Interfaces;
+using Microsoft.OpenApi.Models.References;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models;
@@ -52,7 +54,7 @@ builder.Services.AddOpenApi(options =>
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
         document.Components ??= new OpenApiComponents();
-        document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
         document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
         {
             Type = SecuritySchemeType.OpenIdConnect,
@@ -65,9 +67,10 @@ builder.Services.AddOpenApi(options =>
     });
     options.AddOperationTransformer((operation, context, cancellationToken) =>
     {
+        operation.Security ??= new List<OpenApiSecurityRequirement>();
         operation.Security.Add(new OpenApiSecurityRequirement
         {
-            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "Bearer", Type = ReferenceType.SecurityScheme } }] = []
+            [new OpenApiSecuritySchemeReference("Bearer", context.Document)] = []
         });
 
         return Task.CompletedTask;

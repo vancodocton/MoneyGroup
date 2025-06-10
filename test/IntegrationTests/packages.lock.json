@@ -719,7 +719,7 @@
       "moneygroup.core": {
         "type": "Project",
         "dependencies": {
-          "Ardalis.Specification": "[9.1.0, )",
+          "Ardalis.Specification": "[9.2.0, )",
           "FluentValidation": "[12.0.0, )",
           "Microsoft.Extensions.Logging.Abstractions": "[9.0.5, )"
         }
@@ -727,7 +727,7 @@
       "moneygroup.infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Ardalis.Specification.EntityFrameworkCore": "[9.1.0, )",
+          "Ardalis.Specification.EntityFrameworkCore": "[9.2.0, )",
           "Microsoft.EntityFrameworkCore": "[9.0.5, )",
           "Microsoft.EntityFrameworkCore.Relational": "[9.0.5, )",
           "MoneyGroup.Core": "[1.0.0, )"
@@ -749,19 +749,19 @@
       },
       "Ardalis.Specification": {
         "type": "CentralTransitive",
-        "requested": "[9.1.0, )",
-        "resolved": "9.1.0",
-        "contentHash": "ncH34MGz8XOQr7HaJz6U0iGiy9RTuzUAYAI2C+PkbfL4L7qrruR9mUrmg9nE2wa3ZbO88dZMpuwEuLiY7lvxbA=="
+        "requested": "[9.2.0, )",
+        "resolved": "9.2.0",
+        "contentHash": "bggkCJU1tLIV/hSK5s0lbyFAOLsNpiafFPfrg2/0arWhmst8Y90CWQFTNE5aVJJLV1Ja6Jdf4rogsG9mYiRUSA=="
       },
       "Ardalis.Specification.EntityFrameworkCore": {
         "type": "CentralTransitive",
-        "requested": "[9.1.0, )",
-        "resolved": "9.1.0",
-        "contentHash": "9cPBhu+h40k0smi6o/ga6dx3hOeziEnnO8/CJA7j5JKHavbTWUq1uqtxqky90IJdGYRd8zvC/aKCqpTME6DG9Q==",
+        "requested": "[9.2.0, )",
+        "resolved": "9.2.0",
+        "contentHash": "0cy8NQpPemf870dwyk8orhIi5LSrvxtqUWQeJ+VfrK8eaUifGpXRKRR7rFHaIQRl4kzrU5Mz6RN0OsKs8fgu5w==",
         "dependencies": {
-          "Ardalis.Specification": "9.1.0",
-          "Microsoft.EntityFrameworkCore": "9.0.2",
-          "Microsoft.EntityFrameworkCore.Relational": "9.0.2"
+          "Ardalis.Specification": "9.2.0",
+          "Microsoft.EntityFrameworkCore": "9.0.5",
+          "Microsoft.EntityFrameworkCore.Relational": "9.0.5"
         }
       },
       "FluentValidation": {

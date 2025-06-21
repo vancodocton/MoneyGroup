@@ -22,15 +22,16 @@ updates:
       Ardalis.Specification:
         patterns:
           - "Ardalis.Specification*"
-      EntityFrameworkCore:
-        patterns:
-          - "*EntityFrameworkCore*"
-          - "dotnet-ef"
       Microsoft:
         patterns:
           - "Microsoft.*"
         exclude-patterns:
           - "*Test*"
+          - "*EntityFrameworkCore*"
+      EntityFrameworkCore:
+        patterns:
+          - "*EntityFrameworkCore*"
+          - "dotnet-ef"
       AutoMapper:
         patterns:
           - "AutoMapper*"

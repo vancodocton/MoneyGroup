@@ -27,15 +27,10 @@ public class OrderDtoValidator : AbstractValidator<OrderDto>
                 RuleFor(o => o.Participants)
                 .Must(l =>
                 {
-                    var idsHashSet = new HashSet<int>(l.Count());
-                    foreach (var participantId in l.Select(c => c.ParticipantId))
-                    {
-                        if (!idsHashSet.Add(participantId))
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
+                    // Use LINQ GroupBy to find duplicates
+                    return l.Select(c => c.ParticipantId)
+                            .Distinct()
+                            .Count() == l.Count();
                 })
                 .WithMessage("Duplicated participant");
             });

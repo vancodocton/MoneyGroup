@@ -27,7 +27,7 @@ public class OrderDtoValidator : AbstractValidator<OrderDto>
                 RuleFor(o => o.Participants)
                 .Must(l =>
                 {
-                    // Use LINQ Where to find duplicates
+                    // Use LINQ GroupBy to find duplicates
                     return l.Select(c => c.ParticipantId)
                             .Distinct()
                             .Count() == l.Count();

@@ -28,9 +28,9 @@ public class OrderDtoValidator : AbstractValidator<OrderDto>
                 .Must(l =>
                 {
                     // Use LINQ Where to find duplicates
-                    return !l.Select(c => c.ParticipantId)
-                             .GroupBy(id => id)
-                             .Any(g => g.Count() > 1);
+                    return l.Select(c => c.ParticipantId)
+                            .Distinct()
+                            .Count() == l.Count();
                 })
                 .WithMessage("Duplicated participant");
             });

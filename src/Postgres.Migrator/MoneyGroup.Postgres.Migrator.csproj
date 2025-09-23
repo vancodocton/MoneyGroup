@@ -16,5 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure.SqlServer\MoneyGroup.Infrastructure.SqlServer.csproj" />
+    <ProjectReference Include="..\ServiceDefaults\MoneyGroup.ServiceDefaults.csproj" />
   </ItemGroup>
 </Project>

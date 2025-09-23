@@ -5,6 +5,8 @@ using MoneyGroup.Infrastructure.SqlServer;
 
 var builder = Host.CreateApplicationBuilder(args);
 
+builder.AddServiceDefaults();
+
 var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection")
     ?? throw new InvalidOperationException();
 builder.Services.AddApplicationDbContextSqlServer(connectionString);

@@ -61,7 +61,7 @@ jobs:
 
     - name: Setup .NET
       if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         cache: true
         cache-dependency-path: |

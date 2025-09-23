@@ -27,7 +27,12 @@ public sealed class ApplicationDbContextFactory
         var connectionString = Configuration.GetConnectionString("SqlServerConnection")
             ?? throw new InvalidOperationException();
         optionsBuilder.UseSqlServer(connectionString);
+        
+        // Only enable sensitive data logging in development/test environments
+        #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();
+        #endif
+        
         optionsBuilder.LogTo(message =>
         {
             _diagnosticMessageSink.OnMessage(new DiagnosticMessage(message));

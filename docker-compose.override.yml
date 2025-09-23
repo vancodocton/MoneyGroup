@@ -2,7 +2,7 @@ services:
   postgres:
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
       - "5432:5432"
     volumes:
@@ -13,7 +13,7 @@ services:
   mssql:
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "password123!"
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD:-password123!}
     ports:
       - "1433:1433"
     volumes:
@@ -24,6 +24,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
+      - DB_PASSWORD=${DB_PASSWORD:-password123!}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
     ports:
       - "5200:8080"
       - "7428:8081"

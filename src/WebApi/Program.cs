@@ -42,7 +42,8 @@ builder.Services.AddScoped<IAuthorizationHandler, DenyUnauthorizedUserHandler>()
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
-    options.SerializerOptions.Encoder = null;
+    // Use default encoder instead of null to prevent potential security issues
+    // options.SerializerOptions.Encoder = null;
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -57,7 +58,9 @@ builder.Services.AddOpenApi(options =>
         {
             Type = SecuritySchemeType.OpenIdConnect,
             In = ParameterLocation.Header,
-            OpenIdConnectUrl = new Uri(builder.Configuration["Authentication:Schemes:Google:MetadataAddress"]!),
+            OpenIdConnectUrl = builder.Configuration["Authentication:Schemes:Google:MetadataAddress"] is string metadataAddress 
+                ? new Uri(metadataAddress) 
+                : throw new InvalidOperationException("Google metadata address configuration is required"),
             BearerFormat = "Json Web Token",
             Scheme = "bearer",
         });
@@ -77,7 +80,15 @@ builder.Services.AddOpenApi(options =>
 builder.Services.AddMapper();
 
 var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection")
-    ?? throw new InvalidOperationException();
+    ?? throw new InvalidOperationException("SqlServerConnection is required");
+
+// Add password from environment variable for security
+var dbPassword = builder.Configuration["DB_PASSWORD"] ?? Environment.GetEnvironmentVariable("DB_PASSWORD");
+if (!string.IsNullOrEmpty(dbPassword))
+{
+    connectionString += $";Password={dbPassword}";
+}
+
 builder.Services.AddApplicationDbContextSqlServer(connectionString);
 
 builder.Services.AddHealthChecks()

@@ -53,14 +53,30 @@ builder.Services.AddOpenApi(options =>
     {
         document.Components ??= new OpenApiComponents();
         document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
-        document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
+
+        var googleMetadataAddress = builder.Configuration["Authentication:Schemes:Google:MetadataAddress"];
+        if (string.IsNullOrWhiteSpace(googleMetadataAddress))
         {
-            Type = SecuritySchemeType.OpenIdConnect,
-            In = ParameterLocation.Header,
-            OpenIdConnectUrl = new Uri(builder.Configuration["Authentication:Schemes:Google:MetadataAddress"]!),
-            BearerFormat = "Json Web Token",
-            Scheme = "bearer",
-        });
+            document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                In = ParameterLocation.Header,
+                BearerFormat = "Json Web Token",
+                Scheme = "Bearer",
+            });
+        }
+        else
+        {
+            document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OpenIdConnect,
+                In = ParameterLocation.Header,
+                OpenIdConnectUrl = new Uri(builder.Configuration["Authentication:Schemes:Google:MetadataAddress"]!),
+                BearerFormat = "Json Web Token",
+                Scheme = "Bearer",
+            });
+        }
+
         return Task.CompletedTask;
     });
     options.AddOperationTransformer((operation, context, cancellationToken) =>

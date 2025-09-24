@@ -16,14 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Testing" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="xunit.runner.visualstudio">
@@ -34,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\AppHost\MoneyGroup.AppHost.csproj" />
     <ProjectReference Include="..\..\src\Infrastructure.PostgreSql\MoneyGroup.Infrastructure.PostgreSql.csproj" />
     <ProjectReference Include="..\..\src\Infrastructure.SqlServer\MoneyGroup.Infrastructure.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\Infrastructure\MoneyGroup.Infrastructure.csproj" />

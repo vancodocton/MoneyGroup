@@ -6,8 +6,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./src/Docker/psql/scripts/:/docker-entrypoint-initdb.d/
-      - ./src/Docker/psql/:/psql/
+      - ./src/Infrastructure.PostgreSql/Docker/scripts/:/docker-entrypoint-initdb.d/
+      - ./src/Infrastructure.PostgreSql/Docker/:/psql/
       - postgres:/var/lib/postgresql/data/
 
   mssql:
@@ -17,7 +17,7 @@ services:
     ports:
       - "1433:1433"
     volumes:
-      - ./src/Docker/mssql/scripts/:/mssql-server-setup-scripts.d/
+      - ./src/Infrastructure.SqlServer/Docker/scripts/:/mssql-server-setup-scripts.d/
 
   moneygroup.webapi:
     environment:

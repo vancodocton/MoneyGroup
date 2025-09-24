@@ -1,5 +1,3 @@
-$MSSQL_SA_PASSWORD="password123!"
-
 # Terminate all connections to the database
 sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -C -Q "ALTER DATABASE [MoneyGroup] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;"
 

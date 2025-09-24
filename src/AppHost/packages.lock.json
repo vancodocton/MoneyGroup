@@ -83,6 +83,20 @@
           "System.IO.Hashing": "9.0.7"
         }
       },
+      "CommunityToolkit.Aspire.Hosting.SqlServer.Extensions": {
+        "type": "Direct",
+        "requested": "[9.7.2, )",
+        "resolved": "9.7.2",
+        "contentHash": "HTGdx6brGpLWEZ5lKSPYpsPDjXIkK9EnMaZXx5a3/7h+Wmn+aLFxKfT+xFznm2jON6qZa3D9Gpt7xjeXEwyNlg==",
+        "dependencies": {
+          "Aspire.Hosting": "9.4.1",
+          "Aspire.Hosting.SqlServer": "9.4.1",
+          "CommunityToolkit.Aspire.Hosting.Adminer": "9.7.2",
+          "CommunityToolkit.Aspire.Hosting.DbGate": "9.7.2",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.7",
+          "Microsoft.Extensions.Options": "9.0.7"
+        }
+      },
       "Aspire.Hosting": {
         "type": "Transitive",
         "resolved": "9.4.2",
@@ -150,6 +164,22 @@
           "Microsoft.Identity.Client": "4.73.1",
           "Microsoft.Identity.Client.Extensions.Msal": "4.73.1",
           "System.Memory": "4.5.5"
+        }
+      },
+      "CommunityToolkit.Aspire.Hosting.Adminer": {
+        "type": "Transitive",
+        "resolved": "9.7.2",
+        "contentHash": "kVLgjsvW/Ts+gGLuQMdR64Qup5DKtcMkD54eTrRoVQou3JvizsomHAW7Y3xyyzM6n6NBzIR6br4R6PI34dK7Bw==",
+        "dependencies": {
+          "Aspire.Hosting": "9.4.1"
+        }
+      },
+      "CommunityToolkit.Aspire.Hosting.DbGate": {
+        "type": "Transitive",
+        "resolved": "9.7.2",
+        "contentHash": "2BxhBmTcl+16D8M5zuPAESs0ioGWlVsw+RqRU2g4/GR7v8v/qMm+A6fX1m9+CcHa7Tq0htF18S3GQmnHSwtm2w==",
+        "dependencies": {
+          "Aspire.Hosting": "9.4.1"
         }
       },
       "Fractions": {

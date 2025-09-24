@@ -1,0 +1,1 @@
+dotnet user-jwts create -o token --scheme Google --claim email_verified=true --claim email=duongtruong.nguuyenky@gmail.com

@@ -4,20 +4,20 @@ using MoneyGroup.FunctionalTests.Fixture;
 
 namespace MoneyGroup.FunctionalTests;
 public class TestHealthCheck
-    : IClassFixture<WebApiFactory>
+    : IClassFixture<DistributedAppFactory>
 {
-    private readonly WebApiFactory _webApiFactory;
+    private readonly DistributedAppFactory _factory;
 
-    public TestHealthCheck(WebApiFactory webApiFactory)
+    public TestHealthCheck(DistributedAppFactory webApiFactory)
     {
-        _webApiFactory = webApiFactory;
+        _factory = webApiFactory;
     }
 
     [Fact]
     public async Task HealthCheck_ReturnsOk()
     {
         // Arrange
-        var client = _webApiFactory.CreateClient();
+        var client = _factory.CreateWebApiClient();
 
         // Act
         var response = await client.GetAsync("/healthz", TestContext.Current.CancellationToken);
@@ -32,7 +32,7 @@ public class TestHealthCheck
     public async Task OpenApiSpecification_ReturnsOk()
     {
         // Arrange
-        var client = _webApiFactory.CreateClient();
+        var client = _factory.CreateWebApiClient();
 
         // Act
         var response = await client.GetAsync("/openapi/v1.json", TestContext.Current.CancellationToken);

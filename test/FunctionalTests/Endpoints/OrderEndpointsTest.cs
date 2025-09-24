@@ -13,7 +13,7 @@ using MoneyGroup.FunctionalTests.Fixture;
 namespace MoneyGroup.FunctionalTests.Endpoints;
 
 public class OrderEndpointsTest
-    : IClassFixture<WebApiFactory>
+    : IClassFixture<DistributedAppFactory>
 {
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
@@ -24,9 +24,9 @@ public class OrderEndpointsTest
 
     private readonly HttpClient _client;
 
-    public OrderEndpointsTest(WebApiFactory factory)
+    public OrderEndpointsTest(DistributedAppFactory factory)
     {
-        _client = factory.CreateClient();
+        _client = factory.CreateWebApiClient();
     }
 
     #region GetOrders

@@ -2,7 +2,7 @@
 
 namespace MoneyGroup.IntegrationTests.Fixtures;
 
-public class SQLiteDbContextFactory
+public sealed class SQLiteDbContextFactory
     : DbContextFactory<SQLiteDbContext>
 {
     protected override SQLiteDbContext CreateDbContextCore()

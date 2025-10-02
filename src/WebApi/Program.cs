@@ -51,6 +51,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
     var metadataAddress = builder.Configuration[$"Authentication:Schemes:{JwtBearerDefaults.AuthenticationScheme}:MetadataAddress"];
+    var validIssuer = builder.Configuration[$"Authentication:Schemes:{JwtBearerDefaults.AuthenticationScheme}:ValidIssuer"];
 
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
@@ -65,14 +66,17 @@ builder.Services.AddOpenApi(options =>
             Scheme = JwtBearerDefaults.AuthenticationScheme,
         });
 
-        document.Components.SecuritySchemes.Add("google-oidc", new OpenApiSecurityScheme
+        if (!string.IsNullOrWhiteSpace(metadataAddress) && validIssuer != "dotnet-user-jwts")
         {
-            Type = SecuritySchemeType.OpenIdConnect,
-            In = ParameterLocation.Header,
-            OpenIdConnectUrl = new Uri(metadataAddress!),
-            BearerFormat = "Json Web Token",
-            Scheme = JwtBearerDefaults.AuthenticationScheme,
-        });
+            document.Components.SecuritySchemes.Add("google-oidc", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OpenIdConnect,
+                In = ParameterLocation.Header,
+                OpenIdConnectUrl = new Uri(metadataAddress),
+                BearerFormat = "Json Web Token",
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+            });
+        }
 
         return Task.CompletedTask;
     });
@@ -81,12 +85,15 @@ builder.Services.AddOpenApi(options =>
     {
         operation.Security.Add(new OpenApiSecurityRequirement
         {
-            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "bearer", Type = ReferenceType.SecurityScheme } }] = [],
+            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "bearer", Type = ReferenceType.SecurityScheme } }] = []
         });
-        operation.Security.Add(new OpenApiSecurityRequirement
+        if (!string.IsNullOrWhiteSpace(metadataAddress))
         {
-            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "google-oidc", Type = ReferenceType.SecurityScheme } }] = []
-        });
+            operation.Security.Add(new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "google-oidc", Type = ReferenceType.SecurityScheme } }] = []
+            });
+        }
 
         return Task.CompletedTask;
     });

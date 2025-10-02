@@ -57,6 +57,14 @@ builder.Services.AddOpenApi(options =>
         document.Components ??= new OpenApiComponents();
         document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
 
+        document.Components.SecuritySchemes.Add("bearer", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            In = ParameterLocation.Header,
+            BearerFormat = "Json Web Token",
+            Scheme = JwtBearerDefaults.AuthenticationScheme,
+        });
+
         document.Components.SecuritySchemes.Add("google-oidc", new OpenApiSecurityScheme
         {
             Type = SecuritySchemeType.OpenIdConnect,
@@ -65,10 +73,16 @@ builder.Services.AddOpenApi(options =>
             BearerFormat = "Json Web Token",
             Scheme = JwtBearerDefaults.AuthenticationScheme,
         });
+
         return Task.CompletedTask;
     });
+
     options.AddOperationTransformer((operation, context, cancellationToken) =>
     {
+        operation.Security.Add(new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "bearer", Type = ReferenceType.SecurityScheme } }] = [],
+        });
         operation.Security.Add(new OpenApiSecurityRequirement
         {
             [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "google-oidc", Type = ReferenceType.SecurityScheme } }] = []

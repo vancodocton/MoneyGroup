@@ -1,5 +1,6 @@
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -25,7 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHealthChecks();
 
 builder.Services.AddAuthentication()
-    .AddJwtBearer("Google", options =>
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
         // Configuration is loaded from appsettings.json
     });
@@ -33,7 +34,7 @@ builder.Services.AddAuthentication()
 builder.Services.AddAuthorizationBuilder()
     .AddDefaultPolicy("DefaultPolicy", policy =>
     {
-        policy.AddAuthenticationSchemes("Google");
+        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
         policy.RequireAuthenticatedUser();
         policy.RequireAuthorizedUser();
     });
@@ -49,17 +50,20 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
+    var metadataAddress = builder.Configuration[$"Authentication:Schemes:{JwtBearerDefaults.AuthenticationScheme}:MetadataAddress"];
+
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
         document.Components ??= new OpenApiComponents();
         document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
-        document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
+
+        document.Components.SecuritySchemes.Add("google-oidc", new OpenApiSecurityScheme
         {
             Type = SecuritySchemeType.OpenIdConnect,
             In = ParameterLocation.Header,
-            OpenIdConnectUrl = new Uri(builder.Configuration["Authentication:Schemes:Google:MetadataAddress"]!),
+            OpenIdConnectUrl = new Uri(metadataAddress!),
             BearerFormat = "Json Web Token",
-            Scheme = "bearer",
+            Scheme = JwtBearerDefaults.AuthenticationScheme,
         });
         return Task.CompletedTask;
     });
@@ -67,7 +71,7 @@ builder.Services.AddOpenApi(options =>
     {
         operation.Security.Add(new OpenApiSecurityRequirement
         {
-            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "Bearer", Type = ReferenceType.SecurityScheme } }] = []
+            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "google-oidc", Type = ReferenceType.SecurityScheme } }] = []
         });
 
         return Task.CompletedTask;

@@ -91,7 +91,7 @@
         },
         "security": [
           {
-            "Bearer": [ ]
+            "google-oidc": [ ]
           }
         ]
       },
@@ -134,7 +134,7 @@
         },
         "security": [
           {
-            "Bearer": [ ]
+            "google-oidc": [ ]
           }
         ]
       }
@@ -173,7 +173,7 @@
         },
         "security": [
           {
-            "Bearer": [ ]
+            "google-oidc": [ ]
           }
         ]
       },
@@ -203,7 +203,7 @@
         },
         "security": [
           {
-            "Bearer": [ ]
+            "google-oidc": [ ]
           }
         ]
       }
@@ -267,7 +267,7 @@
         },
         "security": [
           {
-            "Bearer": [ ]
+            "google-oidc": [ ]
           }
         ]
       }
@@ -306,7 +306,7 @@
         },
         "security": [
           {
-            "Bearer": [ ]
+            "google-oidc": [ ]
           }
         ]
       }
@@ -331,7 +331,7 @@
         },
         "security": [
           {
-            "Bearer": [ ]
+            "google-oidc": [ ]
           }
         ]
       }
@@ -537,7 +537,7 @@
       }
     },
     "securitySchemes": {
-      "Bearer": {
+      "google-oidc": {
         "type": "openIdConnect",
         "openIdConnectUrl": "https://accounts.google.com/.well-known/openid-configuration"
       }

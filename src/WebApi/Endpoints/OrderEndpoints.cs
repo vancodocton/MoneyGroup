@@ -19,20 +19,16 @@ public static class OrderEndpoints
             .WithTags("Order");
 
         group.MapGet("/", GetOrdersAsync)
-        .WithName("GetOrders")
-        .WithOpenApi();
+        .WithName("GetOrders");
 
         group.MapGet("/{id:int}", GetOrderByIdAsync)
-        .WithName("GetOrderById")
-        .WithOpenApi();
+        .WithName("GetOrderById");
 
         group.MapPost("/", CreateOrderAsync)
-        .WithName("CreateOrder")
-        .WithOpenApi();
+        .WithName("CreateOrder");
 
         group.MapDelete("/{id:int}", DeleteOrderAsync)
-        .WithName("DeleteOrder")
-        .WithOpenApi();
+        .WithName("DeleteOrder");
     }
 
     private static async Task<Results<Ok<PaginatedModel<OrderDetailedDto>>, ValidationProblem>> GetOrdersAsync([AsParameters] OrderPaginatedRequest request, [FromServices] IOrderService orderService)

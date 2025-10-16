@@ -458,14 +458,6 @@
         "resolved": "13.0.3",
         "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
       },
-      "Npgsql": {
-        "type": "Transitive",
-        "resolved": "9.0.3",
-        "contentHash": "tPvY61CxOAWxNsKLEBg+oR646X4Bc8UmyQ/tJszL/7mEmIXQnnBhVJZrZEEUv0Bstu0mEsHZD5At3EO8zQRAYw==",
-        "dependencies": {
-          "Microsoft.Extensions.Logging.Abstractions": "8.0.2"
-        }
-      },
       "SQLitePCLRaw.bundle_e_sqlite3": {
         "type": "Transitive",
         "resolved": "2.1.10",
@@ -598,11 +590,7 @@
         "type": "Project"
       },
       "moneygroup.infrastructure.postgresql": {
-        "type": "Project",
-        "dependencies": {
-          "MoneyGroup.Infrastructure": "[1.0.0, )",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "[9.0.4, )"
-        }
+        "type": "Project"
       },
       "moneygroup.infrastructure.sqlserver": {
         "type": "Project"
@@ -638,17 +626,6 @@
         "contentHash": "FEgpSF+Z9StMvrsSViaybOBwR0f0ZZxDm8xV5cSOFiXN/t+ys+rwAlTd/6yG7Ld1gfppgvLcMasZry3GsI9lGA==",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.9"
-        }
-      },
-      "Npgsql.EntityFrameworkCore.PostgreSQL": {
-        "type": "CentralTransitive",
-        "requested": "[9.0.4, )",
-        "resolved": "9.0.4",
-        "contentHash": "mw5vcY2IEc7L+IeGrxpp/J5OSnCcjkjAgJYCm/eD52wpZze8zsSifdqV7zXslSMmfJG2iIUGZyo3KuDtEFKwMQ==",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "[9.0.1, 10.0.0)",
-          "Microsoft.EntityFrameworkCore.Relational": "[9.0.1, 10.0.0)",
-          "Npgsql": "9.0.3"
         }
       }
     }

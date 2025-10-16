@@ -48,7 +48,7 @@ NuGet packages used across all selected projects or their dependencies that need
 | Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore | 9.0.9      | 10.0.0-rc.2.25502.107         | Recommended for .NET 10.0                      |
 | Microsoft.Extensions.Hosting                                | 9.0.9           | 10.0.0-rc.2.25502.107         | Recommended for .NET 10.0                      |
 | Microsoft.Extensions.Logging.Abstractions                   | 9.0.9           | 10.0.0-rc.2.25502.107         | Recommended for .NET 10.0                      |
-| Microsoft.VisualStudio.Azure.Containers.Tools.Targets       | 1.22.1          |                               | Incompatible; remove or replace if needed      |
+| Microsoft.VisualStudio.Azure.Containers.Tools.Targets       | 1.22.1          | 1.23.0                        | Recommended for .NET 10.0 (VS 2026 Insider)    |
 | Npgsql.EntityFrameworkCore.PostgreSQL                       | 9.0.4           | 10.0.0-rc.1                   | Recommended for .NET 10.0                      |
 
 ### Microsoft Testing Platform migration
@@ -126,7 +126,7 @@ NuGet packages changes:
   - Microsoft.EntityFrameWorkCore.Design should be updated from `9.0.9` to `10.0.0-rc.2.25502.107` (recommended for .NET 10.0)
   - Microsoft.Extensions.ApiDescription.Server should be updated from `9.0.9` to `10.0.0-rc.2.25502.107` (recommended for .NET 10.0)
   - Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore should be updated from `9.0.9` to `10.0.0-rc.2.25502.107` (recommended for .NET 10.0)
-  - Microsoft.VisualStudio.Azure.Containers.Tools.Targets should be removed (incompatible; no supported version found)
+  - Microsoft.VisualStudio.Azure.Containers.Tools.Targets should be updated from `1.22.1` to `1.23.0` (recommended for .NET 10.0 by VS 2026 Insider)
 
 #### test/UnitTests/MoneyGroup.UnitTests.csproj modifications
 
@@ -157,4 +157,4 @@ Project properties changes:
 
 NuGet packages changes:
   - Microsoft.Extensions.Hosting should be updated from `9.0.9` to `10.0.0-rc.2.25502.107` (recommended for .NET 10.0)
-  - Microsoft.VisualStudio.Azure.Containers.Tools.Targets should be removed (incompatible; no supported version found)
+  - Microsoft.VisualStudio.Azure.Containers.Tools.Targets should be updated from `1.22.1` to `1.23.0` (recommended for .NET 10.0 by VS 2026 Insider)

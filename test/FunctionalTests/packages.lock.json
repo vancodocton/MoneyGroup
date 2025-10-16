@@ -693,6 +693,7 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.0-rc.2.25502.107, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.0-rc.2.25502.107, )",
           "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore": "[10.0.0-rc.2.25502.107, )",
+          "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "[1.23.0, )",
           "MoneyGroup.Core": "[1.0.0, )",
           "MoneyGroup.Infrastructure": "[1.0.0, )",
           "MoneyGroup.Infrastructure.SqlServer": "[1.0.0, )",
@@ -827,6 +828,12 @@
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0-rc.2.25502.107"
         }
+      },
+      "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+        "type": "CentralTransitive",
+        "requested": "[1.23.0, )",
+        "resolved": "1.23.0",
+        "contentHash": "2wDnb4umupJZ/1ikgWozFVpggH1mlHQFc0odXVv2ZagL3RYwXgW9zmC15fiqIBzmaC0vLZUnLGwDY+p8ZR7Syw=="
       },
       "SharpGrip.FluentValidation.AutoValidation.Endpoints": {
         "type": "CentralTransitive",

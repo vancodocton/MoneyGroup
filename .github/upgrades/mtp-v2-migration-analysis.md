@@ -25,37 +25,31 @@ Based on the [xUnit v3.2.0-pre.10 release notes](https://xunit.net/releases/v3/3
 
 This setup uses MTP v1 with a VSTest bridge, which is a transitional approach.
 
-## Investigation Required
-
-### Microsoft.Testing.Extensions.CodeCoverage Compatibility
-
-The `Microsoft.Testing.Extensions.CodeCoverage` package version `17.14.2` needs to be verified for MTP v2 compatibility:
-
-**Action Required:**
-1. Check NuGet.org for latest version that supports MTP v2
-2. Verify release notes for MTP v2 compatibility
-3. Update to latest compatible version if needed
-
-**Expected Outcome:**
-- If v17.14.2 is MTP v2 compatible: ? Keep current version
-- If newer version required: Upgrade to latest (likely v17.15.x or v18.x)
-
 ## Target State (After Migration to MTP v2)
 
 ### Packages to Use:
 - **xunit.v3**: `3.2.0-pre.10` ? (Native MTP v2 support)
-- **Microsoft.Testing.Extensions.CodeCoverage**: `17.14.2` or newer ? (Code coverage - verify MTP v2 support)
+- **Microsoft.Testing.Extensions.CodeCoverage**: `18.1.0` ? (MTP v2 compatible - verified)
 
-### Packages to Remove:
+### Packages Removed:
 - ? **xunit.runner.visualstudio** (No longer needed - xUnit now has native MTP v2 runner)
 - ? **Microsoft.NET.Test.Sdk** (VSTest adapter - not needed with MTP v2)
 - ? **Microsoft.Testing.Extensions.VSTestBridge** (Bridge no longer needed with native support)
 
 ### Configuration (Unchanged):
 ```xml
+<OutputType>Exe</OutputType>
 <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
 <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
 ```
+
+## ? Verification Results
+
+### Microsoft.Testing.Extensions.CodeCoverage Compatibility
+- **Current Version**: `17.14.2` (MTP v1)
+- **Upgraded To**: `18.1.0` (MTP v2 compatible - **VERIFIED**)
+- **Status**: ? **MTP v2 support confirmed**
+- **Action Taken**: Upgraded to version 18.1.0
 
 ## Benefits of Migration
 

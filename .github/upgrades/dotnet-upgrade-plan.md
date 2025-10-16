@@ -50,20 +50,29 @@ NuGet packages used across all selected projects or their dependencies that need
 | Microsoft.Extensions.Logging.Abstractions                   | 9.0.9           | 10.0.0-rc.2.25502.107         | Recommended for .NET 10.0                      |
 | Microsoft.VisualStudio.Azure.Containers.Tools.Targets       | 1.22.1          | 1.23.0                        | Recommended for .NET 10.0 (VS 2026 Insider)    |
 | Npgsql.EntityFrameworkCore.PostgreSQL                       | 9.0.4           | 10.0.0-rc.1                   | Recommended for .NET 10.0                      |
+| xunit.v3                                                    | 3.0.1           | 3.2.0-pre.10                  | Native Microsoft Testing Platform v2 support   |
 
-### Microsoft Testing Platform migration
+### Microsoft Testing Platform v2 migration
 
-Migrate test projects to Microsoft Testing Platform and remove VSTest.
+Migrate test projects to Microsoft Testing Platform v2 with native xUnit v3 support.
 
-- Enable Microsoft Testing Platform in all test projects.
-- Remove any VSTest-only tooling, CLI usage, and configuration (vstest.console, VSTest-specific RunSettings, legacy logger/collectors).
-- Ensure `dotnet test` runs use the Microsoft Testing Platform by default.
+- Upgrade xUnit v3 to version 3.2.0-pre.10 which includes native MTP v2 support
+- **Verify** `Microsoft.Testing.Extensions.CodeCoverage` MTP v2 compatibility:
+  - Current version: `17.14.2` (needs MTP v2 verification)
+  - If not MTP v2 compatible, upgrade to latest MTP v2-compatible version
+  - Check NuGet.org release notes for MTP v2 support confirmation
+- Remove `Microsoft.NET.Test.Sdk` (VSTest adapter, not needed with MTP v2)
+- Remove `Microsoft.Testing.Extensions.VSTestBridge` (not needed with native MTP v2 support)
+- Remove `xunit.runner.visualstudio` (VSTest runner, replaced by native MTP v2)
+- Ensure `UseMicrosoftTestingPlatformRunner=true` and `TestingPlatformDotnetTestSupport=true` are set
+
+**Important:** Before applying changes, verify `Microsoft.Testing.Extensions.CodeCoverage` v17.14.2 is MTP v2 compatible on NuGet.org. If not, identify and upgrade to the latest MTP v2-compatible version.
 
 | Test project path                                   | Required changes summary                                                                 |
 |:----------------------------------------------------|:------------------------------------------------------------------------------------------|
-| test/UnitTests/MoneyGroup.UnitTests.csproj          | Enable Microsoft Testing Platform; remove VSTest-only config/tooling                      |
-| test/IntegrationTests/MoneyGroup.IntegrationTests.csproj | Enable Microsoft Testing Platform; remove VSTest-only config/tooling                 |
-| test/FunctionalTests/MoneyGroup.FunctionalTests.csproj | Enable Microsoft Testing Platform; remove VSTest-only config/tooling                  |
+| test/UnitTests/MoneyGroup.UnitTests.csproj          | Upgrade xUnit to 3.2.0-pre.10; remove VSTest packages; use native MTP v2                  |
+| test/IntegrationTests/MoneyGroup.IntegrationTests.csproj | Upgrade xUnit to 3.2.0-pre.10; remove VSTest packages; use native MTP v2            |
+| test/FunctionalTests/MoneyGroup.FunctionalTests.csproj | Upgrade xUnit to 3.2.0-pre.10; remove VSTest packages; use native MTP v2              |
 
 ### Docker build assets modifications
 

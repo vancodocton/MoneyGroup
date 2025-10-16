@@ -596,12 +596,7 @@
         }
       },
       "moneygroup.core": {
-        "type": "Project",
-        "dependencies": {
-          "Ardalis.Specification": "[9.3.1, )",
-          "FluentValidation": "[12.0.0, )",
-          "Microsoft.Extensions.Logging.Abstractions": "[9.0.9, )"
-        }
+        "type": "Project"
       },
       "moneygroup.infrastructure": {
         "type": "Project",
@@ -628,12 +623,6 @@
           "Microsoft.EntityFrameworkCore": "9.0.8",
           "Microsoft.EntityFrameworkCore.Relational": "9.0.8"
         }
-      },
-      "FluentValidation": {
-        "type": "CentralTransitive",
-        "requested": "[12.0.0, )",
-        "resolved": "12.0.0",
-        "contentHash": "8NVLxtMUXynRHJIX3Hn1ACovaqZIJASufXIIFkD0EUbcd5PmMsL1xUD5h548gCezJ5BzlITaR9CAMrGe29aWpA=="
       },
       "Microsoft.EntityFrameworkCore": {
         "type": "CentralTransitive",

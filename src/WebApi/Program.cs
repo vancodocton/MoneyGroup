@@ -1,5 +1,6 @@
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
@@ -25,7 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHealthChecks();
 
 builder.Services.AddAuthentication()
-    .AddJwtBearer("Google", options =>
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
         // Configuration is loaded from appsettings.json
     });
@@ -33,7 +34,7 @@ builder.Services.AddAuthentication()
 builder.Services.AddAuthorizationBuilder()
     .AddDefaultPolicy("DefaultPolicy", policy =>
     {
-        policy.AddAuthenticationSchemes("Google");
+        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
         policy.RequireAuthenticatedUser();
         policy.RequireAuthorizedUser();
     });
@@ -49,27 +50,51 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
+    var metadataAddress = builder.Configuration[$"Authentication:Schemes:{JwtBearerDefaults.AuthenticationScheme}:MetadataAddress"];
+    var validIssuer = builder.Configuration[$"Authentication:Schemes:{JwtBearerDefaults.AuthenticationScheme}:ValidIssuer"];
+
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
         document.Components ??= new OpenApiComponents();
         document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
-        document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
+
+        document.Components.SecuritySchemes.Add("bearer", new OpenApiSecurityScheme
         {
-            Type = SecuritySchemeType.OpenIdConnect,
+            Type = SecuritySchemeType.Http,
             In = ParameterLocation.Header,
-            OpenIdConnectUrl = new Uri(builder.Configuration["Authentication:Schemes:Google:MetadataAddress"]!),
             BearerFormat = "Json Web Token",
-            Scheme = "bearer",
+            Scheme = JwtBearerDefaults.AuthenticationScheme,
         });
+
+        if (!string.IsNullOrWhiteSpace(metadataAddress) && validIssuer != "dotnet-user-jwts")
+        {
+            document.Components.SecuritySchemes.Add("google-oidc", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OpenIdConnect,
+                In = ParameterLocation.Header,
+                OpenIdConnectUrl = new Uri(metadataAddress),
+                BearerFormat = "Json Web Token",
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+            });
+        }
+
         return Task.CompletedTask;
     });
+
     options.AddOperationTransformer((operation, context, cancellationToken) =>
     {
         operation.Security ??= [];
         operation.Security.Add(new OpenApiSecurityRequirement
         {
-            [new OpenApiSecuritySchemeReference("Bearer", context.Document)] = []
+            [new OpenApiSecuritySchemeReference("bearer", context.Document)] = []
         });
+        if (!string.IsNullOrWhiteSpace(metadataAddress))
+        {
+            operation.Security.Add(new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("google-oidc", context.Document)] = []
+            });
+        }
 
         return Task.CompletedTask;
     });

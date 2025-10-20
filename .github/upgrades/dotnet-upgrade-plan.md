@@ -6,19 +6,20 @@ Execute steps below sequentially one by one in the order they are listed.
 
 1. Validate that an .NET 10.0 SDK required for this upgrade is installed on the machine and if not, help to get it installed.
 2. Ensure that the SDK version specified in global.json files is compatible with the .NET 10.0 upgrade.
-3. Upgrade src/Core/MoneyGroup.Core.csproj
-4. Upgrade src/Infrastructure/MoneyGroup.Infrastructure.csproj
-5. Upgrade src/Infrastructure.SqlServer/MoneyGroup.Infrastructure.SqlServer.csproj
-6. Upgrade src/Infrastructure.PostgreSql/MoneyGroup.Infrastructure.PostgreSql.csproj
-7. Upgrade src/WebApi/MoneyGroup.WebApi.csproj
-8. Upgrade test/UnitTests/MoneyGroup.UnitTests.csproj
-9. Upgrade test/IntegrationTests/MoneyGroup.IntegrationTests.csproj
-10. Upgrade test/FunctionalTests/MoneyGroup.FunctionalTests.csproj
-11. Upgrade src/Postgres.Migrator/MoneyGroup.Postgres.Migrator.csproj
-12. Update Docker build assets to .NET 10.0 base images (Dockerfiles and docker-compose.yml)
-13. Global opt-in to Microsoft.Testing.Platform v2 via global.json (test.runner)
-14. Migrate to Microsoft.Testing.Platform v2 and opt-in to the new dotnet test experience
-15. Run tests using dotnet test (Microsoft.Testing.Platform v2)
+3. Upgrade .NET tools in .config/dotnet-tools.json to versions compatible with .NET 10.0
+4. Upgrade src/Core/MoneyGroup.Core.csproj
+5. Upgrade src/Infrastructure/MoneyGroup.Infrastructure.csproj
+6. Upgrade src/Infrastructure.SqlServer/MoneyGroup.Infrastructure.SqlServer.csproj
+7. Upgrade src/Infrastructure.PostgreSql/MoneyGroup.Infrastructure.PostgreSql.csproj
+8. Upgrade src/WebApi/MoneyGroup.WebApi.csproj
+9. Upgrade test/UnitTests/MoneyGroup.UnitTests.csproj
+10. Upgrade test/IntegrationTests/MoneyGroup.IntegrationTests.csproj
+11. Upgrade test/FunctionalTests/MoneyGroup.FunctionalTests.csproj
+12. Upgrade src/Postgres.Migrator/MoneyGroup.Postgres.Migrator.csproj
+13. Update Docker build assets to .NET 10.0 base images (Dockerfiles and docker-compose.yml)
+14. Global opt-in to Microsoft.Testing.Platform v2 via global.json (test.runner)
+15. Migrate to Microsoft.Testing.Platform v2 and opt-in to the new dotnet test experience
+16. Run tests using dotnet test (Microsoft.Testing.Platform v2)
 
 ## Settings
 
@@ -52,6 +53,28 @@ NuGet packages used across all selected projects or their dependencies that need
 | Microsoft.Extensions.Logging.Abstractions                   | 9.0.9           | 10.0.0-rc.2.25502.107         | Recommended for .NET 10.0                      |
 | Microsoft.VisualStudio.Azure.Containers.Tools.Targets       | 1.22.1          | 1.23.0                        | Recommended for .NET 10.0 (VS 2026 Insider)    |
 | Npgsql.EntityFrameworkCore.PostgreSQL                       | 9.0.4           | 10.0.0-rc.2                   | Recommended for .NET 10.0                      |
+
+### .NET Tools (.config/dotnet-tools.json)
+
+.NET tools used in the solution that need version updates for .NET 10.0 compatibility.
+
+| Tool Name                | Current Version | New Version                   | Description                                    |
+|:-------------------------|:---------------:|:-----------------------------:|:-----------------------------------------------|
+| dotnet-ef                | 9.0.10          | 10.0.0-rc.2.25502.107         | Entity Framework Core tools for .NET 10.0      |
+| dotnet-sonarscanner      | 10.1.2          | 10.1.2                        | No update required (compatible with .NET 10.0) |
+| dotnet-coverage          | 17.14.2         | 17.14.2                       | No update required (compatible with .NET 10.0) |
+
+#### .config/dotnet-tools.json modifications
+
+.NET tools changes:
+  - dotnet-ef should be updated from `9.0.10` to `10.0.0-rc.2.25502.107` (required for .NET 10.0 Entity Framework Core tooling)
+  - dotnet-sonarscanner remains at `10.1.2` (compatible with .NET 10.0)
+  - dotnet-coverage remains at `17.14.2` (compatible with .NET 10.0)
+
+Update instructions:
+  - Edit .config/dotnet-tools.json and update the version for dotnet-ef to `10.0.0-rc.2.25502.107`
+  - Run `dotnet tool restore` to ensure tools are restored with updated versions
+  - Verify the upgrade by running `dotnet ef --version` (should show 10.0.0-rc.2.25502.107)
 
 ### .NET SDK 10 Testing Platform Configuration (Microsoft.Testing.Platform v2)
 

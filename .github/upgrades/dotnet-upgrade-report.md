@@ -30,14 +30,29 @@
 | Microsoft.Extensions.Hosting                         |             | 10.0.0-rc.2.25502.107     |           |
 | Microsoft.Extensions.Logging.Abstractions            |             | 10.0.0-rc.2.25502.107     |           |
 | Microsoft.VisualStudio.Azure.Containers.Tools.Targets|             | 1.23.0                    |           |
-| Npgsql.EntityFrameworkCore.PostgreSQL                |             | 10.0.0-rc.1               |           |
+| Npgsql.EntityFrameworkCore.PostgreSQL                | 9.0.4       | 10.0.0-rc.2               | ee22382   |
 | Microsoft.AspNetCore.Mvc.Testing                     |             | 10.0.0-rc.2.25502.107     |           |
 
 ## All commits
 
 | Commit ID | Description |
 |:----------|:------------|
+| ee22382   | Update Npgsql.EntityFrameworkCore.PostgreSQL to version 10.0.0-rc.2 |
 | be6bef9e  | Added UseMicrosoftTestingPlatformRunner and TestingPlatformDotnetTestSupport to Directory.Build.props; removed incorrect MicrosoftTestingPlatform property. |
+
+## Project feature upgrades
+
+### src/Infrastructure.PostgreSql/MoneyGroup.Infrastructure.PostgreSql.csproj
+
+Successfully upgraded to .NET 10.0 with the following changes:
+
+- **Target Framework**: Updated from `net9.0` to `net10.0`
+- **Npgsql.EntityFrameworkCore.PostgreSQL**: Updated to version `10.0.0-rc.2` (corrected from initially planned 10.0.0-rc.1)
+- **Entity Framework Core packages**: Updated to `10.0.0-rc.2.25502.107`
+- **Build validation**: Passed with no errors
+- **Package management**: Using centralized package version management via Directory.Packages.props
+
+All packages are compatible with .NET 10.0 and the project builds successfully.
 
 ## Next steps
 

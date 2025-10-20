@@ -33,14 +33,32 @@
 | Npgsql.EntityFrameworkCore.PostgreSQL                | 9.0.4       | 10.0.0-rc.2               | ee22382   |
 | Microsoft.AspNetCore.Mvc.Testing                     |             | 10.0.0-rc.2.25502.107     |           |
 
+## .NET Tools
+
+| Tool Name            | Old Version | New Version               | Commit Id |
+|:---------------------|:-----------:|:-------------------------:|:----------|
+| dotnet-ef            | 9.0.10      | 10.0.0-rc.2.25502.107     | 3e36aff   |
+
 ## All commits
 
 | Commit ID | Description |
 |:----------|:------------|
+| 3e36aff   | Upgrade dotnet-ef tool to 10.0.0-rc.2.25502.107 for .NET 10.0 |
 | ee22382   | Update Npgsql.EntityFrameworkCore.PostgreSQL to version 10.0.0-rc.2 |
 | be6bef9e  | Added UseMicrosoftTestingPlatformRunner and TestingPlatformDotnetTestSupport to Directory.Build.props; removed incorrect MicrosoftTestingPlatform property. |
 
 ## Project feature upgrades
+
+### .config/dotnet-tools.json
+
+Successfully upgraded .NET tools to versions compatible with .NET 10.0:
+
+- **dotnet-ef**: Updated from `9.0.10` to `10.0.0-rc.2.25502.107`
+  - Entity Framework Core command-line tools now match the .NET 10.0 EF Core packages
+  - Verified with `dotnet ef --version` command
+- **dotnet-sonarscanner**: Remains at `10.1.2` (compatible with .NET 10.0)
+- **dotnet-coverage**: Remains at `17.14.2` (compatible with .NET 10.0)
+- **Tool restoration**: Successfully ran `dotnet tool restore` to apply changes
 
 ### src/Infrastructure.PostgreSql/MoneyGroup.Infrastructure.PostgreSql.csproj
 

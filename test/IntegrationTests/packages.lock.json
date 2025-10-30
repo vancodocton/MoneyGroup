@@ -677,7 +677,6 @@
       "moneygroup.infrastructure.postgresql": {
         "type": "Project",
         "dependencies": {
-          "Microsoft.EntityFrameworkCore": "[10.0.0-rc.2.25502.107, )",
           "Microsoft.EntityFrameworkCore.Relational": "[10.0.0-rc.2.25502.107, )",
           "MoneyGroup.Infrastructure": "[1.0.0, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.0-rc.2, )"

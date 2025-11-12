@@ -34,6 +34,6 @@
     <PackageVersion Include="Riok.Mapperly" Version="4.2.1" />
     <PackageVersion Include="SharpGrip.FluentValidation.AutoValidation.Endpoints" Version="1.5.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.4" />
-    <PackageVersion Include="xunit.v3" Version="3.2.0-pre.10" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.0" />
   </ItemGroup>
 </Project>

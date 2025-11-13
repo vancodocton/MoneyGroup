@@ -28,6 +28,7 @@ on:
       - Directory.Build.props
       - Directory.Packages.props
       - .dockerignore
+  workflow_dispatch:
 
 env:
   # Use docker.io for Docker Hub if empty

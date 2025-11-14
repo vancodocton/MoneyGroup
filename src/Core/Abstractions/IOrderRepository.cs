@@ -2,6 +2,7 @@
 using MoneyGroup.Core.Models.Orders;
 
 namespace MoneyGroup.Core.Abstractions;
+
 public interface IOrderRepository
     : IRepository<Order>
 {

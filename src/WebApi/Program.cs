@@ -3,7 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models;
@@ -56,7 +56,7 @@ builder.Services.AddOpenApi(options =>
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
         document.Components ??= new OpenApiComponents();
-        document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
 
         document.Components.SecuritySchemes.Add("bearer", new OpenApiSecurityScheme
         {
@@ -83,15 +83,16 @@ builder.Services.AddOpenApi(options =>
 
     options.AddOperationTransformer((operation, context, cancellationToken) =>
     {
+        operation.Security ??= [];
         operation.Security.Add(new OpenApiSecurityRequirement
         {
-            [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "bearer", Type = ReferenceType.SecurityScheme } }] = []
+            [new OpenApiSecuritySchemeReference("bearer", context.Document)] = []
         });
         if (!string.IsNullOrWhiteSpace(metadataAddress))
         {
             operation.Security.Add(new OpenApiSecurityRequirement
             {
-                [new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = "google-oidc", Type = ReferenceType.SecurityScheme } }] = []
+                [new OpenApiSecuritySchemeReference("google-oidc", context.Document)] = []
             });
         }
 
@@ -154,7 +155,3 @@ app.MapOrderEndpoints();
 app.MapUserEndpoints();
 
 await app.RunAsync();
-
-#pragma warning disable S1118 // Utility classes should not have public constructors
-public sealed partial class Program { }
-#pragma warning restore S1118 // Utility classes should not have public constructors

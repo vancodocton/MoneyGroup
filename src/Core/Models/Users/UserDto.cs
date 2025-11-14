@@ -1,4 +1,5 @@
 ﻿namespace MoneyGroup.Core.Models.Users;
+
 public class UserDto
 {
     public int Id { get; set; }

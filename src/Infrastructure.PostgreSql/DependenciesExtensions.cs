@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MoneyGroup.Infrastructure.Data;
 
 namespace MoneyGroup.Infrastructure.PostgreSql;
+
 public static class DependenciesExtensions
 {
     private static string? MigrationsAssembly => typeof(DependenciesExtensions).Assembly.GetName().Name;

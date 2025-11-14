@@ -10,6 +10,7 @@ using MoneyGroup.Core.Specifications;
 using Moq;
 
 namespace MoneyGroup.UnitTests.Services;
+
 public class OrderServiceTest
 {
     private readonly Mock<IUserRepository> _userRepositoryMock;

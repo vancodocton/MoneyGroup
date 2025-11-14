@@ -3,6 +3,7 @@
 using MoneyGroup.Core.Entities;
 
 namespace MoneyGroup.Infrastructure.Data;
+
 public class ApplicationDbContext
     : DbContext
 {

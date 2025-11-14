@@ -30,22 +30,34 @@ public class DenyUnauthorizedUserHandler
         var userEmail = context.User.FindFirstValue(ClaimTypes.Email);
         if (userEmail == null || string.IsNullOrWhiteSpace(userEmail))
         {
-            _logger.LogDebug("Require `{JwtRegisteredClaimName}` claim", JwtRegisteredClaimNames.Email);
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Require `{JwtRegisteredClaimName}` claim", JwtRegisteredClaimNames.Email);
+            }
             return;
         }
-        _logger.LogDebug("User email: `{UserEmail}`", userEmail);
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            _logger.LogDebug("User email: `{UserEmail}`", userEmail);
+        }
 
         var emailVerified = context.User.FindFirstValue(JwtRegisteredClaimNames.EmailVerified);
         if (emailVerified == null)
         {
-            _logger.LogDebug("Require `{JwtRegisteredClaimName}` claim", JwtRegisteredClaimNames.EmailVerified);
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Require `{JwtRegisteredClaimName}` claim", JwtRegisteredClaimNames.EmailVerified);
+            }
             return;
         }
 
         var user = await _userService.GetUserByEmailAsync(userEmail);
         if (user is null)
         {
-            _logger.LogDebug("User with email `{UserEmail}` not existed", userEmail);
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("User with email `{UserEmail}` not existed", userEmail);
+            }
             return;
         }
 

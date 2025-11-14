@@ -1,4 +1,5 @@
 ﻿namespace MoneyGroup.Core.Entities;
+
 public class User
     : EntityBase
 {

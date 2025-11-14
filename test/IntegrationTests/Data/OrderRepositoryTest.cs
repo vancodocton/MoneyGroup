@@ -7,6 +7,7 @@ using MoneyGroup.Infrastructure.Data;
 using MoneyGroup.IntegrationTests.Fixtures;
 
 namespace MoneyGroup.IntegrationTests.Data;
+
 public class OrderRepositoryTest
     : IClassFixture<ApplicationDbContextFactory>
 {

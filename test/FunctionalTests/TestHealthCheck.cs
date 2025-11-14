@@ -3,6 +3,7 @@
 using MoneyGroup.FunctionalTests.Fixture;
 
 namespace MoneyGroup.FunctionalTests;
+
 public class TestHealthCheck
     : IClassFixture<WebApiFactory>
 {

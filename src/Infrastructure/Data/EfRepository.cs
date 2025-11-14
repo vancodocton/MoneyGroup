@@ -10,6 +10,7 @@ using MoneyGroup.Core.Models.Paginations;
 using MoneyGroup.Infrastructure.Mapperly;
 
 namespace MoneyGroup.Infrastructure.Data;
+
 public class EfRepository<TEntity>
     : IRepository<TEntity> where TEntity : class
 {

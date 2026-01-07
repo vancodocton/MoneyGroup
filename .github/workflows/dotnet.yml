@@ -89,7 +89,7 @@ jobs:
           Test__Google__RefreshToken: ${{ secrets.Test__Google__RefreshToken }}
         run: |
           docker compose up --wait mssql
-          dotnet test ${{ env.Solution }} --no-build --configuration Release --verbosity normal --coverage --config-file $pwd/testconfig.json --report-xunit
+          dotnet test --solution ${{ env.Solution }} --no-build --configuration Release --verbosity normal --coverage --config-file $pwd/testconfig.json --report-xunit
 
       - name: End Analyze
         env:

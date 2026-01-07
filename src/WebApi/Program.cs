@@ -50,7 +50,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
-    var metadataAddress = builder.Configuration[$"Authentication:Schemes:Bearer:MetadataAddress"]!;
+    var metadataAddress = builder.Configuration[$"Authentication:Schemes:Bearer:MetadataAddress"];
 
     const string bearerSchemeName = "bearer";
     const string oidcSchemeName = "oidc";

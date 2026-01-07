@@ -15,7 +15,7 @@ on:
       - "*.slnx"
       - Directory.*.props
       - Directory.*.targets
-      - coverage.config
+      - testconfig.json
   pull_request:
     branches: ["main"]
     paths:
@@ -27,7 +27,7 @@ on:
       - "*.slnx"
       - Directory.*.props
       - Directory.*.targets
-      - coverage.config
+      - testconfig.json
   workflow_dispatch:
 
 env:

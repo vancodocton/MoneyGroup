@@ -2,106 +2,113 @@ name: .NET CI
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: ["main", "dev"]
     paths:
       - src/**
       - test/**
       - .github/workflows/dotnet.yml
       - .config/dotnet-tools.json
       - global.json
-      - '*.slnx'
+      - "*.slnx"
       - Directory.*.props
       - Directory.*.targets
       - coverage.config
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - src/**
       - test/**
       - .github/workflows/dotnet.yml
       - .config/dotnet-tools.json
       - global.json
-      - '*.slnx'
+      - "*.slnx"
       - Directory.*.props
       - Directory.*.targets
       - coverage.config
   workflow_dispatch:
 
+env:
+  Solution: MoneyGroup.slnf
+
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-      with:
-        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-    - name: Docker Compose Up
-      run: docker compose up -d mssql
+      - name: Docker Compose Up
+        run: docker compose up -d mssql
 
-    - name: Cache SonarQube Cloud packages
-      id: cache-sonar-scanner
-      uses: actions/cache@v5
-      with:
-        path: ~/.sonar/cache
-        key: ${{ runner.os }}-sonar
-        restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarQube Cloud packages
+        id: cache-sonar-scanner
+        uses: actions/cache@v5
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v5
-      with:
-        cache: true
-        cache-dependency-path: |
-          **/packages.lock.json
-          **/dotnet-tools.json
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          cache: true
+          cache-dependency-path: |
+            **/packages.lock.json
+            **/dotnet-tools.json
 
-    - name: Restore .NET tools
-      run: dotnet tool restore
+      - name: Restore .NET tools
+        run: dotnet tool restore
 
-    - name: Begin Analyze
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      shell: pwsh
-      run: |
-        dotnet sonarscanner begin /k:"vancodocton_MoneyGroup" /o:"vancodocton" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.skipJreProvisioning=true
+      - name: Begin Analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: pwsh
+        run: |
+          dotnet sonarscanner begin /k:"vancodocton_MoneyGroup" /o:"vancodocton" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scanner.skipJreProvisioning=true
 
-    - name: Restore and Build
-      run: |
-        dotnet restore MoneyGroup.slnx
-        dotnet build MoneyGroup.slnx -c Release --no-restore
+      - name: Restore
+        run: dotnet restore ${{ env.Solution }}
 
-    - name: Format Checking
-      run: dotnet format MoneyGroup.slnf --no-restore --verify-no-changes -v diag --severity info --exclude-diagnostics xUnit1004
+      - name: Build
+        run: dotnet build ${{ env.Solution }} --no-restore --configuration Release
 
-    - name: Test
-      shell: pwsh
-      env: 
-        Test__Google__ClientId: ${{ secrets.Test__Google__ClientId }}
-        Test__Google__ClientSecret: ${{ secrets.Test__Google__ClientSecret }}
-        Test__Google__RefreshToken: ${{ secrets.Test__Google__RefreshToken }}
-      run: |
-        docker compose up --wait mssql
-        dotnet test --solution MoneyGroup.slnx -c Release --no-build --verbosity normal --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml --report-xunit
+      - name: Verify Format
+        run: dotnet format ${{ env.Solution }} --no-restore --verify-no-changes -v diag --severity info
 
-    - name: End Analyze
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      shell: pwsh
-      run: |
-        dotnet coverage merge **/TestResults/**.xml --output coverage.xml --output-format xml
-        dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+      - name: Test
+        shell: pwsh
+        env:
+          Test__Google__ClientId: ${{ secrets.Test__Google__ClientId }}
+          Test__Google__ClientSecret: ${{ secrets.Test__Google__ClientSecret }}
+          Test__Google__RefreshToken: ${{ secrets.Test__Google__RefreshToken }}
+        run: |
+          docker compose up --wait mssql
+          dotnet test ${{ env.Solution }} --no-build --configuration Release --verbosity normal --coverage --config-file $pwd/testconfig.json --report-xunit
+          dotnet coverage merge **/TestResults/**.xml --output coverage.xml --output-format xml
 
-    - name: Upload TestResults Artifacts
-      uses: actions/upload-artifact@v6
-      if: success() || failure()
-      with:
-        name: ${{ runner.os }}-TestResults
-        path: |
+      - name: End Analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: pwsh
+        run: |
+          dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+
+      - name: Upload TestResults Artifacts
+        uses: actions/upload-artifact@v6
+        if: success() || failure()
+        with:
+          name: ${{ runner.os }}-TestResults
+          path: |
             **/TestResults/**
             coverage.xml
-    - name: Upload TestResults to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        slug: vancodocton/MoneyGroup
-        disable_search: true
-        files: ./coverage.xml
+
+      - name: Upload TestResults to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: vancodocton/MoneyGroup
+          disable_search: true
+          files: ./coverage.xml

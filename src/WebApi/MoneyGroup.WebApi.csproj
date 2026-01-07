@@ -34,6 +34,7 @@
     <ProjectReference Include="..\Core\MoneyGroup.Core.csproj" />
     <ProjectReference Include="..\Infrastructure.SqlServer\MoneyGroup.Infrastructure.SqlServer.csproj" />
     <ProjectReference Include="..\Infrastructure\MoneyGroup.Infrastructure.csproj" />
+    <ProjectReference Include="..\ServiceDefaults\MoneyGroup.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>

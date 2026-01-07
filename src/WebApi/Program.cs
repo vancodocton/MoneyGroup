@@ -23,7 +23,7 @@ using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddHealthChecks();
+builder.AddServiceDefaults();
 
 builder.Services.AddAuthentication()
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -127,6 +127,8 @@ builder.Services.AddExceptionHandler<BusinessValidationExceptionHandler>();
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -142,8 +144,6 @@ else
 }
 
 app.UseExceptionHandler();
-
-app.MapHealthChecks("/healthz");
 
 app.UseHttpsRedirection();
 

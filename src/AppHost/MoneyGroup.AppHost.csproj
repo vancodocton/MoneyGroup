@@ -15,4 +15,8 @@
     <PackageReference Include="Aspire.Hosting.AppHost" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WebApi\MoneyGroup.WebApi.csproj" />
+  </ItemGroup>
+
 </Project>

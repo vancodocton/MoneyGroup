@@ -3,7 +3,7 @@
     <Deterministic>true</Deterministic>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU1608;NU1903</WarningsNotAsErrors>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);</WarningsNotAsErrors>
     <!-- Enable Microsoft.Testing.Platform runner globally for test projects -->
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     <!-- Enable dotnet test integration with Microsoft.Testing.Platform -->

@@ -4,34 +4,16 @@ permissions:
   contents: read
 
 on:
-  push:
-    branches: ["main", "dev"]
-    paths:
-      - src/**
-      - test/**
-      - .github/workflows/dotnet.yml
-      - .config/dotnet-tools.json
-      - global.json
-      - "*.slnx"
-      - Directory.*.props
-      - Directory.*.targets
-      - testconfig.json
-  pull_request:
-    branches: ["main"]
-    paths:
-      - src/**
-      - test/**
-      - .github/workflows/dotnet.yml
-      - .config/dotnet-tools.json
-      - global.json
-      - "*.slnx"
-      - Directory.*.props
-      - Directory.*.targets
-      - testconfig.json
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      Solution:
+        type: string
+        required: false
+        description: The solution file to build and test
+        default: ""
 
 env:
-  Solution: MoneyGroup.slnf
+  Solution: ${{ inputs.Solution }}
 
 jobs:
   build:

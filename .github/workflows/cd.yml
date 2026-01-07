@@ -1,0 +1,40 @@
+name: CD
+
+on:
+  # schedule:
+  #   - cron: '25 16 * * *'
+  push:
+    branches: ["main"]
+    paths:
+      - src/**
+      - .github/workflows/cd.yml
+      - .github/workflows/docker.yml
+      - global.json
+      - Directory.Build.props
+      - Directory.Packages.props
+      - .dockerignore
+    # Publish semver tags as releases.
+    tags: ["v*.*.*"]
+  pull_request:
+    branches: ["main"]
+    paths:
+      - src/**
+      - .github/workflows/cd.yml
+      - .github/workflows/docker.yml
+      - global.json
+      - Directory.Build.props
+      - Directory.Packages.props
+      - .dockerignore
+  workflow_dispatch:
+
+jobs:
+  docker:
+    uses: ./.github/workflows/docker.yml
+    with:
+      is-cd: ${{ github.event_name != 'pull_request' }}
+      environment: Development
+    secrets: inherit
+    permissions:
+      contents: read
+      packages: write
+      id-token: write

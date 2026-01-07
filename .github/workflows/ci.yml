@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "dev"]
+    paths:
+      - src/**
+      - test/**
+      - .github/workflows/ci.yml
+      - .github/workflows/dotnet.yml
+      - .config/dotnet-tools.json
+      - global.json
+      - "*.slnx"
+      - Directory.*.props
+      - Directory.*.targets
+      - testconfig.json
+  pull_request:
+    branches: ["main"]
+    paths:
+      - src/**
+      - test/**
+      - .github/workflows/ci.yml
+      - .github/workflows/dotnet.yml
+      - .config/dotnet-tools.json
+      - global.json
+      - "*.slnx"
+      - Directory.*.props
+      - Directory.*.targets
+      - testconfig.json
+  workflow_dispatch:
+
+jobs:
+  dotnet:
+    uses: ./.github/workflows/dotnet.yml
+    with:
+      Solution: MoneyGroup.slnf
+    secrets: inherit
+    permissions:
+      contents: read

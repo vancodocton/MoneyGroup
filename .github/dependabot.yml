@@ -23,30 +23,26 @@ updates:
     reviewers:
       - "vancodocton"
     groups:
+      Test:
+        patterns:
+          - "Microsoft.Testing.*"
+          - "xunit*"
       Ardalis.Specification:
         patterns:
           - "Ardalis.Specification*"
-      Microsoft:
-        patterns:
-          - "Microsoft.*"
-        exclude-patterns:
-          - "*Test*"
-          - "*EntityFrameworkCore*"
       EntityFrameworkCore:
         patterns:
           - "*EntityFrameworkCore*"
           - "dotnet-ef"
+      Microsoft:
+        patterns:
+          - "Microsoft.*"
       AutoMapper:
         patterns:
           - "AutoMapper*"
       Swashbuckle:
         patterns:
           - "*Swashbuckle*"
-      Test:
-        patterns:
-          - "*Test*"
-          - "xunit*"
-          - "Moq"
 
   - package-ecosystem: "devcontainers"
     directory: "/"

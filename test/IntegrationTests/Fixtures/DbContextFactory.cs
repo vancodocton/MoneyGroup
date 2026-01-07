@@ -22,9 +22,7 @@ public abstract class DbContextFactory<TDbContext>
     where TDbContext : DbContext
 {
 
-#pragma warning disable S2743 // Static fields should not be used in generic types
-    private static readonly SemaphoreSlim SemaphoreSlim = new(1, 1);
-#pragma warning restore S2743 // Static fields should not be used in generic types
+    private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
 
     public IMapper Mapper { get; private set; } = StaticMapper;
 
@@ -36,9 +34,9 @@ public abstract class DbContextFactory<TDbContext>
     {
         if (isCachedInstance)
         {
-            SemaphoreSlim.Wait();
+            _semaphoreSlim.Wait();
             _dbContext ??= CreateDbContextCore();
-            SemaphoreSlim.Release();
+            _semaphoreSlim.Release();
             return _dbContext;
         }
 
@@ -51,6 +49,7 @@ public abstract class DbContextFactory<TDbContext>
         {
             await _dbContext.DisposeAsync().ConfigureAwait(false);
         }
+        _semaphoreSlim.Dispose();
     }
 
     public async ValueTask DisposeAsync()

@@ -80,7 +80,7 @@ jobs:
         Test__Google__RefreshToken: ${{ secrets.Test__Google__RefreshToken }}
       run: |
         docker compose up --wait mssql
-        dotnet test MoneyGroup.slnx -c Release --no-build --verbosity normal -- --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml --report-xunit
+        dotnet test --solution MoneyGroup.slnx -c Release --no-build --verbosity normal --coverage --coverage-settings $pwd/coverage.config --coverage-output-format xml --report-xunit
 
     - name: End Analyze
       env:

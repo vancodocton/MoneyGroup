@@ -20,16 +20,13 @@ public static class UserEndpoints
             .WithTags("User");
 
         group.MapGet("/", GetUsersAsync)
-        .WithName("GetUsers")
-        .WithOpenApi();
+        .WithName("GetUsers");
 
         group.MapGet("/{id:int}", GetUserByIdAsync)
-        .WithName("GetUserById")
-        .WithOpenApi();
+        .WithName("GetUserById");
 
         group.MapGet("/my", GetExecutingUser)
-        .WithName("GetExecutingUser")
-        .WithOpenApi();
+        .WithName("GetExecutingUser");
     }
 
     private static async Task<Results<Ok<PaginatedModel<UserDto>>, ValidationProblem>> GetUsersAsync([AsParameters] UserPaginatedRequest request, [FromServices] IUserService userService)

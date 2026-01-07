@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace MoneyGroup.FunctionalTests.Fixture;
 
@@ -17,6 +18,11 @@ public sealed class WebApiFactory : WebApplicationFactory<Program>
         builder.ConfigureAppConfiguration((context, config) =>
         {
             config.AddUserSecrets<WebApiFactory>();
+        });
+
+        builder.ConfigureLogging(logging =>
+        {
+            logging.AddFilter("MoneyGroup", LogLevel.Debug);
         });
     }
 

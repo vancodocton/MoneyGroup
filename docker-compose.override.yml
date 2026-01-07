@@ -34,6 +34,6 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
-volumes:
-  postgres:
-  mssql:
+# volumes:
+#   postgres:
+#   mssql:

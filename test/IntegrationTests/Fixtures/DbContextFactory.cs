@@ -18,7 +18,8 @@ public abstract class NonGenericDbContextFactory
 }
 
 public abstract class DbContextFactory<TDbContext>
-    : NonGenericDbContextFactory, IAsyncDisposable
+    : NonGenericDbContextFactory
+    , IDisposable
     where TDbContext : DbContext
 {
 
@@ -27,6 +28,7 @@ public abstract class DbContextFactory<TDbContext>
     public IMapper Mapper { get; private set; } = StaticMapper;
 
     private TDbContext? _dbContext;
+    private bool _disposedValue;
 
     protected abstract TDbContext CreateDbContextCore();
 
@@ -43,18 +45,23 @@ public abstract class DbContextFactory<TDbContext>
         return CreateDbContextCore();
     }
 
-    protected virtual async ValueTask DisposeAsyncCore()
+    protected virtual void Dispose(bool disposing)
     {
-        if (_dbContext is not null)
+        if (!_disposedValue)
         {
-            await _dbContext.DisposeAsync().ConfigureAwait(false);
+            if (disposing)
+            {
+                _dbContext?.Dispose();
+                _semaphoreSlim.Dispose();
+            }
+
+            _disposedValue = true;
         }
-        _semaphoreSlim.Dispose();
     }
 
-    public async ValueTask DisposeAsync()
+    public void Dispose()
     {
-        await DisposeAsyncCore().ConfigureAwait(false);
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 }

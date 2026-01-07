@@ -90,13 +90,13 @@ jobs:
         run: |
           docker compose up --wait mssql
           dotnet test ${{ env.Solution }} --no-build --configuration Release --verbosity normal --coverage --config-file $pwd/testconfig.json --report-xunit
-          dotnet coverage merge **/TestResults/**.xml --output coverage.xml --output-format xml
 
       - name: End Analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: pwsh
         run: |
+          dotnet coverage merge **/TestResults/**.xml --output coverage.xml --output-format xml
           dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
       - name: Upload TestResults Artifacts

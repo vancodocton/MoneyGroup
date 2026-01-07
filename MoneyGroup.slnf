@@ -8,6 +8,7 @@
       "src\\Infrastructure.SqlServer\\MoneyGroup.Infrastructure.SqlServer.csproj",
       "src\\Infrastructure\\MoneyGroup.Infrastructure.csproj",
       "src\\Postgres.Migrator\\MoneyGroup.Postgres.Migrator.csproj",
+      "src\\ServiceDefaults\\MoneyGroup.ServiceDefaults.csproj",
       "src\\WebApi\\MoneyGroup.WebApi.csproj",
       "test\\FunctionalTests\\MoneyGroup.FunctionalTests.csproj",
       "test\\IntegrationTests\\MoneyGroup.IntegrationTests.csproj",

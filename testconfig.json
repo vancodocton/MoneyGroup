@@ -1,0 +1,14 @@
+{
+    "codeCoverage": {
+        "Configuration": {
+            "Format": "xml",
+            "CodeCoverage": {
+                "Sources": {
+                    "Exclude": [
+                        ".*\\\\Migrations\\\\.*.cs"
+                    ]
+                }
+            }
+        }
+    }
+}

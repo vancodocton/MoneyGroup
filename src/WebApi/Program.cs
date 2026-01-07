@@ -50,31 +50,29 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
-    var metadataAddress = builder.Configuration[$"Authentication:Schemes:{JwtBearerDefaults.AuthenticationScheme}:MetadataAddress"];
-    var validIssuer = builder.Configuration[$"Authentication:Schemes:{JwtBearerDefaults.AuthenticationScheme}:ValidIssuer"];
+    var metadataAddress = builder.Configuration[$"Authentication:Schemes:Bearer:MetadataAddress"];
 
+    const string bearerSchemeName = "bearer";
+    const string oidcSchemeName = "oidc";
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
         document.Components ??= new OpenApiComponents();
         document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
 
-        document.Components.SecuritySchemes.Add("bearer", new OpenApiSecurityScheme
+        document.Components.SecuritySchemes.Add(bearerSchemeName, new OpenApiSecurityScheme
         {
             Type = SecuritySchemeType.Http,
             In = ParameterLocation.Header,
             BearerFormat = "Json Web Token",
-            Scheme = JwtBearerDefaults.AuthenticationScheme,
+            Scheme = "Bearer",
         });
 
-        if (!string.IsNullOrWhiteSpace(metadataAddress) && validIssuer != "dotnet-user-jwts")
+        if (!string.IsNullOrWhiteSpace(metadataAddress))
         {
-            document.Components.SecuritySchemes.Add("google-oidc", new OpenApiSecurityScheme
+            document.Components.SecuritySchemes.Add(oidcSchemeName, new OpenApiSecurityScheme
             {
                 Type = SecuritySchemeType.OpenIdConnect,
-                In = ParameterLocation.Header,
                 OpenIdConnectUrl = new Uri(metadataAddress),
-                BearerFormat = "Json Web Token",
-                Scheme = JwtBearerDefaults.AuthenticationScheme,
             });
         }
 
@@ -86,13 +84,14 @@ builder.Services.AddOpenApi(options =>
         operation.Security ??= [];
         operation.Security.Add(new OpenApiSecurityRequirement
         {
-            [new OpenApiSecuritySchemeReference("bearer", context.Document)] = []
+            [new OpenApiSecuritySchemeReference(bearerSchemeName, context.Document)] = []
         });
+
         if (!string.IsNullOrWhiteSpace(metadataAddress))
         {
             operation.Security.Add(new OpenApiSecurityRequirement
             {
-                [new OpenApiSecuritySchemeReference("google-oidc", context.Document)] = []
+                [new OpenApiSecuritySchemeReference(oidcSchemeName, context.Document)] = []
             });
         }
 

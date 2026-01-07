@@ -118,7 +118,7 @@
             "bearer": [ ]
           },
           {
-            "google-oidc": [ ]
+            "oidc": [ ]
           }
         ]
       },
@@ -164,7 +164,7 @@
             "bearer": [ ]
           },
           {
-            "google-oidc": [ ]
+            "oidc": [ ]
           }
         ]
       }
@@ -207,7 +207,7 @@
             "bearer": [ ]
           },
           {
-            "google-oidc": [ ]
+            "oidc": [ ]
           }
         ]
       },
@@ -241,7 +241,7 @@
             "bearer": [ ]
           },
           {
-            "google-oidc": [ ]
+            "oidc": [ ]
           }
         ]
       }
@@ -316,7 +316,7 @@
             "bearer": [ ]
           },
           {
-            "google-oidc": [ ]
+            "oidc": [ ]
           }
         ]
       }
@@ -359,7 +359,7 @@
             "bearer": [ ]
           },
           {
-            "google-oidc": [ ]
+            "oidc": [ ]
           }
         ]
       }
@@ -387,7 +387,7 @@
             "bearer": [ ]
           },
           {
-            "google-oidc": [ ]
+            "oidc": [ ]
           }
         ]
       }
@@ -676,7 +676,7 @@
         "scheme": "Bearer",
         "bearerFormat": "Json Web Token"
       },
-      "google-oidc": {
+      "oidc": {
         "type": "openIdConnect",
         "openIdConnectUrl": "https://accounts.google.com/.well-known/openid-configuration"
       }

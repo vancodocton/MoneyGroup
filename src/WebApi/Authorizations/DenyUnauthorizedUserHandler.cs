@@ -38,7 +38,7 @@ public class DenyUnauthorizedUserHandler
         }
         if (_logger.IsEnabled(LogLevel.Debug))
         {
-            _logger.LogDebug("User email: `{UserEmail}`", userEmail);
+            _logger.LogDebug("User email claim is present.");
         }
 
         var emailVerified = context.User.FindFirstValue(JwtRegisteredClaimNames.EmailVerified);
@@ -56,7 +56,7 @@ public class DenyUnauthorizedUserHandler
         {
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("User with email `{UserEmail}` not existed", userEmail);
+                _logger.LogDebug("User corresponding to the email claim does not exist.");
             }
             return;
         }

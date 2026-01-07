@@ -2,7 +2,6 @@
   "solution": {
     "path": "MoneyGroup.slnx",
     "projects": [
-      "docker-compose.dcproj",
       "src\\Core\\MoneyGroup.Core.csproj",
       "src\\Infrastructure.PostgreSql\\MoneyGroup.Infrastructure.PostgreSql.csproj",
       "src\\Infrastructure.SqlServer\\MoneyGroup.Infrastructure.SqlServer.csproj",

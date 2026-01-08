@@ -13,6 +13,7 @@ using MoneyGroup.Core.Validators;
 using MoneyGroup.Infrastructure.Data;
 using MoneyGroup.Infrastructure.Mapperly;
 using MoneyGroup.Infrastructure.SqlServer;
+using MoneyGroup.ServiceDefaults;
 using MoneyGroup.WebApi.Authorizations;
 using MoneyGroup.WebApi.Endpoints;
 using MoneyGroup.WebApi.Middlewares;

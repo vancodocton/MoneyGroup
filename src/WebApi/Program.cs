@@ -13,6 +13,7 @@ using MoneyGroup.Core.Validators;
 using MoneyGroup.Infrastructure.Data;
 using MoneyGroup.Infrastructure.Mapperly;
 using MoneyGroup.Infrastructure.SqlServer;
+using MoneyGroup.ServiceDefaults;
 using MoneyGroup.WebApi.Authorizations;
 using MoneyGroup.WebApi.Endpoints;
 using MoneyGroup.WebApi.Middlewares;
@@ -23,7 +24,7 @@ using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddHealthChecks();
+builder.AddServiceDefaults();
 
 builder.Services.AddAuthentication()
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -101,12 +102,7 @@ builder.Services.AddOpenApi(options =>
 
 builder.Services.AddMapper();
 
-var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection")
-    ?? throw new InvalidOperationException();
-builder.Services.AddApplicationDbContextSqlServer(connectionString);
-
-builder.Services.AddHealthChecks()
-    .AddDbContextCheck<ApplicationDbContext>();
+builder.AddSqlServerDbContext<ApplicationDbContext>("SqlServerConnection");
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -127,6 +123,8 @@ builder.Services.AddExceptionHandler<BusinessValidationExceptionHandler>();
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -142,8 +140,6 @@ else
 }
 
 app.UseExceptionHandler();
-
-app.MapHealthChecks("/healthz");
 
 app.UseHttpsRedirection();
 

@@ -12,11 +12,13 @@
     <File Path="global.json" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/AppHost/MoneyGroup.AppHost.csproj" />
     <Project Path="src/Core/MoneyGroup.Core.csproj" />
     <Project Path="src/Infrastructure.PostgreSql/MoneyGroup.Infrastructure.PostgreSql.csproj" />
     <Project Path="src/Infrastructure.SqlServer/MoneyGroup.Infrastructure.SqlServer.csproj" />
     <Project Path="src/Infrastructure/MoneyGroup.Infrastructure.csproj" />
     <Project Path="src/Postgres.Migrator/MoneyGroup.Postgres.Migrator.csproj" />
+    <Project Path="src/ServiceDefaults/MoneyGroup.ServiceDefaults.csproj" />
     <Project Path="src/WebApi/MoneyGroup.WebApi.csproj" />
   </Folder>
   <Folder Name="/test/">
@@ -24,7 +26,4 @@
     <Project Path="test/IntegrationTests/MoneyGroup.IntegrationTests.csproj" />
     <Project Path="test/UnitTests/MoneyGroup.UnitTests.csproj" />
   </Folder>
-  <Project Path="docker-compose.dcproj">
-    <Build Solution="*|Any CPU" />
-  </Project>
 </Solution>

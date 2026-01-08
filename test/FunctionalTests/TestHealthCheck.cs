@@ -21,7 +21,7 @@ public class TestHealthCheck
         var client = _webApiFactory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/healthz", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/health", TestContext.Current.CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();

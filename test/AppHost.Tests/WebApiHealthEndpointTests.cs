@@ -22,8 +22,10 @@ public class WebApiHealthEndpointTests
         // Act
         using var httpClient = _factory.CreateHttpClient("moneygroup-webapi");
         using var response = await httpClient.GetAsync("/health", cancellationToken);
+        var responseString = await response.Content.ReadAsStringAsync(cancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("Healthy", responseString);
     }
 }

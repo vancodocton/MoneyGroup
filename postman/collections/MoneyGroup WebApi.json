@@ -998,11 +998,61 @@
 			"id": "ffe70cc5-3846-4c5d-9956-7e9759cc8493"
 		}
 	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "scope",
+				"value": "openid email",
+				"type": "string"
+			},
+			{
+				"key": "useBrowser",
+				"value": true,
+				"type": "boolean"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{vault:GoogleClientSecret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{vault:GoogleClientId}}",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "https://oauth2.googleapis.com/token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://accounts.google.com/o/oauth2/v2/auth",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code_with_pkce",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "oidc id",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "6cfef96f-f897-4c31-8812-cb04dc9d9cc7",
+				"id": "7a5832a0-3666-4029-bb92-219a52a6f1b8",
 				"type": "text/javascript",
 				"packages": {},
 				"requests": {},
@@ -1014,7 +1064,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "95f6c59f-5f8a-4aeb-98d1-531b1a33e0a3",
+				"id": "247ab200-141e-4394-a716-29f05c34d9e8",
 				"type": "text/javascript",
 				"packages": {},
 				"requests": {},
@@ -1026,7 +1076,7 @@
 	],
 	"variable": [
 		{
-			"id": "0dbe4643-3edf-4455-b319-f53028dc5161",
+			"id": "98d13029-819e-48c5-8a22-c9e9b54e8b92",
 			"key": "baseUrl",
 			"value": "/"
 		}

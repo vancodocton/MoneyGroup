@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace AppHost.Tests.Fixtures;
 
 public sealed class AppHostFactory()
-    : DistributedApplicationFactory(typeof(Projects.MoneyGroup_AppHost))
+    : DistributedApplicationFactory(typeof(Projects.MoneyGroup_AppHost), ["--launch-profile=http"])
 {
     protected override void OnBuilderCreated(DistributedApplicationBuilder applicationBuilder)
     {

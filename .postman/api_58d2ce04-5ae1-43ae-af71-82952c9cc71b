@@ -13,5 +13,8 @@ rootDirectory = postman/collections
 [config.relations.collections.metaData]
 
 [config.relations.apiDefinition]
+files[] = {"path":"src/WebApi/MoneyGroup.WebApi.json","metaData":{}}
 
 [config.relations.apiDefinition.metaData]
+type = openapi:3_1
+rootFiles[] = src/WebApi/MoneyGroup.WebApi.json

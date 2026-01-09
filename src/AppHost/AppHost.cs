@@ -1,3 +1,5 @@
+[assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var mssql = builder.AddSqlServer("mssql", port: 1435)

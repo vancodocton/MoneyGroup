@@ -9,6 +9,7 @@ id = 58d2ce04-5ae1-43ae-af71-82952c9cc71b
 
 [config.relations.collections]
 rootDirectory = postman/collections
+files[] = {"id":"15768183-2a1912ca-6694-4c80-a157-24cf58a338d8","path":"MoneyGroup WebApi.json","metaData":{"generateCollectionPreferences":"{\"requestNameSource\":\"Fallback\",\"indentCharacter\":\"Space\",\"parametersResolution\":\"Example\",\"folderStrategy\":\"Paths\",\"nestedFolderHierarchy\":false,\"includeAuthInfoInExample\":true,\"enableOptionalParameters\":true,\"keepImplicitHeaders\":false,\"includeDeprecated\":true,\"alwaysInheritAuthentication\":false,\"updateCollectionSync\":true,\"requestParametersResolution\":\"Example\",\"exampleParametersResolution\":\"Example\"}"}}
 
 [config.relations.collections.metaData]
 

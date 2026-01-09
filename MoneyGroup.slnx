@@ -22,6 +22,7 @@
     <Project Path="src/WebApi/MoneyGroup.WebApi.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <Project Path="test/AppHost.Tests/AppHost.Tests.csproj" />
     <Project Path="test/FunctionalTests/MoneyGroup.FunctionalTests.csproj" />
     <Project Path="test/IntegrationTests/MoneyGroup.IntegrationTests.csproj" />
     <Project Path="test/UnitTests/MoneyGroup.UnitTests.csproj" />

@@ -40,6 +40,7 @@ test/
 |----------|-------------|
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Development setup, architecture, testing, commands |
 | [.github/copilot-instructions.md](.github/copilot-instructions.md) | AI assistant patterns and conventions |
+| [AGENTS.md](AGENTS.md) | AI assistant patterns and conventions |
 
 ## License
 

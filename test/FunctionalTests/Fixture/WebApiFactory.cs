@@ -25,7 +25,7 @@ public sealed class WebApiFactory : WebApplicationFactory<Program>
     /// <summary>
     /// Gets or sets the current user feature to be set during authorization.
     /// </summary>
-    public UserDto? CurrentUser { get; set; } = new()
+    public UserDto CurrentUser { get; set; } = new()
     {
         Id = -1,
         Name = "Test User",

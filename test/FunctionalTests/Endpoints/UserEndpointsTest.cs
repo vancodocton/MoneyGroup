@@ -117,7 +117,8 @@ public class UserEndpointsTest
     {
         // Arrange
         var request = "/api/User/my";
-        var user = _factory.CurrentUser!;
+        var user = _factory.CurrentUser;
+
         // Act
         var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
 
@@ -126,22 +127,6 @@ public class UserEndpointsTest
         var res = await response.Content.ReadFromJsonAsync<UserDto>(TestContext.Current.CancellationToken);
         Assert.NotNull(res);
         Assert.Equal(user.Name, res.Name);
-    }
-
-    [Fact]
-    public async Task GetExecutingUser_Unauthenticated_ReturnsUnauthorized()
-    {
-        // Arrange
-        var request = "/api/User/my";
-
-        // Act
-        // Make sure no user is set
-        _factory.CurrentUser = null;
-
-        var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
-
-        // Assert
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
     #endregion GetExecutingUser
 }

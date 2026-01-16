@@ -40,9 +40,9 @@ public class OrderService
         if (participantIds.Count > 0)
         {
             var existingParticipantsCount = await _userRepository.CountAsync(
-                new EntityByIdsSpec<User>(participantIds), 
+                new EntityByIdsSpec<User>(participantIds),
                 cancellationToken);
-            
+
             if (existingParticipantsCount != participantIds.Count)
             {
                 throw new ParticipantNotFoundException();

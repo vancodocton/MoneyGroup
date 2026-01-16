@@ -16,6 +16,8 @@ public interface IRepository<TEntity>
 
     public Task<bool> AnyAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default);
 
+    public Task<int> CountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default);
+
     public Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
     public Task<TEntity?> FirstOrDefaultAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default);

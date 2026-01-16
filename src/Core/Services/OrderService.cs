@@ -36,9 +36,14 @@ public class OrderService
             throw new BuyerNotFoundException();
         }
 
-        foreach (var participantId in model.Participants.Select(c => c.ParticipantId))
+        var participantIds = model.Participants.Select(c => c.ParticipantId).ToList();
+        if (participantIds.Count > 0)
         {
-            if (!await _userRepository.AnyAsync(new EntityByIdSpec<User>(participantId), cancellationToken))
+            var existingParticipantsCount = await _userRepository.CountAsync(
+                new EntityByIdsSpec<User>(participantIds),
+                cancellationToken);
+
+            if (existingParticipantsCount != participantIds.Count)
             {
                 throw new ParticipantNotFoundException();
             }

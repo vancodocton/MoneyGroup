@@ -10,6 +10,7 @@ public class EntityByIdsSpec<TEntity>
 {
     public EntityByIdsSpec(IEnumerable<int> ids)
     {
-        Query.Where(e => ids.Contains(e.Id));
+        var idsList = ids.ToList();
+        Query.Where(e => idsList.Contains(e.Id));
     }
 }

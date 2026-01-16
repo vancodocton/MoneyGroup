@@ -6,8 +6,6 @@
     <Nullable>enable</Nullable>
 
     <OutputType>Exe</OutputType>
-    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
-    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     <UserSecretsId>d8e51689-ed5f-471d-9df7-2f4c2f877667</UserSecretsId>
   </PropertyGroup>
 

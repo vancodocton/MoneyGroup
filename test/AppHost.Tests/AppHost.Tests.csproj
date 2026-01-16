@@ -7,8 +7,6 @@
 
     <OutputType>Exe</OutputType>
     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
-    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
-    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
   </PropertyGroup>
 
   <ItemGroup>

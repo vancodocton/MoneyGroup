@@ -5,7 +5,7 @@
             "CodeCoverage": {
                 "Sources": {
                     "Exclude": [
-                        ".*\\\\Migrations\\\\.*.cs"
+                        ".*\\/Migrations\\/.*.cs"
                     ]
                 }
             }

@@ -85,6 +85,9 @@ public class OrderServiceTest
         _userRepositoryMock.Setup(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
+        _userRepositoryMock.Setup(u => u.CountAsync(It.IsAny<EntityByIdsSpec<User>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(2);
+
         _orderRepositoryMock.Setup(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(() =>
             {
@@ -96,7 +99,39 @@ public class OrderServiceTest
         await _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken);
 
         // Assert
-        _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
+        _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()), Times.Once);
+        _userRepositoryMock.Verify(u => u.CountAsync(It.IsAny<EntityByIdsSpec<User>>(), It.IsAny<CancellationToken>()), Times.Once);
+        _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()));
+        Assert.Equal(newOrderId, model.Id);
+    }
+
+    [Fact]
+    public async Task CreateOrderAsync_NoParticipants_ShouldAddOrder()
+    {
+        // Arrange
+        var newOrderId = 1;
+        var model = new OrderDto
+        {
+            BuyerId = 1,
+            Participants = []
+        };
+
+        _userRepositoryMock.Setup(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+
+        _orderRepositoryMock.Setup(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() =>
+            {
+                model.Id = newOrderId;
+                return model;
+            });
+
+        // Act
+        await _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken);
+
+        // Assert
+        _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()), Times.Once);
+        _userRepositoryMock.Verify(u => u.CountAsync(It.IsAny<EntityByIdsSpec<User>>(), It.IsAny<CancellationToken>()), Times.Never);
         _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()));
         Assert.Equal(newOrderId, model.Id);
     }
@@ -141,16 +176,18 @@ public class OrderServiceTest
             ]
         };
 
-        _userRepositoryMock.SetupSequence(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true)
-            .ReturnsAsync(true)
-            .ReturnsAsync(false);
+        _userRepositoryMock.Setup(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+
+        _userRepositoryMock.Setup(u => u.CountAsync(It.IsAny<EntityByIdsSpec<User>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(1); // Only 1 participant exists, but 2 were requested
 
         // Act
         var ex = await Assert.ThrowsAsync<ParticipantNotFoundException>(() => _orderService.CreateOrderAsync(model, TestContext.Current.CancellationToken));
 
         // Assert
-        _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
+        _userRepositoryMock.Verify(u => u.AnyAsync(It.IsAny<EntityByIdSpec<User>>(), It.IsAny<CancellationToken>()), Times.Once);
+        _userRepositoryMock.Verify(u => u.CountAsync(It.IsAny<EntityByIdsSpec<User>>(), It.IsAny<CancellationToken>()), Times.Once);
         _orderRepositoryMock.Verify(o => o.AddAsync(It.IsAny<OrderDto>(), It.IsAny<CancellationToken>()), Times.Never);
         Assert.Equal("Participant not found", ex.Message);
     }

@@ -86,6 +86,13 @@ public class EfRepository<TEntity>
         return await _dbSet.AnyAsync(predicate, cancellationToken);
     }
 
+    public virtual async Task<int> CountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .WithSpecification(specification)
+            .CountAsync(cancellationToken);
+    }
+
     public virtual async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);

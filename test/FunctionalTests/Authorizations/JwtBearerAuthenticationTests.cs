@@ -26,7 +26,7 @@ public class JwtBearerAuthenticationTests
     {
         // Arrange
         var authenticatedUri = "/authenticated-endpoint";
-        _factory.WithWebHostBuilder(b =>
+        var client = _factory.WithWebHostBuilder(b =>
         {
             b.Configure(app =>
             {
@@ -36,9 +36,8 @@ public class JwtBearerAuthenticationTests
                         .RequireAuthorization();
                 });
             });
-        });
+        }).CreateClient();
 
-        var client = _factory.CreateClient();
         _apiAccessTokenFixture.ConfigureClient(client);
 
         // Act

@@ -32,8 +32,6 @@ on:
 jobs:
   dotnet:
     uses: ./.github/workflows/dotnet.yml
-    with:
-      Solution: MoneyGroup.slnx
     secrets: inherit
     permissions:
       contents: read

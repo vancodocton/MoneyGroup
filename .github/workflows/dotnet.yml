@@ -5,15 +5,9 @@ permissions:
 
 on:
   workflow_call:
-    inputs:
-      Solution:
-        type: string
-        required: false
-        description: The solution file to build and test
-        default: ""
 
 env:
-  Solution: ${{ inputs.Solution }}
+  Solution: MoneyGroup.slnx
 
 jobs:
   build:

@@ -5,8 +5,12 @@ var mssql = builder.AddSqlServer("mssql", port: 1435)
     .WithBindMount("../Infrastructure.SqlServer/Docker/scripts", "/mssql-server-setup-scripts.d/")
     .AddDatabase("SqlServerConnection", "MoneyGroup");
 
-builder.AddProject<Projects.MoneyGroup_WebApi>("moneygroup-webapi")
+var webapi = builder.AddProject<Projects.MoneyGroup_WebApi>("moneygroup-webapi")
     .WaitFor(mssql)
     .WithReference(mssql);
+
+builder.AddViteApp("moneygroup-clientapp", "../ClientApp")
+    .WithReference(webapi)
+    .WaitFor(webapi);
 
 await builder.Build().RunAsync();

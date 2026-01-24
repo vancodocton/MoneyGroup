@@ -21,6 +21,11 @@
     <Project Path="src/ServiceDefaults/MoneyGroup.ServiceDefaults.csproj" />
     <Project Path="src/WebApi/MoneyGroup.WebApi.csproj" />
   </Folder>
+  <Folder Name="/src/ClientApp/">
+    <Project Path="src/ClientApp/MoneyGroup.ClientApp.esproj">
+      <Platform Project="AnyCPU" />
+    </Project>
+  </Folder>
   <Folder Name="/test/">
     <Project Path="test/AppHost.Tests/AppHost.Tests.csproj" />
     <Project Path="test/FunctionalTests/MoneyGroup.FunctionalTests.csproj" />

@@ -27,9 +27,13 @@ updates:
         patterns:
           - "Microsoft.Testing.*"
           - "xunit*"
+          - "dotnet-coverage"
       Ardalis.Specification:
         patterns:
           - "Ardalis.Specification*"
+      Aspire:
+        patterns:
+          - "Aspire.*"
       EntityFrameworkCore:
         patterns:
           - "*EntityFrameworkCore*"

@@ -76,7 +76,7 @@ jobs:
           dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
       - name: Upload TestResults Artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: ${{ runner.os }}-TestResults

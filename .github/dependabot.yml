@@ -12,16 +12,19 @@ updates:
     schedule:
       # Check for updates to GitHub Actions every weekday
       interval: "daily"
-    reviewers:
-      - "vancodocton"
+    groups:
+      docker:
+        patterns:
+          - "docker/*"
+      actions:
+        patterns:
+          - "actions/*"
 
   - package-ecosystem: "nuget"
     open-pull-requests-limit: 8
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - "vancodocton"
     groups:
       Test:
         patterns:
@@ -52,16 +55,12 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-    reviewers:
-      - "vancodocton"
 
   - package-ecosystem: "dotnet-sdk"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "wednesday"
-    reviewers:
-      - "vancodocton"
     ignore:
       - dependency-name: "*"
         update-types:

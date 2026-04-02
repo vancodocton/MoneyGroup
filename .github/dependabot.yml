@@ -12,6 +12,13 @@ updates:
     schedule:
       # Check for updates to GitHub Actions every weekday
       interval: "daily"
+    groups:
+      docker:
+        patterns:
+          - "docker/*"
+      actions:
+        patterns:
+          - "actions/*"
 
   - package-ecosystem: "nuget"
     open-pull-requests-limit: 8

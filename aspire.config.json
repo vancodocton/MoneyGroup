@@ -1,0 +1,6 @@
+{
+  "appHost": {
+    "path": "src/AppHost/MoneyGroup.AppHost.csproj",
+    "language": "csharp"
+  }
+}

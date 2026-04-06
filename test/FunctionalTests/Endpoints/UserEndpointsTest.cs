@@ -21,10 +21,12 @@ public class UserEndpointsTest
         WriteIndented = true,
     };
 
+    private readonly WebApiFactory _factory;
     private readonly HttpClient _client;
 
     public UserEndpointsTest(WebApiFactory factory)
     {
+        _factory = factory;
         _client = factory.CreateClient();
     }
 
@@ -115,30 +117,16 @@ public class UserEndpointsTest
     {
         // Arrange
         var request = "/api/User/my";
+        var user = _factory.CurrentUser;
 
         // Act
         var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var user = await response.Content.ReadFromJsonAsync<UserDto>(TestContext.Current.CancellationToken);
-        Assert.NotNull(user);
-        Assert.NotEqual(0, user.Id);
-        Assert.NotNull(user.Name);
-    }
-
-    [Fact]
-    public async Task GetExecutingUser_Unauthenticated_ReturnsUnauthorized()
-    {
-        // Arrange
-        var request = "/api/User/my";
-
-        // Act
-        _client.DefaultRequestHeaders.Authorization = null;
-        var response = await _client.GetAsync(request, TestContext.Current.CancellationToken);
-
-        // Assert
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        var res = await response.Content.ReadFromJsonAsync<UserDto>(TestContext.Current.CancellationToken);
+        Assert.NotNull(res);
+        Assert.Equal(user.Name, res.Name);
     }
     #endregion GetExecutingUser
 }

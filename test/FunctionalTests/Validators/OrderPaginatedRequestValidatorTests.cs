@@ -1,6 +1,5 @@
 using FluentValidation.TestHelper;
 
-using MoneyGroup.Core.Validators;
 using MoneyGroup.WebApi.Endpoints;
 using MoneyGroup.WebApi.Validators;
 

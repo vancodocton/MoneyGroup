@@ -2,7 +2,7 @@ using FluentValidation;
 
 using MoneyGroup.Core.Models.Orders;
 
-namespace MoneyGroup.Core.Validators;
+namespace MoneyGroup.WebApi.Validators;
 
 public class OrderDtoValidator : AbstractValidator<OrderDto>
 {

@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using MoneyGroup.Core.Models.Orders;
-using MoneyGroup.Core.Validators;
+using MoneyGroup.WebApi.Validators;
 
 namespace MoneyGroup.WebApi.Endpoints;
 

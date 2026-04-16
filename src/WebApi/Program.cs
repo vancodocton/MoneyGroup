@@ -9,7 +9,6 @@ using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Services;
-using MoneyGroup.Core.Validators;
 using MoneyGroup.Infrastructure.Data;
 using MoneyGroup.Infrastructure.Mapperly;
 using MoneyGroup.Infrastructure.SqlServer;

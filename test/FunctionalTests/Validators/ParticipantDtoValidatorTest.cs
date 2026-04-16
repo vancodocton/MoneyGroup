@@ -1,9 +1,9 @@
 using FluentValidation.TestHelper;
 
 using MoneyGroup.Core.Models.Orders;
-using MoneyGroup.Core.Validators;
+using MoneyGroup.WebApi.Validators;
 
-namespace MoneyGroup.UnitTests.Validators;
+namespace MoneyGroup.FunctionalTests.Validators;
 
 public class ParticipantDtoValidatorTest
     : IClassFixture<ParticipantDtoValidator>

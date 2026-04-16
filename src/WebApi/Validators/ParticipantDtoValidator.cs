@@ -3,7 +3,7 @@ using FluentValidation.Results;
 
 using MoneyGroup.Core.Models.Orders;
 
-namespace MoneyGroup.Core.Validators;
+namespace MoneyGroup.WebApi.Validators;
 
 public class ParticipantDtoValidator : AbstractValidator<ParticipantDto>
 {

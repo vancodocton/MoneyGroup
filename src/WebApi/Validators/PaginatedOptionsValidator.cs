@@ -2,7 +2,7 @@
 
 using MoneyGroup.Core.Abstractions;
 
-namespace MoneyGroup.Core.Validators;
+namespace MoneyGroup.WebApi.Validators;
 
 public class PaginatedOptionsValidator : AbstractValidator<IPaginatedOptions>
 {

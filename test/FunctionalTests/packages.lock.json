@@ -821,7 +821,6 @@
         "dependencies": {
           "Ardalis.Specification.EntityFrameworkCore": "[9.3.1, )",
           "Microsoft.EntityFrameworkCore": "[10.0.5, )",
-          "Microsoft.EntityFrameworkCore.Relational": "[10.0.5, )",
           "MoneyGroup.Core": "[1.0.0, )"
         }
       },

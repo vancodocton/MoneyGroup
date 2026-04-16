@@ -685,13 +685,13 @@
         "dependencies": {
           "Ardalis.Specification.EntityFrameworkCore": "[9.3.1, )",
           "Microsoft.EntityFrameworkCore": "[10.0.5, )",
-          "Microsoft.EntityFrameworkCore.Relational": "[10.0.5, )",
           "MoneyGroup.Core": "[1.0.0, )"
         }
       },
       "moneygroup.infrastructure.postgresql": {
         "type": "Project",
         "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "[10.0.5, )",
           "MoneyGroup.Infrastructure": "[1.0.0, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.1, )"
         }

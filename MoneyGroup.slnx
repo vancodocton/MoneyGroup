@@ -13,6 +13,9 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/AppHost/MoneyGroup.AppHost.csproj" />
+    <Project Path="src/ClientApp/MoneyGroup.ClientApp.esproj">
+      <Platform Project="AnyCPU" />
+    </Project>
     <Project Path="src/Core/MoneyGroup.Core.csproj" />
     <Project Path="src/Infrastructure.PostgreSql/MoneyGroup.Infrastructure.PostgreSql.csproj" />
     <Project Path="src/Infrastructure.SqlServer/MoneyGroup.Infrastructure.SqlServer.csproj" />
@@ -20,11 +23,6 @@
     <Project Path="src/Postgres.Migrator/MoneyGroup.Postgres.Migrator.csproj" />
     <Project Path="src/ServiceDefaults/MoneyGroup.ServiceDefaults.csproj" />
     <Project Path="src/WebApi/MoneyGroup.WebApi.csproj" />
-  </Folder>
-  <Folder Name="/src/ClientApp/">
-    <Project Path="src/ClientApp/MoneyGroup.ClientApp.esproj">
-      <Platform Project="AnyCPU" />
-    </Project>
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/AppHost.Tests/AppHost.Tests.csproj" />

@@ -846,7 +846,7 @@
       "moneygroup.webapi": {
         "type": "Project",
         "dependencies": {
-          "Aspire.Microsoft.EntityFrameworkCore.SqlServer": "[13.2.1, )",
+          "Aspire.Microsoft.EntityFrameworkCore.SqlServer": "[13.2.2, )",
           "FluentValidation": "[12.0.0, )",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.5, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.5, )",
@@ -879,9 +879,9 @@
       },
       "Aspire.Microsoft.EntityFrameworkCore.SqlServer": {
         "type": "CentralTransitive",
-        "requested": "[13.2.1, )",
-        "resolved": "13.2.1",
-        "contentHash": "mdjcUfNhFRwZ0r4YGmbBjzek+K0z1sOUo+ePl1UT+0VlwLuARjMAEC61BfB+gHrxJtN1nsbd+jpjC+sUXQIcFg==",
+        "requested": "[13.2.2, )",
+        "resolved": "13.2.2",
+        "contentHash": "mJ4WM7fsXyhS6U9+7CVlWqM2sQISRKBnazPRUKxoPRKt/yD80erQFnKY2eRglPVsZQ5RZzYHFzNGIZdpNQvhRA==",
         "dependencies": {
           "Azure.Core": "1.51.1",
           "Azure.Identity": "1.18.0",

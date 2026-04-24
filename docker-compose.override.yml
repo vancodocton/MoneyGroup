@@ -21,6 +21,8 @@ services:
       # - mssql:/var/opt/mssql
 
   moneygroup.webapi:
+    profiles:
+      - app
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080

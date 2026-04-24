@@ -18,10 +18,9 @@ services:
       retries: 1
 
   moneygroup.webapi:
-    image: ${DOCKER_REGISTRY-}moneygroupwebapi
+    profiles:
+      - app
+    image: ghcr.io/vancodocton/moneygroup:latest
     depends_on:
       mssql:
         condition: service_healthy
-    build:
-      context: .
-      dockerfile: src/WebApi/Dockerfile

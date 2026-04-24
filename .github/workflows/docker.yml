@@ -48,12 +48,6 @@ jobs:
         with:
           cosign-release: "v2.2.4"
 
-      # Set up BuildKit Docker container builder to be able to build
-      # multi-platform images and export cache
-      # https://github.com/docker/setup-buildx-action
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
-
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
@@ -72,19 +66,62 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image
-        id: build-and-push
-        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
+      # Setup .NET SDK with NuGet cache to preserve build cache
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
         with:
-          context: .
-          file: src/WebApi/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      # Install Aspire CLI for container image publishing
+      - name: Install Aspire CLI
+        run: dotnet tool install -g Aspire.Cli --version 13.2.3
+
+      # Build container image without pushing (PR validation only)
+      - name: Build container image
+        if: ${{ !inputs.is-cd }}
+        run: |
+          dotnet restore src/WebApi/MoneyGroup.WebApi.csproj
+          dotnet publish src/WebApi/MoneyGroup.WebApi.csproj \
+            /t:PublishContainer \
+            --os linux --arch x64 \
+            -c Release \
+            --no-restore \
+            -p:ContainerImageName=moneygroup-webapi
+
+      # Build and push container image via Aspire CLI
+      # https://aspire.dev/deployment/docker-compose/#push-images-with-the-aspire-cli
+      - name: Build and push container image
+        id: push
+        if: ${{ inputs.is-cd }}
+        env:
+          REGISTRY_ENDPOINT: ${{ env.REGISTRY }}
+          REGISTRY_REPOSITORY: ${{ github.repository }}
+          IMAGE_TAG: ${{ steps.meta.outputs.version }}
+        run: |
+          aspire do push \
+            --apphost src/AppHost/MoneyGroup.AppHost.csproj \
+            --non-interactive \
+            --nologo
+
+          # Compute manifest digest from the pushed image
+          PRIMARY_IMAGE="${REGISTRY_ENDPOINT}/$(echo "${REGISTRY_REPOSITORY}" | tr '[:upper:]' '[:lower:]'):${IMAGE_TAG}"
+          DIGEST=$(docker buildx imagetools inspect --raw "${PRIMARY_IMAGE}" | sha256sum | awk '{print "sha256:"$1}')
+          echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
+          echo "primary-image=${PRIMARY_IMAGE}" >> "$GITHUB_OUTPUT"
+
+      # Create additional tags (e.g. sha tag) from the pushed manifest
+      - name: Create additional image tags
+        if: ${{ inputs.is-cd }}
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+          PRIMARY_IMAGE: ${{ steps.push.outputs.primary-image }}
+          DIGEST: ${{ steps.push.outputs.digest }}
+        run: |
+          while IFS= read -r tag; do
+            tag_lower=$(echo "$tag" | tr '[:upper:]' '[:lower:]')
+            docker buildx imagetools create --tag "${tag_lower}" "${PRIMARY_IMAGE}@${DIGEST}"
+          done <<< "${TAGS}"
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
@@ -96,7 +133,7 @@ jobs:
         env:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
           TAGS: ${{ steps.meta.outputs.tags }}
-          DIGEST: ${{ steps.build-and-push.outputs.digest }}
+          DIGEST: ${{ steps.push.outputs.digest }}
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}

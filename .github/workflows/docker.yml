@@ -106,7 +106,7 @@ jobs:
 
           # Compute manifest digest from the pushed image
           PRIMARY_IMAGE="${REGISTRY_ENDPOINT}/$(echo "${REGISTRY_REPOSITORY}" | tr '[:upper:]' '[:lower:]'):${IMAGE_TAG}"
-          DIGEST=$(docker buildx imagetools inspect --raw "${PRIMARY_IMAGE}" | sha256sum | awk '{print "sha256:"$1}')
+          DIGEST=$(docker manifest inspect --verbose "${PRIMARY_IMAGE}" | jq -r '.Descriptor.digest')
           echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
           echo "primary-image=${PRIMARY_IMAGE}" >> "$GITHUB_OUTPUT"
 

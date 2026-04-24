@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageVersion Include="Ardalis.Specification" Version="9.3.1" />
     <PackageVersion Include="Ardalis.Specification.EntityFrameworkCore" Version="9.3.1" />
-    <PackageVersion Include="Aspire.Hosting.Docker" Version="13.2.2" />
+    <PackageVersion Include="Aspire.Hosting.Docker" Version="13.2.3" />
     <PackageVersion Include="Aspire.Hosting.JavaScript" Version="13.2.2" />
     <PackageVersion Include="Aspire.Hosting.SqlServer" Version="13.2.2" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="13.2.2" />

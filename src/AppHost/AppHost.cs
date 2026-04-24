@@ -26,7 +26,8 @@ if (builder.ExecutionContext.IsPublishMode)
         .WithImagePushOptions(ctx =>
         {
             ctx.Options.RemoteImageName = (
-                Environment.GetEnvironmentVariable("REGISTRY_REPOSITORY") ?? "vancodocton/moneygroup"
+                Environment.GetEnvironmentVariable("REGISTRY_REPOSITORY")
+                    ?? throw new InvalidOperationException("REGISTRY_REPOSITORY environment variable is required for container publishing.")
             ).ToLowerInvariant();
             ctx.Options.RemoteImageTag = Environment.GetEnvironmentVariable("IMAGE_TAG") ?? "latest";
         });

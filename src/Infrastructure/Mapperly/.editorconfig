@@ -1,0 +1,9 @@
+# Suppress false-positive analyzer warnings for Mapperly partial mapper classes.
+# Mapperly 5.x generates instance implementations that use 'this' and consume the
+# declared parameters - the source generator just isn't visible to the analyzer.
+#
+# CA1822 (mark as static)  – adding 'static' causes RMG054 (mixed static/instance)
+# IDE0060 (unused parameter) – parameters are consumed by the generated partial impl
+[*.cs]
+dotnet_diagnostic.CA1822.severity = none
+dotnet_diagnostic.IDE0060.severity = none

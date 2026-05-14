@@ -1,4 +1,4 @@
-﻿using MoneyGroup.Core.Entities;
+using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Models.Users;
 
@@ -12,14 +12,14 @@ public partial class Mapper
     [MapperIgnoreTarget(nameof(OrderParticipant.Order))]
     [MapperIgnoreTarget(nameof(OrderParticipant.OrderId))]
     [MapperIgnoreTarget(nameof(OrderParticipant.Participant))]
-    public static partial OrderParticipant Map(ParticipantDto dto);
+    public partial OrderParticipant Map(ParticipantDto dto);
 
     [MapperIgnoreTarget(nameof(Order.Buyer))]
-    public static partial Order Map(OrderDto dto);
+    public partial Order Map(OrderDto dto);
 
     [MapperIgnoreSource(nameof(OrderParticipant.Order))]
     [MapperIgnoreSource(nameof(OrderParticipant.OrderId))]
-    public static partial ParticipantDetailedDto Map(OrderParticipant entity);
+    public partial ParticipantDetailedDto Map(OrderParticipant entity);
 
     public partial OrderDetailedDto Map(Order entity);
 

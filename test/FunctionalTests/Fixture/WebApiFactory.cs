@@ -30,12 +30,23 @@ public sealed class WebApiFactory : WebApplicationFactory<Program>
 
     private static async Task<string?> GetAccessTokenAsync(HttpClient client, IConfiguration configuration)
     {
+        var refreshToken = configuration["Test:Google:RefreshToken"];
+        var clientId = configuration["Test:Google:ClientId"];
+        var clientSecret = configuration["Test:Google:ClientSecret"];
+
+        if (string.IsNullOrWhiteSpace(refreshToken)
+            || string.IsNullOrWhiteSpace(clientId)
+            || string.IsNullOrWhiteSpace(clientSecret))
+        {
+            return null;
+        }
+
         var tokenResponse = await client.RequestRefreshTokenAsync(new RefreshTokenRequest
         {
             Address = "https://oauth2.googleapis.com/token",
-            ClientId = configuration["Test:Google:ClientId"]!,
-            ClientSecret = configuration["Test:Google:ClientSecret"]!,
-            RefreshToken = configuration["Test:Google:RefreshToken"]!,
+            ClientId = clientId,
+            ClientSecret = clientSecret,
+            RefreshToken = refreshToken,
         }).ConfigureAwait(false);
         return tokenResponse.IsError ? throw new InvalidOperationException(tokenResponse.Error) : tokenResponse.IdentityToken;
     }

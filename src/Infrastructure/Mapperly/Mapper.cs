@@ -12,14 +12,14 @@ public partial class Mapper
     [MapperIgnoreTarget(nameof(OrderParticipant.Order))]
     [MapperIgnoreTarget(nameof(OrderParticipant.OrderId))]
     [MapperIgnoreTarget(nameof(OrderParticipant.Participant))]
-    public partial OrderParticipant Map(ParticipantDto dto);
+    public static partial OrderParticipant Map(ParticipantDto dto);
 
     [MapperIgnoreTarget(nameof(Order.Buyer))]
-    public partial Order Map(OrderDto dto);
+    public static partial Order Map(OrderDto dto);
 
     [MapperIgnoreSource(nameof(OrderParticipant.Order))]
     [MapperIgnoreSource(nameof(OrderParticipant.OrderId))]
-    public partial ParticipantDetailedDto Map(OrderParticipant entity);
+    public static partial ParticipantDetailedDto Map(OrderParticipant entity);
 
     public partial OrderDetailedDto Map(Order entity);
 

@@ -77,3 +77,6 @@ jobs:
       # https://github.com/docker/build-push-action
       - name: Push images
         run: aspire deploy
+        env:
+          # Pass the registry and image name to Aspire
+          Azure__SubscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}

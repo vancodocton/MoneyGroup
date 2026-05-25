@@ -25,6 +25,20 @@
         "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21050",
         "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22072"
       }
+    },
+    "deploy": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:17079;http://localhost:15268",
+      "environmentVariables": {
+        "AppHost:Operation": "publish",
+        //"Publishing:Publisher": "",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21050",
+        "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22072"
+      }
     }
   }
 }

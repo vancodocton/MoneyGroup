@@ -40,6 +40,13 @@ jobs:
             **/packages.lock.json
             **/dotnet-tools.json
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24.12.0"
+          cache: "npm"
+          cache-dependency-path: src/ClientApp/package-lock.json
+
       - name: Install Aspire
         run: curl -sSL https://aspire.dev/install.sh | bash
 

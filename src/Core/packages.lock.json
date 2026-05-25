@@ -22,6 +22,8 @@
         "resolved": "10.0.8",
         "contentHash": "21nbDV60SRPWGIivsyl6lqBeEJNG1sginhhfWgRrr3Ais7aQ12To25OAHQxgoiJkjqy1aQ6RxpZBGYuTi7Ge6A=="
       }
-    }
+    },
+    "net10.0/linux-x64": {},
+    "net10.0/win-x64": {}
   }
 }

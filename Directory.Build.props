@@ -6,6 +6,7 @@
     <WarningsNotAsErrors>$(WarningsNotAsErrors);NU1902</WarningsNotAsErrors>
     <!-- Enable Microsoft.Testing.Platform runner globally for test projects -->
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <RuntimeIdentifiers>win-x64;linux-x64;</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

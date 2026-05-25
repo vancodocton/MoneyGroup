@@ -78,7 +78,10 @@ jobs:
       - name: Push images
         run: aspire deploy
         env:
+          # https://aspire.dev/deployment/azure/#shared-azure-settings
           # Azure:SubscriptionId
           Azure__SubscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           # Azure:Location
           Azure__Location: ${{ secrets.AZURE_LOCATION }}
+          # Azure:ResourceGroup
+          Azure__ResourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}

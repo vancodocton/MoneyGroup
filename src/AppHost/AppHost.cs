@@ -2,7 +2,7 @@
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var ghcr = builder.AddContainerRegistry("ghcr", "ghcr.io");
+var ghcr = builder.AddContainerRegistry("ghcr", "ghcr.io", repository: "vancodocton");
 
 var mssql = builder.AddSqlServer("mssql", port: 1435)
     .WithLifetime(ContainerLifetime.Persistent)

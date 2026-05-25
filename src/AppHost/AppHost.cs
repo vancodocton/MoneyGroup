@@ -12,9 +12,6 @@ var ghcr = builder
     .AddContainerRegistry("ghcr", "ghcr.io", repository: "vancodocton");
 
 var acEnv = builder.AddAzureContainerAppEnvironment("moneygroup-env");
-    //.WithContainerRegistry(ghcr);
-
-var acr = acEnv.GetAzureContainerRegistry().ExcludeFromManifest();
 
 var mssql = builder.AddSqlServer("mssql", port: 1435)
     .WithLifetime(ContainerLifetime.Persistent)

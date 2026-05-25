@@ -32,6 +32,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          cache: true
+          cache-dependency-path: |
+            **/packages.lock.json
+            **/dotnet-tools.json
+
       - name: Install Aspire
         run: curl -sSL https://aspire.dev/install.sh | bash
 

@@ -2,6 +2,8 @@
 #pragma warning disable ASPIREPIPELINES003 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 #pragma warning disable ASPIREJAVASCRIPT001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
+using Microsoft.Extensions.Hosting;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var ghcr = builder.AddContainerRegistry("ghcr", "ghcr.io", repository: "vancodocton");
@@ -19,9 +21,13 @@ var webapi = builder.AddProject<Projects.MoneyGroup_WebApi>("moneygroup-webapi")
     .WaitFor(mssql)
     .WithReference(mssql);
 
-builder.AddViteApp("moneygroup-clientapp", "../ClientApp")
-    .PublishAsStaticWebsite()
-    .WithReference(webapi)
-    .WaitFor(webapi);
+// TODO: Fix bug in https://github.com/vancodocton/MoneyGroup/actions/runs/26411668249/job/77747448911
+if (builder.Environment.IsDevelopment())
+{
+    builder.AddViteApp("moneygroup-clientapp", "../ClientApp")
+        .PublishAsStaticWebsite()
+        .WithReference(webapi)
+        .WaitFor(webapi);
+}
 
 await builder.Build().RunAsync();

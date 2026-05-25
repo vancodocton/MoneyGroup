@@ -6,6 +6,9 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var ghcr = builder.AddContainerRegistry("ghcr", "ghcr.io", repository: "vancodocton");
 
+var acEnv = builder.AddAzureContainerAppEnvironment("moneygroup-env")
+    .WithContainerRegistry(ghcr);
+
 var mssql = builder.AddSqlServer("mssql", port: 1435)
     .WithLifetime(ContainerLifetime.Persistent)
     .WithBindMount("../Infrastructure.SqlServer/Docker/scripts", "/mssql-server-setup-scripts.d/")
@@ -13,20 +16,11 @@ var mssql = builder.AddSqlServer("mssql", port: 1435)
 
 var webapi = builder.AddProject<Projects.MoneyGroup_WebApi>("moneygroup-webapi")
     .WithContainerRegistry(ghcr)
-    .WithImagePushOptions(options =>
-    {
-        options.Options.RemoteImageTag = builder.Configuration["tag"];
-    })
     .WaitFor(mssql)
     .WithReference(mssql);
 
 builder.AddViteApp("moneygroup-clientapp", "../ClientApp")
     .PublishAsStaticWebsite()
-    .WithContainerRegistry(ghcr)
-    .WithImagePushOptions(options =>
-    {
-        options.Options.RemoteImageTag = builder.Configuration["tag"];
-    })
     .WithReference(webapi)
     .WaitFor(webapi);
 

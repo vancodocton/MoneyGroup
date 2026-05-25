@@ -20,6 +20,7 @@ env:
 
 jobs:
   build:
+    environment: Development
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -65,7 +66,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Log in to Azure
+        uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # 3.0.0
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       # Build and push Docker image with Aspire
       # https://github.com/docker/build-push-action
       - name: Push images
-        run: aspire do push
+        run: aspire deploy

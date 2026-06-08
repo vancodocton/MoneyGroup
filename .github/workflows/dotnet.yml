@@ -26,7 +26,7 @@ jobs:
             **/dotnet-tools.json
 
       - name: Verify Format
-        run: dotnet format ${{ env.Solution }} --no-restore --verify-no-changes -v diag --severity info
+        run: dotnet format ${{ env.Solution }} --verify-no-changes -v diag --severity info
 
   build:
     name: Build

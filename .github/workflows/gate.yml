@@ -1,5 +1,3 @@
-name: CI
-
 on:
   push:
     branches: ["main", "dev"]
@@ -14,6 +12,7 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
+      deploy: ${{ steps.filter.outputs.deploy }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -43,22 +42,41 @@ jobs:
               - 'global.json'
               - '.config/dotnet-tools.json'
               - 'testconfig.json'
-              - '.github/workflows/ci.yml'
               - '.github/workflows/dotnet.yml'
+            deploy:
+              - '.github/workflows/docker.yml'
+              - '.github/workflows/gate.yml'
+              - '.dockerignore'
 
-  dotnet:
+  backend:
     uses: ./.github/workflows/dotnet.yml
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
+    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.deploy == 'true' }}
     secrets: inherit
     permissions:
       contents: read
 
+  # TODO: add fronent job
+
+  deploy:
+    uses: ./.github/workflows/docker.yml
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.deploy == 'true' }}
+    with:
+      is-cd: ${{ github.event_name != 'pull_request' }}
+      environment: Development
+    secrets: inherit
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
   gate:
     name: gate
-    needs: [changes, dotnet]
+    needs: [changes, backend, deploy]
     if: ${{ always() }}
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: Enforce component checks by changed paths
         shell: bash
@@ -67,11 +85,13 @@ jobs:
 
           fe_needed='${{ needs.changes.outputs.frontend }}'
           be_needed='${{ needs.changes.outputs.backend }}'
+          deploy_needed='${{ needs.changes.outputs.deploy }}'
           fe_result='${{ needs.frontend.result }}'
           be_result='${{ needs.backend.result }}'
-
+          deploy_result='${{ needs.deploy.result }}'
           echo "frontend needed: ${fe_needed}, result: ${fe_result}"
           echo "backend needed: ${be_needed}, result: ${be_result}"
+          echo "deploy needed: ${deploy_needed}, result: ${deploy_result}"
 
           if [[ "${fe_needed}" == "true" && "${fe_result}" != "success" ]]; then
             echo "Frontend checks were required but did not succeed."
@@ -80,6 +100,11 @@ jobs:
 
           if [[ "${be_needed}" == "true" && "${be_result}" != "success" ]]; then
             echo "Backend checks were required but did not succeed."
+            exit 1
+          fi
+
+          if [[ "${deploy_needed}" == "true" && "${deploy_result}" != "success" ]]; then
+            echo "Deploy checks were required but did not succeed."
             exit 1
           fi
 

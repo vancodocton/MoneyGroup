@@ -9,6 +9,8 @@ on:
 jobs:
   changes:
     name: detect changes
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}

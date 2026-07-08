@@ -830,7 +830,7 @@
           "MoneyGroup.Infrastructure.SqlServer": "[1.0.0, )",
           "MoneyGroup.ServiceDefaults": "[1.0.0, )",
           "SharpGrip.FluentValidation.AutoValidation.Endpoints": "[2.0.0, )",
-          "Swashbuckle.AspNetCore.SwaggerUI": "[10.1.7, )"
+          "Swashbuckle.AspNetCore.SwaggerUI": "[10.2.3, )"
         }
       },
       "Ardalis.Specification": {
@@ -1080,9 +1080,9 @@
       },
       "Swashbuckle.AspNetCore.SwaggerUI": {
         "type": "CentralTransitive",
-        "requested": "[10.1.7, )",
-        "resolved": "10.1.7",
-        "contentHash": "iJo3ODyUb/M8Vm8AH1r9y9iAba0w95xsCn3zFVl96ISRHbTDWxi+l7oFVCZqUEdjd97B8VMDPnMliWAdomR8uw=="
+        "requested": "[10.2.3, )",
+        "resolved": "10.2.3",
+        "contentHash": "nthWONRs/FJ4yyG206g1cC52WEG8EqrjuMWjGdR+5XG7lbjFto6NqcI9EMICgVFom/UivIjUVwI76ZHbHwTPfQ=="
       }
     }
   }

@@ -59,7 +59,7 @@ jobs:
     permissions:
       contents: read
 
-  # TODO: add fronent job
+  # TODO: add frontend job
 
   deploy:
     uses: ./.github/workflows/docker.yml

@@ -54,7 +54,7 @@ jobs:
   backend:
     uses: ./.github/workflows/dotnet.yml
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.deploy == 'true' }}
+    if: ${{ needs.changes.outputs.backend == 'true' }}
     secrets: inherit
     permissions:
       contents: read

@@ -26,14 +26,11 @@ updates:
     schedule:
       interval: "daily"
     groups:
-      Test:
+      Microsoft:
         patterns:
-          - "Microsoft.Testing.*"
-          - "xunit*"
+          - "Microsoft.*"
+          - "dotnet-ef"
           - "dotnet-coverage"
-      Ardalis.Specification:
-        patterns:
-          - "Ardalis.Specification*"
       Aspire:
         patterns:
           - "Aspire.*"
@@ -41,15 +38,15 @@ updates:
         patterns:
           - "*EntityFrameworkCore*"
           - "dotnet-ef"
-      Microsoft:
+      Ardalis.Specification:
         patterns:
-          - "Microsoft.*"
-      AutoMapper:
+          - "Ardalis.Specification*"
+      Test:
         patterns:
-          - "AutoMapper*"
-      Swashbuckle:
-        patterns:
-          - "*Swashbuckle*"
+          - "Microsoft.Testing.*"
+          - "xunit*"
+          - "dotnet-coverage"
+          - "Moq"
 
   - package-ecosystem: "devcontainers"
     directory: "/"

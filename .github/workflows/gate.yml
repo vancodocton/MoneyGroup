@@ -83,6 +83,12 @@ jobs:
         run: |
           set -euo pipefail
 
+          changes_result='${{ needs.changes.result }}'
+          if [[ "${changes_result}" != "success" ]]; then
+            echo "Change detection job did not succeed."
+            exit 1
+          fi
+
           fe_needed='${{ needs.changes.outputs.frontend }}'
           be_needed='${{ needs.changes.outputs.backend }}'
           deploy_needed='${{ needs.changes.outputs.deploy }}'

@@ -3,35 +3,84 @@ name: CI
 on:
   push:
     branches: ["main", "dev"]
-    paths:
-      - src/**
-      - test/**
-      - .github/workflows/ci.yml
-      - .github/workflows/dotnet.yml
-      - .config/dotnet-tools.json
-      - global.json
-      - "*.slnx"
-      - Directory.*.props
-      - Directory.*.targets
-      - testconfig.json
   pull_request:
     branches: ["main"]
-    paths:
-      - src/**
-      - test/**
-      - .github/workflows/ci.yml
-      - .github/workflows/dotnet.yml
-      - .config/dotnet-tools.json
-      - global.json
-      - "*.slnx"
-      - Directory.*.props
-      - Directory.*.targets
-      - testconfig.json
   workflow_dispatch:
 
 jobs:
+  changes:
+    name: detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      backend: ${{ steps.filter.outputs.backend }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            frontend:
+              - 'src/ClientApp/**'
+            backend:
+              - 'src/AppHost/**'
+              - 'src/Core/**'
+              - 'src/Infrastructure/**'
+              - 'src/Infrastructure.PostgreSql/**'
+              - 'src/Infrastructure.SqlServer/**'
+              - 'src/Postgres.Migrator/**'
+              - 'src/ServiceDefaults/**'
+              - 'src/WebApi/**'
+              - 'test/**'
+              - 'MoneyGroup.slnx'
+              - 'Directory.*.props'
+              - 'Directory.*.targets'
+              - 'global.json'
+              - '.config/dotnet-tools.json'
+              - 'testconfig.json'
+              - '.github/workflows/ci.yml'
+              - '.github/workflows/dotnet.yml'
+
   dotnet:
     uses: ./.github/workflows/dotnet.yml
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
     secrets: inherit
     permissions:
       contents: read
+
+  gate:
+    name: gate
+    needs: [changes, dotnet]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce component checks by changed paths
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          fe_needed='${{ needs.changes.outputs.frontend }}'
+          be_needed='${{ needs.changes.outputs.backend }}'
+          fe_result='${{ needs.frontend.result }}'
+          be_result='${{ needs.backend.result }}'
+
+          echo "frontend needed: ${fe_needed}, result: ${fe_result}"
+          echo "backend needed: ${be_needed}, result: ${be_result}"
+
+          if [[ "${fe_needed}" == "true" && "${fe_result}" != "success" ]]; then
+            echo "Frontend checks were required but did not succeed."
+            exit 1
+          fi
+
+          if [[ "${be_needed}" == "true" && "${be_result}" != "success" ]]; then
+            echo "Backend checks were required but did not succeed."
+            exit 1
+          fi
+
+          echo "Monorepo gate passed."

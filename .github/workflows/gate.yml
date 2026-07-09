@@ -13,8 +13,8 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      deploy: ${{ steps.filter.outputs.deploy || steps.filter.outputs.backend }}
+      backend: ${{ steps.filter.outputs.backend == 'true' }}
+      deploy: ${{ steps.filter.outputs.deploy == 'true' || steps.filter.outputs.backend == 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -50,7 +50,7 @@ jobs:
   backend:
     uses: ./.github/workflows/dotnet.yml
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
+    if: ${{ needs.changes.outputs.backend }}
     secrets: inherit
     permissions:
       contents: read
@@ -58,7 +58,7 @@ jobs:
   deploy:
     uses: ./.github/workflows/docker.yml
     needs: changes
-    if: ${{ needs.changes.outputs.deploy == 'true' }}
+    if: ${{ needs.changes.outputs.deploy }}
     with:
       is-cd: ${{ github.event_name != 'pull_request' }}
       environment: Development

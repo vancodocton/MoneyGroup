@@ -59,6 +59,12 @@ jobs:
       - name: Restore .NET tools
         run: dotnet tool restore
 
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
       - name: Begin Analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

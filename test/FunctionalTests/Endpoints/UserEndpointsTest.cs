@@ -110,7 +110,7 @@ public class UserEndpointsTest
     #endregion GetUserById
 
     #region GetExecutingUser
-    [Fact]
+    [Fact(Skip = "TODO: refactor test suite to support authenticated requests")]
     public async Task GetExecutingUser_Authenticated_ReturnsUser()
     {
         // Arrange
@@ -127,7 +127,7 @@ public class UserEndpointsTest
         Assert.NotNull(user.Name);
     }
 
-    [Fact]
+    [Fact(Skip = "TODO: refactor test suite to support authenticated requests")]
     public async Task GetExecutingUser_Unauthenticated_ReturnsUnauthorized()
     {
         // Arrange

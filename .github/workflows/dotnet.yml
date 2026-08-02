@@ -80,10 +80,6 @@ jobs:
 
       - name: Test
         shell: pwsh
-        env:
-          Test__Google__ClientId: ${{ secrets.Test__Google__ClientId }}
-          Test__Google__ClientSecret: ${{ secrets.Test__Google__ClientSecret }}
-          Test__Google__RefreshToken: ${{ secrets.Test__Google__RefreshToken }}
         run: |
           docker compose up --wait mssql
           dotnet test --solution ${{ env.Solution }} --no-build --configuration Release --verbosity normal --coverage --config-file $pwd/testconfig.json --report-xunit

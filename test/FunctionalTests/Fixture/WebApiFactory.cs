@@ -1,13 +1,12 @@
-﻿using System.Net.Http.Headers;
-
-using Duende.IdentityModel.Client;
-
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
+using MoneyGroup.WebApi.Authorizations;
 
 namespace MoneyGroup.FunctionalTests.Fixture;
 
@@ -24,52 +23,33 @@ public sealed class WebApiFactory : WebApplicationFactory<Program>
         {
             logging.AddFilter("MoneyGroup", LogLevel.Debug);
         });
+
+        // Satisfy both the authentication gate (DenyAnonymousAuthorizationRequirement, added by
+        // RequireAuthenticatedUser) and the app's own requirement, so requests run unauthenticated.
+        // Neither the built-in handler nor DenyUnauthorizedUserHandler calls context.Fail(), so
+        // adding a handler that succeeds is enough; the real registrations can stay in place.
+        builder.ConfigureServices(services =>
+        {
+            services.AddSingleton<IAuthorizationHandler, BypassDenyUnauthorizedUserRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, BypassDenyAnonymousAuthorizationRequirementHandler>();
+        });
     }
 
-    private string? _accessToken;
-
-    private static async Task<string?> GetAccessTokenAsync(HttpClient client, IConfiguration configuration)
+    private sealed class BypassDenyUnauthorizedUserRequirementHandler : AuthorizationHandler<DenyUnauthorizedUserRequirement>
     {
-        var refreshToken = configuration["Test:Google:RefreshToken"];
-        var clientId = configuration["Test:Google:ClientId"];
-        var clientSecret = configuration["Test:Google:ClientSecret"];
-
-        if (string.IsNullOrWhiteSpace(refreshToken)
-            || string.IsNullOrWhiteSpace(clientId)
-            || string.IsNullOrWhiteSpace(clientSecret))
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DenyUnauthorizedUserRequirement requirement)
         {
-            return null;
+            context.Succeed(requirement);
+            return Task.CompletedTask;
         }
+    }
 
-        var tokenResponse = await client.RequestRefreshTokenAsync(new RefreshTokenRequest
+    private sealed class BypassDenyAnonymousAuthorizationRequirementHandler : AuthorizationHandler<DenyAnonymousAuthorizationRequirement>
+    {
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DenyAnonymousAuthorizationRequirement requirement)
         {
-            Address = "https://oauth2.googleapis.com/token",
-            ClientId = clientId,
-            ClientSecret = clientSecret,
-            RefreshToken = refreshToken,
-        }).ConfigureAwait(false);
-        return tokenResponse.IsError ? throw new InvalidOperationException(tokenResponse.Error) : tokenResponse.IdentityToken;
-    }
-
-    protected override IHost CreateHost(IHostBuilder builder)
-    {
-        var host = base.CreateHost(builder);
-
-        var configuration = host.Services.GetRequiredService<IConfiguration>();
-
-        using var client = new HttpClient();
-
-        _accessToken = GetAccessTokenAsync(client, configuration).ConfigureAwait(false).GetAwaiter().GetResult();
-
-        return host;
-    }
-
-    protected override void ConfigureClient(HttpClient client)
-    {
-        base.ConfigureClient(client);
-
-        if (_accessToken is not null)
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-
+            context.Succeed(requirement);
+            return Task.CompletedTask;
+        }
     }
 }

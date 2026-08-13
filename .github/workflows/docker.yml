@@ -13,7 +13,16 @@ on:
       is-cd:
         type: boolean
         required: false
-        description: Whether to run the deployment job
+        description: Whether to push and sign the image (i.e. not a PR validation build)
+        default: false
+      do-deploy:
+        type: boolean
+        required: false
+        description: >-
+          Whether to deploy the built image. Separate from is-cd so that dev and
+          tag pushes still build, push and sign an image without deploying it:
+          there is a single Container App, so every ref that deploys overwrites
+          the previous one.
         default: false
       environment:
         type: string
@@ -29,6 +38,11 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      # Immutable digest of the image produced (and signed) by this run, so the
+      # deploy job ships exactly what was built instead of re-resolving a
+      # mutable tag that a concurrent run could have moved.
+      digest: ${{ steps.build-and-push.outputs.digest }}
     permissions:
       contents: read
       packages: write
@@ -106,7 +120,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ inputs.is-cd }}
+    if: ${{ inputs.is-cd && inputs.do-deploy }}
     environment: ${{ inputs.environment }}
     permissions:
       id-token: write
@@ -119,11 +133,26 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      # Build the immutable image reference from the digest the build job
+      # produced and signed. env.IMAGE_NAME is github.repository, which is
+      # mixed case (vancodocton/MoneyGroup); container registries reject
+      # non-lowercase paths, so lowercase it explicitly here. Inputs are passed
+      # through an intermediate env block rather than interpolated into `run:`.
+      # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
+      - name: Resolve image reference
+        id: image
+        env:
+          REGISTRY_HOST: ${{ env.REGISTRY }}
+          IMAGE_REPOSITORY: ${{ env.IMAGE_NAME }}
+          DIGEST: ${{ needs.build.outputs.digest }}
+        run: |
+          if [[ -z "${DIGEST}" ]]; then
+            echo "::error::build job produced no image digest — refusing to deploy." \
+                 "The image is only pushed when is-cd is true; deploying without a" \
+                 "digest would resolve to an empty reference."
+            exit 1
+          fi
+          echo "ref=${REGISTRY_HOST,,}/${IMAGE_REPOSITORY,,}@${DIGEST}" >> "$GITHUB_OUTPUT"
 
       - name: Deploy Azure Container App
         uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703 # v2
@@ -131,4 +160,4 @@ jobs:
           containerAppName: ${{ secrets.AZURE_CONTAINER_APP_NAME }}
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
           registryUrl: ${{ env.REGISTRY }}
-          imageToDeploy: ${{ steps.meta.outputs.tags }}
+          imageToDeploy: ${{ steps.image.outputs.ref }}

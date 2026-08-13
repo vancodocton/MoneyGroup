@@ -3,8 +3,12 @@ on:
     branches: ["main", "dev"]
     tags: ["v*.*.*"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "dev"]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   changes:
@@ -50,17 +54,18 @@ jobs:
   backend:
     uses: ./.github/workflows/dotnet.yml
     needs: changes
-    if: ${{ needs.changes.outputs.backend }}
+    if: ${{ needs.changes.outputs.backend == 'true' }}
     secrets: inherit
     permissions:
       contents: read
 
   deploy:
     uses: ./.github/workflows/docker.yml
-    needs: changes
-    if: ${{ needs.changes.outputs.deploy }}
+    needs: [changes, backend]
+    if: ${{ !cancelled() && needs.changes.outputs.deploy == 'true' && needs.backend.result != 'failure' }}
     with:
       is-cd: ${{ github.event_name != 'pull_request' }}
+      do-deploy: ${{ github.ref == 'refs/heads/main' }}
       environment: Development
     secrets: inherit
     permissions:

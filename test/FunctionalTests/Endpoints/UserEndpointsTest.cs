@@ -110,6 +110,7 @@ public class UserEndpointsTest
     #endregion GetUserById
 
     #region GetExecutingUser
+#pragma warning disable xUnit1004 // Test methods should not be skipped - tracked by the TODO below
     [Fact(Skip = "TODO: refactor test suite to support authenticated requests")]
     public async Task GetExecutingUser_Authenticated_ReturnsUser()
     {
@@ -140,5 +141,6 @@ public class UserEndpointsTest
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
+#pragma warning restore xUnit1004
     #endregion GetExecutingUser
 }

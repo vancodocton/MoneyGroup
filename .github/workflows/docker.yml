@@ -42,11 +42,13 @@ jobs:
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
+      # No cosign-release input on purpose: the cosign binary version is then
+      # fixed by the SHA-pinned installer below (v4.1.2 installs cosign v3.0.6),
+      # so Dependabot's installer bumps keep it current. An explicit
+      # cosign-release pin is invisible to Dependabot and goes stale silently.
       - name: Install cosign
         if: ${{ inputs.is-cd }}
-        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 #v4.1.2
-        with:
-          cosign-release: "v2.2.4"
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
@@ -111,7 +113,7 @@ jobs:
       contents: read
     steps:
       - name: Log in to Azure
-        uses: azure/login@f5d393ae46f8fde4be8b75f32e3fc50e654ad0ca # 3.0.1
+        uses: azure/login@f5d393ae46f8fde4be8b75f32e3fc50e654ad0ca # v3.0.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}

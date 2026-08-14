@@ -55,7 +55,11 @@ jobs:
     uses: ./.github/workflows/dotnet.yml
     needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
-    secrets: inherit
+    # Forward only the repository secrets dotnet.yml actually reads, instead of
+    # handing it every repository secret via `secrets: inherit`.
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     permissions:
       contents: read
 
@@ -67,7 +71,13 @@ jobs:
       is-cd: ${{ github.event_name != 'pull_request' }}
       do-deploy: ${{ github.ref == 'refs/heads/main' }}
       environment: Development
-    secrets: inherit
+    # No `secrets:` block on purpose. docker.yml needs no caller-supplied secrets:
+    # its build job uses the automatic secrets.GITHUB_TOKEN (granted to called
+    # workflows without being passed, and undeclarable since the GITHUB_ prefix is
+    # reserved), and its deploy job reads the AZURE_* values as environment secrets
+    # of the `Development` environment it declares itself. Those environment secrets
+    # do not exist at this caller's scope, so forwarding them here would pass empty
+    # strings and break the deploy.
     permissions:
       contents: read
       packages: write

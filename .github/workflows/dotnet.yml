@@ -5,6 +5,13 @@ permissions:
 
 on:
   workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        description: SonarQube Cloud analysis token, used by the begin/end scanner steps.
+        required: false
+      CODECOV_TOKEN:
+        description: Codecov upload token, used to publish the merged coverage report.
+        required: false
 
 env:
   Solution: MoneyGroup.slnx

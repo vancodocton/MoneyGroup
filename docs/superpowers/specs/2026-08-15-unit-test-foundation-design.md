@@ -28,17 +28,18 @@ Full findings and evidence: see the test-suite audit
 
 ## Goals
 
-1. Report a coverage number that reflects code humans wrote.
-2. Put every test in a project whose name describes what it actually does.
-3. Establish one idiom — mocking library, naming convention, data construction — before
+1. Put every test in a project whose name describes what it actually does.
+2. Establish one idiom — mocking library, naming convention, data construction — before
    the bulk of the suite gets written.
-4. Close the gaps that are unit-testable.
+3. Close the gaps that are unit-testable.
 
 ## Non-goals
 
-- **Moving the coverage number materially.** It moves 68% → 89% from configuration in
-  Phase 0, then only ~+1.5% from Phase 3. This is expected. The remaining genuinely
-  uncovered lines live in deferred slices (see *Coverage reality* below).
+- **Moving the coverage number materially.** Phase 3 adds ~15 covered lines, which against
+  the current denominator is 68.0% → ~68.4%. This is expected, not a shortfall. The
+  *reported* figure is distorted by generated code, but correcting that is deferred — see
+  *Coverage reality* below.
+- **Changing coverage configuration.** `testconfig.json` is not touched in this slice.
 - Database isolation, authorization testing, CI restructuring, Postgres support. All
   deferred — see *Deferred work*.
 - Fixing the functional suite's seed-data corruption. Deferred to Slice 2, whose
@@ -61,6 +62,11 @@ Full findings and evidence: see the test-suite audit
 ---
 
 ## Coverage reality
+
+> **Analysis only — no configuration change ships in this slice.** The exclusion described
+> here is deferred: it rebases a metric the team is managed on, and should not land until
+> whoever owns that metric understands it. Recorded here so the analysis is not lost and
+> the change can be picked up deliberately later.
 
 Measured on `main` @ `fc33b0a`, full suite, after a seed reset.
 
@@ -105,7 +111,7 @@ design complaint, but it is not a coverage hole. The audit's claim that closing 
 | D8 | Test data | Hand-written builders | Explicit and reproducible; AutoFixture's randomness complicates failure reproduction for four DTOs. |
 | D10 | Endpoint handlers | `internal` + `InternalsVisibleTo` | Handlers return typed `Results<,>`, directly assertable. Extends a pattern already present twice in the repo. |
 | — | Naming convention | `Given_When_Then` | Chosen for readability on the validator-heavy tests Phase 3 adds. Costs ~36 renames in this slice. |
-| — | Coverage config | `[GeneratedCode]` exclusion only | See *Coverage reality*. |
+| — | Coverage config | **Deferred** — `testconfig.json` untouched | Rebases a managed metric; should not ship until its owner understands it. Analysis retained under *Coverage reality*. |
 | — | Sonar coverage path | **Not touched** | `sonar.cs.vscoveragexml.reportsPaths` is absent from `dotnet.yml`, but SonarCloud is reported as configured correctly. Revisit only if Sonar shows a problem. |
 
 ---
@@ -139,40 +145,6 @@ path. `UnitTests` gains one project reference:
 `UnitTests` once it references `WebApi`. Mitigated by folder convention and review, not
 by the build. The alternative — three layer-split test projects — was rejected as
 over-structure at this codebase size.
-
-### Phase 0 — coverage configuration
-
-`testconfig.json`, one file, no test changes:
-
-```json
-{
-    "codeCoverage": {
-        "Configuration": {
-            "Format": "xml",
-            "CodeCoverage": {
-                "Attributes": {
-                    "Exclude": [
-                        "^System\\.CodeDom\\.Compiler\\.GeneratedCodeAttribute$",
-                        "^System\\.Diagnostics\\.CodeAnalysis\\.ExcludeFromCodeCoverageAttribute$"
-                    ]
-                },
-                "Sources": {
-                    "Exclude": [ ".*\\\\Migrations\\\\.*.cs" ]
-                }
-            }
-        }
-    }
-}
-```
-
-**CI propagation requires no workflow change.** `.github/workflows/dotnet.yml` already
-runs `dotnet test --coverage --config-file $pwd/testconfig.json`, so per-project reports
-are filtered at generation. `dotnet coverage merge` preserves that filtering, and
-`codecov-action` consumes the merged `coverage.xml`.
-
-Ships as its own commit. 68% → 89% is a *jump*, so it is safe against Codecov's default
-"must not decrease" project status, but it permanently rebases the history — the commit
-message must explain the discontinuity.
 
 ### Phase 1 — relocation
 
@@ -272,10 +244,14 @@ docker exec -w /mssql-server-setup-scripts.d moneygroup-mssql-1 bash ./reset.sh
 
 Phase-specific gates:
 
-- **Phase 0** — coverage rises to ~89% with no change in test count or results.
 - **Phase 1** — test count is exactly 63 before and after; `FunctionalTests` reports 20.
 - **Phase 2** — count stays 63; no `Moq` reference remains in any test project.
-- **Phase 3** — count reaches ~103; coverage ~91% (589+15 covered of 662); `dotnet format` clean.
+- **Phase 3** — count reaches ~103; coverage ~68.4% under the unchanged `testconfig.json`
+  (2526+15 covered of 3716); `dotnet format` clean.
+
+The Phase 3 coverage gate looks unimpressive because the denominator still includes
+generated code. Against hand-written code only it is ~91%. Do not "fix" this by editing
+`testconfig.json` — that change is deliberately deferred.
 
 ## Risks
 
@@ -286,7 +262,7 @@ Phase-specific gates:
 | `UnitTests` referencing `WebApi` invites host-based tests | Folder convention + review. Accepted trade-off of the one-project decision |
 | Given_When_Then churn produces a large, noisy diff | Renames are their own commit, separate from behaviour changes |
 | New package versions break the CI lock-file gate | Regenerate and commit `packages.lock.json` in the same commit that adds NSubstitute |
-| Coverage baseline discontinuity confuses later comparison | Phase 0 ships alone with an explanatory commit message |
+| `src/WebApi/MoneyGroup.WebApi.json` (generated OpenAPI doc, `text: auto`) re-churns line endings on every Windows build and gets swept into a commit | Never `git add -A`; stage explicit paths. `git diff --numstat` on it is empty when the change is line-endings only |
 
 ## Deferred work
 
@@ -297,6 +273,40 @@ Phase-specific gates:
 | 4 | CI fast/slow job split; Aspire nightly; `src/AppHost` coverage exclusion shipped in the same commit | Depends on Phase 1's traits |
 | later | Postgres as a second provider | Wanted, explicitly not now. Slice 2 builds the seam so this is additive |
 | later | Shouldly adoption | D6 deferred; converts ~76 tests if taken up after this slice |
+| later | Coverage-config correction | Deferred pending owner understanding. Self-contained, ~15 min, no test changes — see below |
+
+### Deferred: coverage-config correction
+
+Recorded so it can be picked up deliberately. Adds two attribute exclusions to
+`testconfig.json`; takes the reported figure from 68.0% to 89.0% by removing generated
+code from the denominator.
+
+```json
+"CodeCoverage": {
+    "Attributes": {
+        "Exclude": [
+            "^System\\.CodeDom\\.Compiler\\.GeneratedCodeAttribute$",
+            "^System\\.Diagnostics\\.CodeAnalysis\\.ExcludeFromCodeCoverageAttribute$"
+        ]
+    },
+    "Sources": { "Exclude": [ ".*\\\\Migrations\\\\.*.cs" ] }
+}
+```
+
+Notes for whoever takes it:
+
+- **No workflow change needed.** `.github/workflows/dotnet.yml` already runs
+  `dotnet test --coverage --config-file $pwd/testconfig.json`, so reports are filtered at
+  generation; `dotnet coverage merge` preserves it and `codecov-action` consumes the
+  merged `coverage.xml`.
+- **Do not add `CompilerGeneratedAttribute`.** It yields a flattering 93.7% by excluding
+  async state machines — i.e. the body of every service and handler method here.
+- 68% → 89% is a *rise*, so it passes Codecov's default "must not decrease" status, but it
+  permanently rebases history. Ship alone, with a commit message explaining the
+  discontinuity.
+- Unrelated but adjacent: `dotnet.yml` passes no
+  `/d:sonar.cs.vscoveragexml.reportsPaths`. SonarCloud is reported as configured
+  correctly, so this is only worth revisiting if Sonar shows a coverage problem.
 
 **Known-open while this slice runs:** the functional suite corrupts its own seed data
 (deletes Order 3, leaks `New order` rows) and fails on a second consecutive local run.

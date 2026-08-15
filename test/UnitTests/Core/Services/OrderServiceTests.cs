@@ -9,17 +9,16 @@ using MoneyGroup.Core.Specifications;
 
 using Moq;
 
-namespace MoneyGroup.UnitTests.Services;
+namespace MoneyGroup.UnitTests.Core.Services;
 
-public class OrderServiceTest
+[Trait("Category", "Unit")]
+public class OrderServiceTests
 {
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<IOrderRepository> _orderRepositoryMock;
-#pragma warning disable CA1859 // Use concrete types when possible for improved performance
-    private readonly IOrderService _orderService;
-#pragma warning restore CA1859 // Use concrete types when possible for improved performance
+    private readonly OrderService _orderService;
 
-    public OrderServiceTest()
+    public OrderServiceTests()
     {
         _userRepositoryMock = new Mock<IUserRepository>();
         _orderRepositoryMock = new Mock<IOrderRepository>();

@@ -71,13 +71,22 @@ jobs:
       is-cd: ${{ github.event_name != 'pull_request' }}
       do-deploy: ${{ github.ref == 'refs/heads/main' }}
       environment: Development
-    # No `secrets:` block on purpose. docker.yml needs no caller-supplied secrets:
-    # its build job uses the automatic secrets.GITHUB_TOKEN (granted to called
-    # workflows without being passed, and undeclarable since the GITHUB_ prefix is
-    # reserved), and its deploy job reads the AZURE_* values as environment secrets
-    # of the `Development` environment it declares itself. Those environment secrets
-    # do not exist at this caller's scope, so forwarding them here would pass empty
-    # strings and break the deploy.
+    # `secrets: inherit` is load-bearing here — do not narrow it without reading
+    # this first. docker.yml's deploy job reads AZURE_CLIENT_ID / AZURE_TENANT_ID /
+    # AZURE_SUBSCRIPTION_ID / AZURE_CONTAINER_APP_NAME / AZURE_RESOURCE_GROUP, which
+    # exist ONLY as secrets of the `Development` environment that job declares.
+    #
+    # A called workflow's `secrets` context is populated solely from what the caller
+    # passes. Declaring `environment:` in the callee does not by itself pull that
+    # environment's secrets into scope — `inherit` is what lets the callee resolve
+    # secrets against the repository/environment store. Dropping it in #419 left
+    # client-id and tenant-id empty and broke `azure/login` on the first main push
+    # (run 31789136623); docker.yml was byte-identical to the last green run.
+    #
+    # Listing the AZURE_* secrets explicitly cannot work either: a job that `uses:`
+    # a reusable workflow may not declare `environment:`, so they are out of scope
+    # at this caller and would forward empty strings — the same failure.
+    secrets: inherit
     permissions:
       contents: read
       packages: write

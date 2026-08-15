@@ -3,27 +3,12 @@ using FluentValidation.TestHelper;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.WebApi.Validators;
 
-namespace MoneyGroup.FunctionalTests.Validators;
+namespace MoneyGroup.UnitTests.WebApi.Validators;
 
-public class OrderDtoValidatorTestFixture
+[Trait("Category", "Unit")]
+public class OrderDtoValidatorTests
 {
-    public OrderDtoValidator Validator { get; }
-
-    public OrderDtoValidatorTestFixture()
-    {
-        Validator = new OrderDtoValidator(new ParticipantDtoValidator());
-    }
-}
-
-public class OrderDtoValidatorTest
-    : IClassFixture<OrderDtoValidatorTestFixture>
-{
-    private readonly OrderDtoValidator _validator;
-
-    public OrderDtoValidatorTest(OrderDtoValidatorTestFixture fixture)
-    {
-        _validator = fixture.Validator;
-    }
+    private readonly OrderDtoValidator _validator = new(new ParticipantDtoValidator());
 
     [Fact]
     public async Task GivenOrderDto_WhenValid_ThenReturnNoError()

@@ -3,8 +3,9 @@ using FluentValidation.TestHelper;
 using MoneyGroup.WebApi.Endpoints;
 using MoneyGroup.WebApi.Validators;
 
-namespace MoneyGroup.FunctionalTests.Validators;
+namespace MoneyGroup.UnitTests.WebApi.Validators;
 
+[Trait("Category", "Unit")]
 public class OrderPaginatedRequestValidatorTests
 {
     private readonly OrderPaginatedRequestValidator _validator;

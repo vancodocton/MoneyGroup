@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\MoneyGroup.Core.csproj" />
+    <ProjectReference Include="..\..\src\WebApi\MoneyGroup.WebApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

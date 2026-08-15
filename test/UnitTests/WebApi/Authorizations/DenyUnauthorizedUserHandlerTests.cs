@@ -11,16 +11,17 @@ using MoneyGroup.WebApi.Authorizations;
 
 using Moq;
 
-namespace MoneyGroup.FunctionalTests.Authorizations;
+namespace MoneyGroup.UnitTests.WebApi.Authorizations;
 
-public class DenyUnauthorizedUserHandlerTest
+[Trait("Category", "Unit")]
+public class DenyUnauthorizedUserHandlerTests
 {
     private readonly Mock<IUserService> _userServiceMock;
     private readonly Mock<ClaimsPrincipal> _userMock;
     private readonly DenyUnauthorizedUserHandler _handler;
     private readonly AuthorizationHandlerContext _authContext;
 
-    public DenyUnauthorizedUserHandlerTest()
+    public DenyUnauthorizedUserHandlerTests()
     {
         var requirement = new DenyUnauthorizedUserRequirement();
         _userServiceMock = new();

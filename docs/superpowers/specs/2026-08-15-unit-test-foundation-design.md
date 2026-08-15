@@ -122,7 +122,7 @@ design complaint, but it is not a coverage hole. The audit's claim that closing 
 
 ```
 test/
-  UnitTests/          pure, in-memory, no host, no DB.        36 → ~76 tests
+  UnitTests/          pure, in-memory, no host, no DB.          8 → 79 tests
     Builders/         hand-written test-data builders
     Core/             services, specifications
     Infrastructure/   Mapperly mapper
@@ -246,8 +246,9 @@ Phase-specific gates:
 
 - **Phase 1** — test count is exactly 63 before and after; `FunctionalTests` reports 20.
 - **Phase 2** — count stays 63; no `Moq` reference remains in any test project.
-- **Phase 3** — count reaches ~103; coverage ~68.4% under the unchanged `testconfig.json`
-  (2526+15 covered of 3716); `dotnet format` clean.
+- **Phase 3** — count reaches 106 (79 unit + 6 integration + 20 functional + 1 smoke);
+  coverage ~68.4% under the unchanged `testconfig.json` (2526+15 covered of 3716);
+  `dotnet format` clean.
 
 The Phase 3 coverage gate looks unimpressive because the denominator still includes
 generated code. Against hand-written code only it is ~91%. Do not "fix" this by editing

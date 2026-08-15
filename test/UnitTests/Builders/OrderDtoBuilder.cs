@@ -50,7 +50,7 @@ public sealed class OrderDtoBuilder
 
     public OrderDtoBuilder WithParticipants(params int[] participantIds)
     {
-        _participants = participantIds.Select(id => new ParticipantDto { ParticipantId = id }).ToList();
+        _participants = [.. participantIds.Select(id => new ParticipantDto { ParticipantId = id })];
         return this;
     }
 

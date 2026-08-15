@@ -4,6 +4,7 @@ using MoneyGroup.Core.Exceptions;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.Core.Services;
 using MoneyGroup.Core.Specifications;
+using MoneyGroup.UnitTests.Builders;
 
 using NSubstitute;
 
@@ -68,15 +69,7 @@ public class OrderServiceTests
     {
         // Arrange
         var newOrderId = 1;
-        var model = new OrderDto
-        {
-            BuyerId = 1,
-            Participants =
-            [
-                new() { ParticipantId = 2 },
-                new() { ParticipantId = 3 },
-            ],
-        };
+        var model = OrderDtoBuilder.Valid().WithBuyer(1).WithParticipants(2, 3).Build();
 
         _userRepository.AnyAsync(Arg.Any<EntityByIdSpec<User>>(), Arg.Any<CancellationToken>())
             .Returns(true);
@@ -104,11 +97,7 @@ public class OrderServiceTests
     {
         // Arrange
         var newOrderId = 1;
-        var model = new OrderDto
-        {
-            BuyerId = 1,
-            Participants = [],
-        };
+        var model = OrderDtoBuilder.Valid().WithBuyer(1).WithNoParticipants().Build();
 
         _userRepository.AnyAsync(Arg.Any<EntityByIdSpec<User>>(), Arg.Any<CancellationToken>())
             .Returns(true);
@@ -133,15 +122,7 @@ public class OrderServiceTests
     public async Task GivenOrder_WhenBuyerMissing_ThenThrowsBuyerNotFound()
     {
         // Arrange
-        var model = new OrderDto
-        {
-            BuyerId = -1,
-            Participants =
-            [
-                new() { ParticipantId = 2 },
-                new() { ParticipantId = 3 },
-            ],
-        };
+        var model = OrderDtoBuilder.Valid().WithBuyer(-1).WithParticipants(2, 3).Build();
 
         _userRepository.AnyAsync(Arg.Any<EntityByIdSpec<User>>(), Arg.Any<CancellationToken>())
             .Returns(false);
@@ -160,15 +141,7 @@ public class OrderServiceTests
     public async Task GivenOrder_WhenAnyParticipantMissing_ThenThrowsParticipantNotFound()
     {
         // Arrange
-        var model = new OrderDto
-        {
-            BuyerId = 1,
-            Participants =
-            [
-                new() { ParticipantId = 2 },
-                new() { ParticipantId = -1 },
-            ],
-        };
+        var model = OrderDtoBuilder.Valid().WithBuyer(1).WithParticipants(2, -1).Build();
 
         _userRepository.AnyAsync(Arg.Any<EntityByIdSpec<User>>(), Arg.Any<CancellationToken>())
             .Returns(true);

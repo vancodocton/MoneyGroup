@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="MoneyGroup.FunctionalTests" />
+    <InternalsVisibleTo Include="MoneyGroup.UnitTests" />
   </ItemGroup>
 
 </Project>

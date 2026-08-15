@@ -31,19 +31,19 @@ public static class OrderEndpoints
         .WithName("DeleteOrder");
     }
 
-    private static async Task<Results<Ok<PaginatedModel<OrderDetailedDto>>, ValidationProblem>> GetOrdersAsync([AsParameters] OrderPaginatedRequest request, [FromServices] IOrderService orderService)
+    internal static async Task<Results<Ok<PaginatedModel<OrderDetailedDto>>, ValidationProblem>> GetOrdersAsync([AsParameters] OrderPaginatedRequest request, [FromServices] IOrderService orderService)
     {
         var orders = await orderService.GetOrdersByPageAsync(request);
         return TypedResults.Ok(orders);
     }
 
-    private static async Task<Results<CreatedAtRoute<OrderDto>, ValidationProblem>> CreateOrderAsync(OrderDto input, IOrderService orderService)
+    internal static async Task<Results<CreatedAtRoute<OrderDto>, ValidationProblem>> CreateOrderAsync(OrderDto input, IOrderService orderService)
     {
         await orderService.CreateOrderAsync(input);
         return TypedResults.CreatedAtRoute(input, "GetOrderById", new { id = input.Id });
     }
 
-    private static async Task<Results<NoContent, NotFound>> DeleteOrderAsync(int id, IOrderService orderService, CancellationToken cancellationToken)
+    internal static async Task<Results<NoContent, NotFound>> DeleteOrderAsync(int id, IOrderService orderService, CancellationToken cancellationToken)
     {
         var result = await orderService.RemoveOrderAsync(id, cancellationToken);
         return !result
@@ -51,7 +51,7 @@ public static class OrderEndpoints
             : TypedResults.NoContent();
     }
 
-    public static async Task<Results<Ok<OrderDetailedDto>, NotFound>> GetOrderByIdAsync(int id, IOrderService orderService)
+    internal static async Task<Results<Ok<OrderDetailedDto>, NotFound>> GetOrderByIdAsync(int id, IOrderService orderService)
     {
         var order = await orderService.GetOrderByIdAsync(id);
         return order == null

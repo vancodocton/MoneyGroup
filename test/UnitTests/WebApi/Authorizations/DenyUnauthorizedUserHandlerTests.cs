@@ -1,116 +1,115 @@
-﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models.Users;
 using MoneyGroup.WebApi.Authorizations;
 
-using Moq;
+using NSubstitute;
 
 namespace MoneyGroup.UnitTests.WebApi.Authorizations;
 
 [Trait("Category", "Unit")]
 public class DenyUnauthorizedUserHandlerTests
 {
-    private readonly Mock<IUserService> _userServiceMock;
-    private readonly Mock<ClaimsPrincipal> _userMock;
+    private const string Email = "user@domain.com";
+
+    private readonly IUserService _userService = Substitute.For<IUserService>();
     private readonly DenyUnauthorizedUserHandler _handler;
-    private readonly AuthorizationHandlerContext _authContext;
 
     public DenyUnauthorizedUserHandlerTests()
     {
-        var requirement = new DenyUnauthorizedUserRequirement();
-        _userServiceMock = new();
-        _userMock = new();
-        _authContext = new AuthorizationHandlerContext([requirement], _userMock.Object, resource: null);
-        _handler = new DenyUnauthorizedUserHandler(NullLoggerFactory.Instance.CreateLogger<DenyUnauthorizedUserHandler>(), _userServiceMock.Object);
+        _handler = new DenyUnauthorizedUserHandler(
+            NullLoggerFactory.Instance.CreateLogger<DenyUnauthorizedUserHandler>(),
+            _userService);
+    }
 
+    private static AuthorizationHandlerContext ContextFor(ClaimsPrincipal user) =>
+        new([new DenyUnauthorizedUserRequirement()], user, resource: null);
+
+    private static ClaimsPrincipal Anonymous() => new(new ClaimsIdentity());
+
+    private static ClaimsPrincipal Authenticated(params Claim[] claims) =>
+        new(new ClaimsIdentity(claims, authenticationType: "TestAuth"));
+
+    [Fact]
+    public async Task GivenUser_WhenNotAuthenticated_ThenDoesNotSucceed()
+    {
+        // Arrange
+        var context = ContextFor(Anonymous());
+
+        // Act
+        await _handler.HandleAsync(context);
+
+        // Assert
+        Assert.False(context.HasSucceeded);
     }
 
     [Fact]
-    public async Task HandleAsync_WhenUserIsNotAuthenticated_ShouldReturnUnauthorized()
+    public async Task GivenUser_WhenEmailClaimMissing_ThenDoesNotSucceed()
     {
         // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(false);
+        var context = ContextFor(Authenticated());
 
         // Act
-        await _handler.HandleAsync(_authContext);
+        await _handler.HandleAsync(context);
 
         // Assert
-        Assert.False(_authContext.HasSucceeded);
+        Assert.False(context.HasSucceeded);
     }
 
     [Fact]
-    public async Task HandleAsync_WhenUserEmailIsNotPresent_ShouldReturnUnauthorized()
+    public async Task GivenUser_WhenEmailVerifiedClaimMissing_ThenDoesNotSucceed()
     {
         // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(true);
-        _userMock.Setup(u => u.FindFirst(ClaimTypes.Email)).Returns((Claim?)null);
+        var context = ContextFor(Authenticated(new Claim(ClaimTypes.Email, Email)));
 
         // Act
-        await _handler.HandleAsync(_authContext);
+        await _handler.HandleAsync(context);
 
         // Assert
-        Assert.False(_authContext.HasSucceeded);
-
+        Assert.False(context.HasSucceeded);
     }
 
     [Fact]
-    public async Task HandleAsync_WhenUserEmailIsNotValid_ShouldReturnUnauthorized()
+    public async Task GivenVerifiedEmail_WhenUserNotFound_ThenDoesNotSucceed()
     {
         // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(true);
-        _userMock.Setup(u => u.FindFirst(ClaimTypes.Email)).Returns(EmailClaim);
-        _userMock.Setup(u => u.FindFirst(JwtRegisteredClaimNames.EmailVerified)).Returns((Claim?)null);
+        var context = ContextFor(Authenticated(
+            new Claim(ClaimTypes.Email, Email),
+            new Claim(JwtRegisteredClaimNames.EmailVerified, "true")));
+
+        _userService.GetUserByEmailAsync(Email, Arg.Any<CancellationToken>())
+            .Returns((UserDto?)null);
 
         // Act
-        await _handler.HandleAsync(_authContext);
+        await _handler.HandleAsync(context);
 
         // Assert
-        Assert.False(_authContext.HasSucceeded);
-    }
-
-    private const string Email = "user@domain.com";
-    private static readonly Claim EmailClaim = new(ClaimTypes.Email, Email);
-
-    [Fact]
-    public async Task HandlerAsync_WhenUserNotFound_ShouldReturnUnauthorized()
-    {
-        // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(true);
-        _userMock.Setup(u => u.FindFirst(ClaimTypes.Email)).Returns(EmailClaim);
-        _userMock.Setup(u => u.FindFirst(JwtRegisteredClaimNames.EmailVerified)).Returns(new Claim(JwtRegisteredClaimNames.EmailVerified, "true"));
-        _userServiceMock.Setup(r => r.GetUserByEmailAsync(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync((UserDto?)null);
-
-        // Act
-        await _handler.HandleAsync(_authContext);
-
-        // Assert
-        Assert.False(_authContext.HasSucceeded);
+        Assert.False(context.HasSucceeded);
+        await _userService.Received(1).GetUserByEmailAsync(Email, Arg.Any<CancellationToken>());
     }
 
     [Fact]
-    public async Task HandlerAsync_WhenUserFound_ShouldReturnOk()
+    public async Task GivenVerifiedEmail_WhenUserFound_ThenSucceeds()
     {
         // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(true);
-        _userMock.Setup(u => u.FindFirst(ClaimTypes.Email)).Returns(EmailClaim);
-        _userMock.Setup(u => u.FindFirst(JwtRegisteredClaimNames.EmailVerified)).Returns(new Claim(JwtRegisteredClaimNames.EmailVerified, "true"));
-        _userServiceMock.Setup(r => r.GetUserByEmailAsync(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync(new UserDto()
-        {
-            Id = 1,
-            Name = "User",
-            Email = Email,
-        });
+        var context = ContextFor(Authenticated(
+            new Claim(ClaimTypes.Email, Email),
+            new Claim(JwtRegisteredClaimNames.EmailVerified, "true")));
+
+        _userService.GetUserByEmailAsync(Email, Arg.Any<CancellationToken>())
+            .Returns(new UserDto { Id = 1, Name = "User", Email = Email });
 
         // Act
-        await _handler.HandleAsync(_authContext);
+        await _handler.HandleAsync(context);
 
         // Assert
-        Assert.True(_authContext.HasSucceeded);
+        Assert.True(context.HasSucceeded);
+        await _userService.Received(1).GetUserByEmailAsync(Email, Arg.Any<CancellationToken>());
     }
 }

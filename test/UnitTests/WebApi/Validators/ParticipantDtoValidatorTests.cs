@@ -11,7 +11,7 @@ public class ParticipantDtoValidatorTests
     private readonly ParticipantDtoValidator _validator = new();
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantIdZero_ThenReturnError()
+    public async Task GivenParticipant_WhenParticipantIdZero_ThenHasErrorForParticipantId()
     {
         // Arrange
         var participant = new ParticipantDto()

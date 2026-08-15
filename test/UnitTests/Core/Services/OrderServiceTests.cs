@@ -22,7 +22,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task GetOrderByIdAsync_ValidId_ShouldReturnOrder()
+    public async Task GivenOrderId_WhenOrderExists_ThenReturnsOrder()
     {
         // Arrange
         var id = 1;
@@ -44,7 +44,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task GetOrderByIdAsync_InvalidId_ShouldReturnNull()
+    public async Task GivenOrderId_WhenOrderMissing_ThenReturnsNull()
     {
         // Arrange
         var invalidId = -1;
@@ -64,7 +64,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task CreateOrderAsync_ValidDto_ShouldAddOrder()
+    public async Task GivenOrder_WhenBuyerAndParticipantsExist_ThenAddsOrder()
     {
         // Arrange
         var newOrderId = 1;
@@ -100,7 +100,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task CreateOrderAsync_NoParticipants_ShouldAddOrder()
+    public async Task GivenOrder_WhenNoParticipants_ThenAddsOrderWithoutCountingParticipants()
     {
         // Arrange
         var newOrderId = 1;
@@ -130,7 +130,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task CreateOrderAsync_InvalidBuyer_ShouldThrowInvalidOperationException()
+    public async Task GivenOrder_WhenBuyerMissing_ThenThrowsBuyerNotFound()
     {
         // Arrange
         var model = new OrderDto
@@ -157,7 +157,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task CreateOrderAsync_InvalidParticipants_ShouldThrowInvalidOperationException()
+    public async Task GivenOrder_WhenAnyParticipantMissing_ThenThrowsParticipantNotFound()
     {
         // Arrange
         var model = new OrderDto
@@ -187,7 +187,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task RemoveOrderAsync_OrderExists_ShouldRemoveOrder()
+    public async Task GivenOrderId_WhenOrderExists_ThenRemovesOrderAndReturnsTrue()
     {
         // Arrange
         var orderId = 1;
@@ -206,7 +206,7 @@ public class OrderServiceTests
     }
 
     [Fact]
-    public async Task RemoveOrderAsync_OrderNotFound_ShouldThrowInvalidOperationException()
+    public async Task GivenOrderId_WhenOrderMissing_ThenReturnsFalse()
     {
         // Arrange
         var orderId = 1;

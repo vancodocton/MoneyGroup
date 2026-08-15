@@ -16,7 +16,7 @@ public class OrderPaginatedRequestValidatorTests
     }
 
     [Fact]
-    public void Should_Have_Error_When_BuyerId_Is_Less_Than_Or_Equal_To_Zero()
+    public void GivenRequest_WhenBuyerIdNotPositive_ThenHasErrorForBuyerId()
     {
         // Arrange
         var model = new OrderPaginatedRequest(buyerId: 0, participantId: 1, totalMax: 10, totalMin: 1, page: 1, size: 10);
@@ -29,7 +29,7 @@ public class OrderPaginatedRequestValidatorTests
     }
 
     [Fact]
-    public void Should_Have_Error_When_ParticipantId_Is_Less_Than_Or_Equal_To_Zero()
+    public void GivenRequest_WhenParticipantIdNotPositive_ThenHasErrorForParticipantId()
     {
         // Arrange
         var model = new OrderPaginatedRequest(buyerId: 1, participantId: 0, totalMax: 10, totalMin: 1, page: 1, size: 10);
@@ -42,7 +42,7 @@ public class OrderPaginatedRequestValidatorTests
     }
 
     [Fact]
-    public void Should_Have_Error_When_TotalMax_Is_Less_Than_Or_Equal_To_Zero()
+    public void GivenRequest_WhenTotalMaxNotPositive_ThenHasErrorForTotalMax()
     {
         // Arrange
         var model = new OrderPaginatedRequest(buyerId: 1, participantId: 1, totalMax: 0, totalMin: 1, page: 1, size: 10);
@@ -55,7 +55,7 @@ public class OrderPaginatedRequestValidatorTests
     }
 
     [Fact]
-    public void Should_Have_Error_When_TotalMin_Is_Less_Than_Or_Equal_To_Zero()
+    public void GivenRequest_WhenTotalMinNotPositive_ThenHasErrorForTotalMin()
     {
         // Arrange
         var model = new OrderPaginatedRequest(buyerId: 1, participantId: 1, totalMax: 10, totalMin: 0, page: 1, size: 10);
@@ -68,7 +68,7 @@ public class OrderPaginatedRequestValidatorTests
     }
 
     [Fact]
-    public void Should_Have_Error_When_TotalMin_Is_Greater_Than_TotalMax()
+    public void GivenRequest_WhenTotalMinExceedsTotalMax_ThenHasErrorForTotalMin()
     {
         // Arrange
         var model = new OrderPaginatedRequest(buyerId: 1, participantId: 1, totalMax: 5, totalMin: 10, page: 1, size: 10);
@@ -81,7 +81,7 @@ public class OrderPaginatedRequestValidatorTests
     }
 
     [Fact]
-    public void Should_Have_Error_When_Page_Is_Less_Than_One()
+    public void GivenRequest_WhenPageBelowOne_ThenHasErrorForPage()
     {
         // Arrange
         var model = new OrderPaginatedRequest(buyerId: 1, participantId: 1, totalMax: 10, totalMin: 1, page: 0, size: 10);
@@ -94,7 +94,7 @@ public class OrderPaginatedRequestValidatorTests
     }
 
     [Fact]
-    public void Should_Have_Error_When_Size_Is_Less_Than_One()
+    public void GivenRequest_WhenSizeBelowOne_ThenHasErrorForSize()
     {
         // Arrange
         var model = new OrderPaginatedRequest(buyerId: 1, participantId: 1, totalMax: 10, totalMin: 1, page: 1, size: 0);
@@ -108,7 +108,7 @@ public class OrderPaginatedRequestValidatorTests
 
     [Theory]
     [MemberData(nameof(GetEnumerator))]
-    public void Should_Not_Have_Error_When_Valid_Model(int? buyerId, int? participantId, decimal? totalMax, decimal? totalMin, int page, int size)
+    public void GivenRequest_WhenValid_ThenHasNoErrors(int? buyerId, int? participantId, decimal? totalMax, decimal? totalMin, int page, int size)
     {
         // Arrange
         var model = new OrderPaginatedRequest(buyerId, participantId, totalMax, totalMin, page, size);

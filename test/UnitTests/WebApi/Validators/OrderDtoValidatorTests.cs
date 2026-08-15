@@ -11,7 +11,7 @@ public class OrderDtoValidatorTests
     private readonly OrderDtoValidator _validator = new(new ParticipantDtoValidator());
 
     [Fact]
-    public async Task GivenOrderDto_WhenValid_ThenReturnNoError()
+    public async Task GivenOrderDto_WhenValid_ThenHasNoErrors()
     {
         // Arrange
         var order = new OrderDto()
@@ -32,7 +32,7 @@ public class OrderDtoValidatorTests
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenTitleEmpty_ThenReturnError()
+    public async Task GivenOrderDto_WhenTitleEmpty_ThenHasErrorForTitle()
     {
         // Arrange
         var order = new OrderDto()
@@ -48,7 +48,7 @@ public class OrderDtoValidatorTests
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenDescriptionNull_ThenReturnNoError()
+    public async Task GivenOrderDto_WhenDescriptionNull_ThenHasNoErrorForDescription()
     {
         // Arrange
         var order = new OrderDto()
@@ -64,7 +64,7 @@ public class OrderDtoValidatorTests
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenBuyerIdZero_ThenReturnError()
+    public async Task GivenOrderDto_WhenBuyerIdZero_ThenHasErrorForBuyerId()
     {
         // Arrange
         var order = new OrderDto()
@@ -80,7 +80,7 @@ public class OrderDtoValidatorTests
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenTotalNegative_ThenReturnError()
+    public async Task GivenOrderDto_WhenTotalNegative_ThenHasErrorForTotal()
     {
         // Arrange
         var order = new OrderDto()
@@ -96,7 +96,7 @@ public class OrderDtoValidatorTests
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantsNull_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsNull_ThenHasErrorForParticipants()
     {
         // Arrange
         var order = new OrderDto()
@@ -112,7 +112,7 @@ public class OrderDtoValidatorTests
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantsEmpty_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsEmpty_ThenHasErrorForParticipants()
     {
         // Arrange
         var order = new OrderDto()
@@ -128,7 +128,7 @@ public class OrderDtoValidatorTests
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantsContainsNull_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsContainsNull_ThenHasErrorForParticipants()
     {
         // Arrange
         var order = new OrderDto()
@@ -144,7 +144,7 @@ public class OrderDtoValidatorTests
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantsDuplicate_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsDuplicate_ThenHasDuplicatedParticipantError()
     {
         // Arrange
         var order = new OrderDto()

@@ -2,6 +2,7 @@ using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Entities;
 using MoneyGroup.Core.Exceptions;
 using MoneyGroup.Core.Models.Orders;
+using MoneyGroup.Core.Models.Paginations;
 using MoneyGroup.Core.Services;
 using MoneyGroup.Core.Specifications;
 using MoneyGroup.UnitTests.Builders;
@@ -194,5 +195,46 @@ public class OrderServiceTests
         Assert.False(result);
         await _orderRepository.Received(1).FirstOrDefaultAsync(Arg.Any<EntityByIdSpec<Order>>(), Arg.Any<CancellationToken>());
         await _orderRepository.DidNotReceive().RemoveAsync(Arg.Any<Order>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task GivenPagingOptions_WhenOrdersExist_ThenReturnsPaginatedOrders()
+    {
+        // Arrange
+        var options = new OrderPaginatedOptions(null, null, null, null, 1, 10);
+        var expected = new PaginatedModel<OrderDetailedDto>
+        {
+            Page = 1,
+            Count = 1,
+            Total = 1,
+            Items = [new OrderDetailedDto { Id = 1, Title = "Order 1" }],
+        };
+
+        _orderRepository.GetByPageAsync<OrderDetailedDto>(Arg.Any<OrderPaginatedSpec>(), Arg.Any<CancellationToken>())
+            .Returns(expected);
+
+        // Act
+        var result = await _orderService.GetOrdersByPageAsync(options);
+
+        // Assert
+        Assert.Same(expected, result);
+    }
+
+    [Fact]
+    public async Task GivenPagingOptions_WhenCalled_ThenPassesSpecificationBuiltFromOptions()
+    {
+        // Arrange
+        var options = new OrderPaginatedOptions(buyerId: 4, null, null, null, page: 3, size: 7);
+
+        _orderRepository.GetByPageAsync<OrderDetailedDto>(Arg.Any<OrderPaginatedSpec>(), Arg.Any<CancellationToken>())
+            .Returns(new PaginatedModel<OrderDetailedDto> { Page = 3, Count = 0, Total = 0, Items = [] });
+
+        // Act
+        await _orderService.GetOrdersByPageAsync(options);
+
+        // Assert
+        await _orderRepository.Received(1).GetByPageAsync<OrderDetailedDto>(
+            Arg.Is<OrderPaginatedSpec>(spec => spec.Skip == 14 && spec.Take == 7),
+            Arg.Any<CancellationToken>());
     }
 }

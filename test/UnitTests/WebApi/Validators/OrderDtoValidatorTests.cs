@@ -1,43 +1,21 @@
 using FluentValidation.TestHelper;
 
 using MoneyGroup.Core.Models.Orders;
+using MoneyGroup.UnitTests.Builders;
 using MoneyGroup.WebApi.Validators;
 
-namespace MoneyGroup.FunctionalTests.Validators;
+namespace MoneyGroup.UnitTests.WebApi.Validators;
 
-public class OrderDtoValidatorTestFixture
+[Trait("Category", "Unit")]
+public class OrderDtoValidatorTests
 {
-    public OrderDtoValidator Validator { get; }
-
-    public OrderDtoValidatorTestFixture()
-    {
-        Validator = new OrderDtoValidator(new ParticipantDtoValidator());
-    }
-}
-
-public class OrderDtoValidatorTest
-    : IClassFixture<OrderDtoValidatorTestFixture>
-{
-    private readonly OrderDtoValidator _validator;
-
-    public OrderDtoValidatorTest(OrderDtoValidatorTestFixture fixture)
-    {
-        _validator = fixture.Validator;
-    }
+    private readonly OrderDtoValidator _validator = new(new ParticipantDtoValidator());
 
     [Fact]
-    public async Task GivenOrderDto_WhenValid_ThenReturnNoError()
+    public async Task GivenOrderDto_WhenValid_ThenHasNoErrors()
     {
         // Arrange
-        var order = new OrderDto()
-        {
-            Title = "Title",
-            BuyerId = 1,
-            Participants =
-            [
-                new ParticipantDto() { ParticipantId = 1 },
-            ],
-        };
+        var order = OrderDtoBuilder.Valid().Build();
 
         // Act
         var result = await _validator.ValidateAsync(order, TestContext.Current.CancellationToken);
@@ -47,13 +25,10 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenTitleEmpty_ThenReturnError()
+    public async Task GivenOrderDto_WhenTitleEmpty_ThenHasErrorForTitle()
     {
         // Arrange
-        var order = new OrderDto()
-        {
-            Title = "   ",
-        };
+        var order = OrderDtoBuilder.Valid().WithTitle("   ").Build();
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
@@ -63,13 +38,10 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenDescriptionNull_ThenReturnNoError()
+    public async Task GivenOrderDto_WhenDescriptionNull_ThenHasNoErrorForDescription()
     {
         // Arrange
-        var order = new OrderDto()
-        {
-            Description = null,
-        };
+        var order = OrderDtoBuilder.Valid().WithDescription(null).Build();
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
@@ -79,13 +51,10 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenBuyerIdZero_ThenReturnError()
+    public async Task GivenOrderDto_WhenBuyerIdZero_ThenHasErrorForBuyerId()
     {
         // Arrange
-        var order = new OrderDto()
-        {
-            BuyerId = 0,
-        };
+        var order = OrderDtoBuilder.Valid().WithBuyer(0).Build();
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
@@ -95,13 +64,10 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenTotalNegative_ThenReturnError()
+    public async Task GivenOrderDto_WhenTotalNegative_ThenHasErrorForTotal()
     {
         // Arrange
-        var order = new OrderDto()
-        {
-            Total = -1,
-        };
+        var order = OrderDtoBuilder.Valid().WithTotal(-1).Build();
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
@@ -111,13 +77,10 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantsNull_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsNull_ThenHasErrorForParticipants()
     {
         // Arrange
-        var order = new OrderDto()
-        {
-            Participants = null!,
-        };
+        var order = OrderDtoBuilder.Valid().WithNullParticipants().Build();
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
@@ -127,13 +90,10 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantsEmpty_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsEmpty_ThenHasErrorForParticipants()
     {
         // Arrange
-        var order = new OrderDto()
-        {
-            Participants = [],
-        };
+        var order = OrderDtoBuilder.Valid().WithNoParticipants().Build();
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
@@ -143,13 +103,10 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantsContainsNull_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsContainsNull_ThenHasErrorForParticipants()
     {
         // Arrange
-        var order = new OrderDto()
-        {
-            Participants = [null!, null!],
-        };
+        var order = OrderDtoBuilder.Valid().WithParticipants([null!, null!]).Build();
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);
@@ -159,16 +116,10 @@ public class OrderDtoValidatorTest
     }
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantsDuplicate_ThenReturnError()
+    public async Task GivenOrderDto_WhenParticipantsDuplicate_ThenHasDuplicatedParticipantError()
     {
         // Arrange
-        var order = new OrderDto()
-        {
-            Participants = [
-                new ParticipantDto() { ParticipantId = 1 },
-                new ParticipantDto() { ParticipantId = 1 },
-                ],
-        };
+        var order = OrderDtoBuilder.Valid().WithParticipants(1, 1).Build();
 
         // Act
         var result = await _validator.TestValidateAsync(order, cancellationToken: TestContext.Current.CancellationToken);

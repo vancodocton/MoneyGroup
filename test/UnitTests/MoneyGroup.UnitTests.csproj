@@ -14,12 +14,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
-    <PackageReference Include="Moq" />
+    <PackageReference Include="NSubstitute" />
     <PackageReference Include="xunit.v3.mtp-v2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\MoneyGroup.Core.csproj" />
+    <ProjectReference Include="..\..\src\WebApi\MoneyGroup.WebApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

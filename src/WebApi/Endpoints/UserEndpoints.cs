@@ -29,13 +29,13 @@ public static class UserEndpoints
         .WithName("GetExecutingUser");
     }
 
-    private static async Task<Results<Ok<PaginatedModel<UserDto>>, ValidationProblem>> GetUsersAsync([AsParameters] UserPaginatedRequest request, [FromServices] IUserService userService)
+    internal static async Task<Results<Ok<PaginatedModel<UserDto>>, ValidationProblem>> GetUsersAsync([AsParameters] UserPaginatedRequest request, [FromServices] IUserService userService)
     {
         var users = await userService.GetUsersByPageAsync(request);
         return TypedResults.Ok(users);
     }
 
-    public static async Task<Results<Ok<UserDto>, NotFound>> GetUserByIdAsync(int id, [FromServices] IUserService userService, CancellationToken cancellationToken)
+    internal static async Task<Results<Ok<UserDto>, NotFound>> GetUserByIdAsync(int id, [FromServices] IUserService userService, CancellationToken cancellationToken)
     {
         var user = await userService.GetUserByIdAsync(id, cancellationToken);
         return user == null
@@ -43,7 +43,7 @@ public static class UserEndpoints
             : TypedResults.Ok(user);
     }
 
-    public static Ok<UserDto> GetExecutingUser(HttpContext httpContext)
+    internal static Ok<UserDto> GetExecutingUser(HttpContext httpContext)
     {
         var feature = httpContext.Features.Get<ICurrentUserFeature>();
         ArgumentNullException.ThrowIfNull(feature?.User);

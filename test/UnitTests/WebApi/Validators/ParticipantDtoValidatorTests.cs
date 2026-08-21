@@ -3,20 +3,15 @@ using FluentValidation.TestHelper;
 using MoneyGroup.Core.Models.Orders;
 using MoneyGroup.WebApi.Validators;
 
-namespace MoneyGroup.FunctionalTests.Validators;
+namespace MoneyGroup.UnitTests.WebApi.Validators;
 
-public class ParticipantDtoValidatorTest
-    : IClassFixture<ParticipantDtoValidator>
+[Trait("Category", "Unit")]
+public class ParticipantDtoValidatorTests
 {
-    private readonly ParticipantDtoValidator _validator;
-
-    public ParticipantDtoValidatorTest(ParticipantDtoValidator validator)
-    {
-        _validator = validator;
-    }
+    private readonly ParticipantDtoValidator _validator = new();
 
     [Fact]
-    public async Task GivenOrderDto_WhenParticipantIdZero_ThenReturnError()
+    public async Task GivenParticipant_WhenParticipantIdZero_ThenHasErrorForParticipantId()
     {
         // Arrange
         var participant = new ParticipantDto()

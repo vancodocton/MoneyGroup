@@ -21,7 +21,7 @@ updates:
           - "actions/*"
       codeql-action:
         patterns:
-          - "docker/codeql-action/*"
+          - "github/codeql-action/*"
 
   - package-ecosystem: "nuget"
     open-pull-requests-limit: 8

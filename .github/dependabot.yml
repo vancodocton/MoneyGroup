@@ -49,7 +49,7 @@ updates:
           - "Microsoft.Testing.*"
           - "xunit*"
           - "dotnet-coverage"
-          - "Moq"
+          - "NSubstitute*"
 
   - package-ecosystem: "devcontainers"
     directory: "/"

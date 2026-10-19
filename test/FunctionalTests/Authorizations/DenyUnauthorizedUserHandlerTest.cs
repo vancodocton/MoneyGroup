@@ -9,24 +9,24 @@ using MoneyGroup.Core.Abstractions;
 using MoneyGroup.Core.Models.Users;
 using MoneyGroup.WebApi.Authorizations;
 
-using Moq;
+using NSubstitute;
 
 namespace MoneyGroup.FunctionalTests.Authorizations;
 
 public class DenyUnauthorizedUserHandlerTest
 {
-    private readonly Mock<IUserService> _userServiceMock;
-    private readonly Mock<ClaimsPrincipal> _userMock;
+    private readonly IUserService _userService;
+    private readonly ClaimsPrincipal _user;
     private readonly DenyUnauthorizedUserHandler _handler;
     private readonly AuthorizationHandlerContext _authContext;
 
     public DenyUnauthorizedUserHandlerTest()
     {
         var requirement = new DenyUnauthorizedUserRequirement();
-        _userServiceMock = new();
-        _userMock = new();
-        _authContext = new AuthorizationHandlerContext([requirement], _userMock.Object, resource: null);
-        _handler = new DenyUnauthorizedUserHandler(NullLoggerFactory.Instance.CreateLogger<DenyUnauthorizedUserHandler>(), _userServiceMock.Object);
+        _userService = Substitute.For<IUserService>();
+        _user = Substitute.For<ClaimsPrincipal>();
+        _authContext = new AuthorizationHandlerContext([requirement], _user, resource: null);
+        _handler = new DenyUnauthorizedUserHandler(NullLoggerFactory.Instance.CreateLogger<DenyUnauthorizedUserHandler>(), _userService);
 
     }
 
@@ -34,7 +34,7 @@ public class DenyUnauthorizedUserHandlerTest
     public async Task HandleAsync_WhenUserIsNotAuthenticated_ShouldReturnUnauthorized()
     {
         // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(false);
+        _user.Identity!.IsAuthenticated.Returns(false);
 
         // Act
         await _handler.HandleAsync(_authContext);
@@ -47,8 +47,8 @@ public class DenyUnauthorizedUserHandlerTest
     public async Task HandleAsync_WhenUserEmailIsNotPresent_ShouldReturnUnauthorized()
     {
         // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(true);
-        _userMock.Setup(u => u.FindFirst(ClaimTypes.Email)).Returns((Claim?)null);
+        _user.Identity!.IsAuthenticated.Returns(true);
+        _user.FindFirst(ClaimTypes.Email).Returns((Claim?)null);
 
         // Act
         await _handler.HandleAsync(_authContext);
@@ -62,9 +62,9 @@ public class DenyUnauthorizedUserHandlerTest
     public async Task HandleAsync_WhenUserEmailIsNotValid_ShouldReturnUnauthorized()
     {
         // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(true);
-        _userMock.Setup(u => u.FindFirst(ClaimTypes.Email)).Returns(EmailClaim);
-        _userMock.Setup(u => u.FindFirst(JwtRegisteredClaimNames.EmailVerified)).Returns((Claim?)null);
+        _user.Identity!.IsAuthenticated.Returns(true);
+        _user.FindFirst(ClaimTypes.Email).Returns(EmailClaim);
+        _user.FindFirst(JwtRegisteredClaimNames.EmailVerified).Returns((Claim?)null);
 
         // Act
         await _handler.HandleAsync(_authContext);
@@ -80,10 +80,10 @@ public class DenyUnauthorizedUserHandlerTest
     public async Task HandlerAsync_WhenUserNotFound_ShouldReturnUnauthorized()
     {
         // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(true);
-        _userMock.Setup(u => u.FindFirst(ClaimTypes.Email)).Returns(EmailClaim);
-        _userMock.Setup(u => u.FindFirst(JwtRegisteredClaimNames.EmailVerified)).Returns(new Claim(JwtRegisteredClaimNames.EmailVerified, "true"));
-        _userServiceMock.Setup(r => r.GetUserByEmailAsync(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync((UserDto?)null);
+        _user.Identity!.IsAuthenticated.Returns(true);
+        _user.FindFirst(ClaimTypes.Email).Returns(EmailClaim);
+        _user.FindFirst(JwtRegisteredClaimNames.EmailVerified).Returns(new Claim(JwtRegisteredClaimNames.EmailVerified, "true"));
+        _userService.GetUserByEmailAsync(Arg.Any<string>(), CancellationToken.None).Returns((UserDto?)null);
 
         // Act
         await _handler.HandleAsync(_authContext);
@@ -96,10 +96,10 @@ public class DenyUnauthorizedUserHandlerTest
     public async Task HandlerAsync_WhenUserFound_ShouldReturnOk()
     {
         // Arrange
-        _userMock.Setup(u => u.Identity!.IsAuthenticated).Returns(true);
-        _userMock.Setup(u => u.FindFirst(ClaimTypes.Email)).Returns(EmailClaim);
-        _userMock.Setup(u => u.FindFirst(JwtRegisteredClaimNames.EmailVerified)).Returns(new Claim(JwtRegisteredClaimNames.EmailVerified, "true"));
-        _userServiceMock.Setup(r => r.GetUserByEmailAsync(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync(new UserDto()
+        _user.Identity!.IsAuthenticated.Returns(true);
+        _user.FindFirst(ClaimTypes.Email).Returns(EmailClaim);
+        _user.FindFirst(JwtRegisteredClaimNames.EmailVerified).Returns(new Claim(JwtRegisteredClaimNames.EmailVerified, "true"));
+        _userService.GetUserByEmailAsync(Arg.Any<string>(), CancellationToken.None).Returns(new UserDto()
         {
             Id = 1,
             Name = "User",

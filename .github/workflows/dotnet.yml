@@ -89,7 +89,7 @@ jobs:
         shell: pwsh
         run: |
           docker compose up --wait mssql
-          dotnet test --solution ${{ env.Solution }} --no-build --configuration Release --verbosity normal --coverage --config-file $pwd/testconfig.json --report-xunit
+          dotnet test --solution ${{ env.Solution }} --no-build --configuration Release --verbosity normal --coverage --config-file $pwd/testconfig.json --report-xunit-xml
 
       - name: End Analyze
         env:

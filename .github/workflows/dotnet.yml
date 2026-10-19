@@ -28,9 +28,10 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           cache: true
+          # Differs from the build job on purpose: a shared key lets this job save first and lock out
+          # the build job's cache, which also holds the dotnet tools and the Aspire CLI bundle package.
           cache-dependency-path: |
             **/packages.lock.json
-            **/dotnet-tools.json
 
       - name: Verify Format
         run: dotnet format ${{ env.Solution }} --verify-no-changes -v diag --severity info

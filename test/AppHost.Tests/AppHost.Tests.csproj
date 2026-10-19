@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
 
     <OutputType>Exe</OutputType>
-    <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
   </PropertyGroup>
 
   <ItemGroup>

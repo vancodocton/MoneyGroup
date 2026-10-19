@@ -6,7 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UserSecretsId>a969ec3c-9f14-4517-9c32-14f33c87b188</UserSecretsId>
-    <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+    <!-- DCP/Dashboard come from the Aspire CLI bundle (PATH, else dnx) instead of RID-specific NuGet packages, so packages.lock.json is platform-independent. -->
+    <AspireUseCliBundle>true</AspireUseCliBundle>
   </PropertyGroup>
 
   <ItemGroup>

@@ -10,6 +10,7 @@
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <RestoreLockedMode>true</RestoreLockedMode>
+    <!-- Dependabot's updater container also sets GITHUB_ACTIONS=true. Locked mode there makes its restore fail with NU1004 after it bumps Directory.Packages.props, so it skips every packages.lock.json. -->
+    <RestoreLockedMode Condition="'$(DEPENDABOT_JOB_ID)' == ''">true</RestoreLockedMode>
   </PropertyGroup>
 </Project>

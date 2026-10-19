@@ -48,4 +48,16 @@
     <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.3.0" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="4.0.2" />
   </ItemGroup>
+  <!--
+    Transitive pins for vulnerable packages (CentralPackageTransitivePinningEnabled).
+    Projects never reference these directly. On each bump, remove a pin once its
+    parents resolve a non-vulnerable version on their own, and confirm that
+    restore reports no NuGet audit warnings (NU1902/NU1903).
+  -->
+  <ItemGroup>
+    <!-- From Aspire.Hosting* / StreamJsonRpc (2.5.302). Remove when they require >= 2.5.303. -->
+    <PackageVersion Include="MessagePack" Version="2.5.303" />
+    <!-- From Aspire.Microsoft.EntityFrameworkCore.SqlServer (10.0.12) and Microsoft.Data.SqlClient (9.0.x). Remove when they require >= 10.0.13. -->
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+  </ItemGroup>
 </Project>

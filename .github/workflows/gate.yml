@@ -19,6 +19,7 @@ jobs:
     outputs:
       backend: ${{ steps.filter.outputs.backend == 'true' }}
       deploy: ${{ steps.filter.outputs.deploy == 'true' || steps.filter.outputs.backend == 'true' }}
+      codeql-languages: ${{ steps.codeql.outputs.languages }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -30,7 +31,7 @@ jobs:
         uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         with:
           filters: |
-            backend:
+            csharp: &csharp
               - 'src/AppHost/**'
               - 'src/Core/**'
               - 'src/Infrastructure/**'
@@ -46,10 +47,30 @@ jobs:
               - 'global.json'
               - '.config/dotnet-tools.json'
               - 'testconfig.json'
+            backend:
+              - *csharp
               - '.github/workflows/**'
+            actions:
+              - '.github/workflows/**'
+            frontend:
+              - 'src/ClientApp/**'
             deploy:
               - '.github/workflows/**'
               - '.dockerignore'
+
+      - name: Pick CodeQL languages
+        id: codeql
+        shell: bash
+        env:
+          ACTIONS: ${{ steps.filter.outputs.actions }}
+          CSHARP: ${{ steps.filter.outputs.csharp }}
+          FRONTEND: ${{ steps.filter.outputs.frontend }}
+        run: |
+          langs=()
+          [[ "${ACTIONS}" == "true" ]] && langs+=('"actions"')
+          [[ "${CSHARP}" == "true" ]] && langs+=('"csharp"')
+          [[ "${FRONTEND}" == "true" ]] && langs+=('"javascript-typescript"')
+          echo "languages=[$(IFS=,; echo "${langs[*]}")]" >> "$GITHUB_OUTPUT"
 
   backend:
     uses: ./.github/workflows/dotnet.yml
@@ -61,6 +82,18 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     permissions:
+      contents: read
+
+  codeql:
+    uses: ./.github/workflows/codeql.yml
+    needs: changes
+    if: ${{ needs.changes.outputs.codeql-languages != '[]' }}
+    with:
+      languages: ${{ needs.changes.outputs.codeql-languages }}
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
       contents: read
 
   deploy:
@@ -94,7 +127,7 @@ jobs:
 
   gate:
     name: gate
-    needs: [changes, backend, deploy]
+    needs: [changes, backend, codeql, deploy]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     permissions: {}
@@ -113,13 +146,21 @@ jobs:
           be_needed='${{ needs.changes.outputs.backend }}'
           deploy_needed='${{ needs.changes.outputs.deploy }}'
           be_result='${{ needs.backend.result }}'
+          codeql_languages='${{ needs.changes.outputs.codeql-languages }}'
+          codeql_result='${{ needs.codeql.result }}'
           deploy_result='${{ needs.deploy.result }}'
 
           echo "backend needed: ${be_needed}, result: ${be_result}"
+          echo "codeql languages: ${codeql_languages}, result: ${codeql_result}"
           echo "deploy needed: ${deploy_needed}, result: ${deploy_result}"
 
           if [[ "${be_needed}" == "true" && "${be_result}" != "success" ]]; then
             echo "Backend checks were required but did not succeed."
+            exit 1
+          fi
+
+          if [[ "${codeql_languages}" != "[]" && "${codeql_result}" != "success" ]]; then
+            echo "CodeQL analysis was required but did not succeed."
             exit 1
           fi
 

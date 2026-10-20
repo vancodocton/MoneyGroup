@@ -63,6 +63,16 @@ jobs:
     permissions:
       contents: read
 
+  codeql:
+    uses: ./.github/workflows/codeql.yml
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
   deploy:
     uses: ./.github/workflows/docker.yml
     needs: [changes, backend]
@@ -94,7 +104,7 @@ jobs:
 
   gate:
     name: gate
-    needs: [changes, backend, deploy]
+    needs: [changes, backend, codeql, deploy]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     permissions: {}
@@ -113,13 +123,20 @@ jobs:
           be_needed='${{ needs.changes.outputs.backend }}'
           deploy_needed='${{ needs.changes.outputs.deploy }}'
           be_result='${{ needs.backend.result }}'
+          codeql_result='${{ needs.codeql.result }}'
           deploy_result='${{ needs.deploy.result }}'
 
           echo "backend needed: ${be_needed}, result: ${be_result}"
+          echo "codeql needed: ${be_needed}, result: ${codeql_result}"
           echo "deploy needed: ${deploy_needed}, result: ${deploy_result}"
 
           if [[ "${be_needed}" == "true" && "${be_result}" != "success" ]]; then
             echo "Backend checks were required but did not succeed."
+            exit 1
+          fi
+
+          if [[ "${be_needed}" == "true" && "${codeql_result}" != "success" ]]; then
+            echo "CodeQL analysis was required but did not succeed."
             exit 1
           fi
 

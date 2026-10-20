@@ -3,6 +3,9 @@
     "version": "10.0.402",
     "rollForward": "latestMinor"
   },
+  "msbuild-sdks": {
+    "Aspire.AppHost.Sdk": "13.6.1"
+  },
   "test": {
     "runner": "Microsoft.Testing.Platform"
   }

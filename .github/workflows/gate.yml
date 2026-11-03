@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       backend: ${{ steps.filter.outputs.backend == 'true' }}
+      frontend: ${{ steps.filter.outputs.frontend == 'true' }}
       deploy: ${{ steps.filter.outputs.deploy == 'true' || steps.filter.outputs.backend == 'true' }}
     steps:
       - name: Checkout
@@ -32,6 +33,7 @@ jobs:
           filters: |
             backend:
               - 'src/AppHost/**'
+              - 'src/ClientApp/*.esproj'
               - 'src/Core/**'
               - 'src/Infrastructure/**'
               - 'src/Infrastructure.PostgreSql/**'
@@ -47,6 +49,9 @@ jobs:
               - '.config/dotnet-tools.json'
               - 'testconfig.json'
               - '.github/workflows/**'
+            frontend:
+              - 'src/ClientApp/**'
+              - '.github/workflows/**'
             deploy:
               - '.github/workflows/**'
               - '.dockerignore'
@@ -60,6 +65,13 @@ jobs:
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    permissions:
+      contents: read
+
+  frontend:
+    uses: ./.github/workflows/clientapp.yml
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     permissions:
       contents: read
 
@@ -94,7 +106,7 @@ jobs:
 
   gate:
     name: gate
-    needs: [changes, backend, deploy]
+    needs: [changes, backend, frontend, deploy]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     permissions: {}
@@ -111,15 +123,23 @@ jobs:
           fi
 
           be_needed='${{ needs.changes.outputs.backend }}'
+          fe_needed='${{ needs.changes.outputs.frontend }}'
           deploy_needed='${{ needs.changes.outputs.deploy }}'
           be_result='${{ needs.backend.result }}'
+          fe_result='${{ needs.frontend.result }}'
           deploy_result='${{ needs.deploy.result }}'
 
           echo "backend needed: ${be_needed}, result: ${be_result}"
+          echo "frontend needed: ${fe_needed}, result: ${fe_result}"
           echo "deploy needed: ${deploy_needed}, result: ${deploy_result}"
 
           if [[ "${be_needed}" == "true" && "${be_result}" != "success" ]]; then
             echo "Backend checks were required but did not succeed."
+            exit 1
+          fi
+
+          if [[ "${fe_needed}" == "true" && "${fe_result}" != "success" ]]; then
+            echo "Frontend checks were required but did not succeed."
             exit 1
           fi
 

@@ -62,11 +62,24 @@ jobs:
       - name: Setup .NET
         if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
         uses: actions/setup-dotnet@v6
+
+      # Restore-only: the build job in dotnet.yml is the only job that saves the NuGet cache.
+      # Before, this job shared that key and usually saved it first, which locked build out.
+      # See the verify-format job in dotnet.yml for why the key and path look like this.
+      - name: Locate NuGet global-packages folder
+        id: nuget
+        if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
+        run: |
+          path="$(dotnet nuget locals global-packages --list --force-english-output | sed -n 's/^global-packages: //p')"
+          echo "path=${path:?could not resolve the NuGet global-packages folder}" >> "$GITHUB_OUTPUT"
+
+      - name: Restore NuGet cache
+        if: matrix.build-mode == 'manual' && matrix.language == 'csharp'
+        uses: actions/cache/restore@v6
         with:
-          cache: true
-          cache-dependency-path: |
-            **/packages.lock.json
-            **/dotnet-tools.json
+          path: ${{ steps.nuget.outputs.path }}
+          key: dotnet-cache-${{ runner.os }}-${{ hashFiles('**/packages.lock.json', '**/dotnet-tools.json') }}
+          restore-keys: dotnet-cache-${{ runner.os }}-
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL

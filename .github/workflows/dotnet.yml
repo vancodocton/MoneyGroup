@@ -26,12 +26,31 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
+
+      # Restore-only. The build job below is the only job that saves the NuGet cache. If a
+      # parallel job saved it too, it could reserve the key first and lock the build job out
+      # ("Unable to reserve cache ... another job may be creating this cache"), and its entry
+      # would lack the dotnet tools and the Aspire CLI bundle package that only build restores.
+      # setup-dotnet has no restore-only mode, so this mirrors its `cache: true` lookup:
+      # - key: `dotnet-cache-<RUNNER_OS>-<hash of the build job's cache-dependency-path>`;
+      #   keep the hashFiles() patterns in sync with that input.
+      # - path: the global-packages folder exactly as `dotnet nuget locals` prints it (trailing
+      #   slash included). The path string is part of the cache version, so `~/.nuget/packages`
+      #   would never match the entry setup-dotnet saved.
+      - name: Locate NuGet global-packages folder
+        id: nuget
+        run: |
+          path="$(dotnet nuget locals global-packages --list --force-english-output | sed -n 's/^global-packages: //p')"
+          echo "path=${path:?could not resolve the NuGet global-packages folder}" >> "$GITHUB_OUTPUT"
+
+      - name: Restore NuGet cache
+        uses: actions/cache/restore@v6
         with:
-          cache: true
-          # Differs from the build job on purpose: a shared key lets this job save first and lock out
-          # the build job's cache, which also holds the dotnet tools and the Aspire CLI bundle package.
-          cache-dependency-path: |
-            **/packages.lock.json
+          path: ${{ steps.nuget.outputs.path }}
+          key: dotnet-cache-${{ runner.os }}-${{ hashFiles('**/packages.lock.json', '**/dotnet-tools.json') }}
+          # On a lock-file change the build job has not saved the new key yet; fall back to
+          # the latest entry so only the changed packages are downloaded.
+          restore-keys: dotnet-cache-${{ runner.os }}-
 
       - name: Verify Format
         run: dotnet format ${{ env.Solution }} --verify-no-changes -v diag --severity info
@@ -59,6 +78,8 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
+          # The only job that saves the NuGet cache. verify-format and CodeQL restore this
+          # entry read-only, so keep their hashFiles() patterns in sync with this list.
           cache: true
           cache-dependency-path: |
             **/packages.lock.json

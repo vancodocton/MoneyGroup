@@ -1,19 +1,35 @@
-name: Azure Static Web Apps CI/CD
+name: Azure Static Web Apps PR preview
 
+# PR previews only. Production deploys come from the deploy-web job in gate.yml.
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - src/ClientApp/**
   pull_request:
+    # `closed` is what lets close_pull_request_job remove the preview.
+    types: [opened, synchronize, reopened, closed]
     branches: ["main"]
     paths:
       - src/ClientApp/**
+      - .github/workflows/azure-static-web-apps-mango-forest-03b3e8000.yml
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+# Dependabot and fork PRs have no deployment token, so skip the deploy instead of
+# failing.
+env:
+  SKIP_DEPLOY_ON_MISSING_SECRETS: true
+
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -52,7 +68,7 @@ jobs:
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
     steps:

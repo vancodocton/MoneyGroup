@@ -14,6 +14,7 @@ codeql-config:
   - '.github/actions/detect-changes/**'
   - '.github/filters.yml'
 
+# Also decides the API image: it is rebuilt, and on main deployed, for any of these.
 backend:
   - 'src/AppHost/**'
   - 'src/ClientApp/*.esproj'
@@ -31,18 +32,7 @@ backend:
   - 'global.json'
   - '.config/dotnet-tools.json'
   - 'testconfig.json'
+  - '.dockerignore'
 
 frontend:
   - 'src/ClientApp/**'
-
-# What ends up in the API image. Keep in step with src/WebApi/Dockerfile.
-image:
-  - 'src/Core/**'
-  - 'src/Infrastructure/**'
-  - 'src/Infrastructure.SqlServer/**'
-  - 'src/ServiceDefaults/**'
-  - 'src/WebApi/**'
-  - 'Directory.*.props'
-  - 'Directory.*.targets'
-  - 'global.json'
-  - '.dockerignore'

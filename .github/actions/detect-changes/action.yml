@@ -1,9 +1,10 @@
 name: Detect changes
 description: >-
   Reports which areas in .github/filters.yml changed. PRs compare against their
-  base branch. Pushes compare against the last successful run of the workflow, so
-  a change whose run failed or was cancelled is picked up by the next run. The
-  caller must check out with fetch-depth 0 and grant actions read permission.
+  base branch. Pushes compare against the last successful push or manual run of
+  the workflow, so a change whose run failed or was cancelled is picked up by the
+  next run. Other events report everything as changed. The caller must check out
+  with fetch-depth 0 and grant actions read permission.
 
 inputs:
   workflow:
@@ -23,9 +24,6 @@ outputs:
   frontend:
     description: Whether frontend paths changed.
     value: ${{ steps.scope.outputs.mode == 'full' || steps.filter.outputs.frontend == 'true' }}
-  image:
-    description: Whether paths in the API image changed.
-    value: ${{ steps.scope.outputs.mode == 'full' || steps.filter.outputs.image == 'true' }}
 
 runs:
   using: composite

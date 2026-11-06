@@ -15,14 +15,16 @@ case "${EVENT}" in
   push)
     # Comparing against the previous commit would lose changes: a newer run
     # replaces a pending one in the concurrency group, so a commit can end up
-    # with no run at all. The last successful run has no such gap.
+    # with no run at all. The last successful run has no such gap. Scheduled runs
+    # don't count because they never deploy, so one passing must not hide a
+    # failed deploy.
     last_success="$(gh run list \
       --workflow "${WORKFLOW}" \
       --branch "${BRANCH}" \
       --status success \
       --limit 20 \
       --json headSha,event \
-      --jq '[.[] | select(.event != "pull_request")][0].headSha // ""')" || {
+      --jq '[.[] | select(.event == "push" or .event == "workflow_dispatch")][0].headSha // ""')" || {
       echo "::warning::Could not read run history, so running everything."
       last_success=""
     }

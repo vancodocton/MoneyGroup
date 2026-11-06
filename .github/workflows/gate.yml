@@ -5,9 +5,13 @@ on:
     branches: ["main"]
   # Runs every job, and deploys when started on main.
   workflow_dispatch:
+  # Runs every job as a health check, and never publishes or deploys.
+  schedule:
+    - cron: "13 1 * * 4"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # Scheduled runs get their own group, so one can't replace a queued deploy.
+  group: ${{ github.workflow }}-${{ github.event_name == 'schedule' && 'schedule' || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -23,9 +27,8 @@ jobs:
       # it does not run them again or deploy.
       backend: ${{ steps.changes.outputs.backend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.ci-config == 'true') }}
       frontend: ${{ steps.changes.outputs.frontend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.ci-config == 'true') }}
-      image: ${{ steps.changes.outputs.image == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.ci-config == 'true') }}
-      deploy-api: ${{ steps.changes.outputs.image == 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
-      deploy-web: ${{ steps.changes.outputs.frontend == 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+      deploy-api: ${{ steps.changes.outputs.backend == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
+      deploy-web: ${{ steps.changes.outputs.frontend == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -60,7 +63,7 @@ jobs:
   image:
     uses: ./.github/workflows/docker.yml
     needs: [changes, backend]
-    if: ${{ !cancelled() && needs.changes.outputs.image == 'true' && needs.backend.result != 'failure' }}
+    if: ${{ needs.changes.outputs.backend == 'true' }}
     with:
       publish: ${{ needs.changes.outputs.deploy-api == 'true' }}
     permissions:
@@ -89,14 +92,13 @@ jobs:
 
           be_needed='${{ needs.changes.outputs.backend }}'
           fe_needed='${{ needs.changes.outputs.frontend }}'
-          image_needed='${{ needs.changes.outputs.image }}'
           be_result='${{ needs.backend.result }}'
           fe_result='${{ needs.frontend.result }}'
           image_result='${{ needs.image.result }}'
 
           echo "backend needed: ${be_needed}, result: ${be_result}"
           echo "frontend needed: ${fe_needed}, result: ${fe_result}"
-          echo "image needed: ${image_needed}, result: ${image_result}"
+          echo "image needed: ${be_needed}, result: ${image_result}"
 
           if [[ "${be_needed}" == "true" && "${be_result}" != "success" ]]; then
             echo "Backend checks were required but did not succeed."
@@ -108,7 +110,7 @@ jobs:
             exit 1
           fi
 
-          if [[ "${image_needed}" == "true" && "${image_result}" != "success" ]]; then
+          if [[ "${be_needed}" == "true" && "${image_result}" != "success" ]]; then
             echo "Image build was required but did not succeed."
             exit 1
           fi

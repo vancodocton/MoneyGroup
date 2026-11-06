@@ -8,7 +8,10 @@ version: 2
 updates:
   - package-ecosystem: "github-actions"
     # Workflow files stored in the default location of `.github/workflows`. (You don't need to specify `/.github/workflows` for `directory`. You can use `directory: "/"`.)
-    directory: "/"
+    # "/" alone would miss the pins inside local composite actions.
+    directories:
+      - "/"
+      - "/.github/actions/*"
     schedule:
       # Check for updates to GitHub Actions every weekday
       interval: "daily"
@@ -50,6 +53,20 @@ updates:
           - "xunit*"
           - "dotnet-coverage"
           - "NSubstitute*"
+
+  - package-ecosystem: "npm"
+    directory: "/src/ClientApp"
+    schedule:
+      interval: "weekly"
+    groups:
+      ClientApp:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "docker"
+    directory: "/src/WebApi"
+    schedule:
+      interval: "weekly"
 
   - package-ecosystem: "devcontainers"
     directory: "/"

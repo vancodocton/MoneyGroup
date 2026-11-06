@@ -1,13 +1,17 @@
 on:
   push:
-    branches: ["main", "dev"]
-    tags: ["v*.*.*"]
+    branches: ["main"]
   pull_request:
-    branches: ["main", "dev"]
+    branches: ["main"]
+  # Runs every job, and deploys when started on main.
   workflow_dispatch:
+  # Runs every job as a health check, and never publishes or deploys.
+  schedule:
+    - cron: "13 1 * * 4"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # Scheduled runs get their own group, so one can't replace a queued deploy.
+  group: ${{ github.workflow }}-${{ github.event_name == 'schedule' && 'schedule' || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -15,46 +19,27 @@ jobs:
     name: detect changes
     permissions:
       contents: read
+      actions: read
+      pull-requests: read
     runs-on: ubuntu-latest
     outputs:
-      backend: ${{ steps.filter.outputs.backend == 'true' }}
-      frontend: ${{ steps.filter.outputs.frontend == 'true' }}
-      deploy: ${{ steps.filter.outputs.deploy == 'true' || steps.filter.outputs.backend == 'true' }}
+      # A CI change runs every job on its PR. Once merged it has been proven, so
+      # it does not run them again or deploy.
+      backend: ${{ steps.changes.outputs.backend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.ci-config == 'true') }}
+      frontend: ${{ steps.changes.outputs.frontend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.ci-config == 'true') }}
+      deploy-api: ${{ steps.changes.outputs.backend == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
+      deploy-web: ${{ steps.changes.outputs.frontend == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - name: Detect changed paths
-        id: filter
-        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+      - name: Detect changes
+        id: changes
+        uses: ./.github/actions/detect-changes
         with:
-          filters: |
-            backend:
-              - 'src/AppHost/**'
-              - 'src/ClientApp/*.esproj'
-              - 'src/Core/**'
-              - 'src/Infrastructure/**'
-              - 'src/Infrastructure.PostgreSql/**'
-              - 'src/Infrastructure.SqlServer/**'
-              - 'src/Postgres.Migrator/**'
-              - 'src/ServiceDefaults/**'
-              - 'src/WebApi/**'
-              - 'test/**'
-              - 'MoneyGroup.slnx'
-              - 'Directory.*.props'
-              - 'Directory.*.targets'
-              - 'global.json'
-              - '.config/dotnet-tools.json'
-              - 'testconfig.json'
-              - '.github/workflows/**'
-            frontend:
-              - 'src/ClientApp/**'
-              - '.github/workflows/**'
-            deploy:
-              - '.github/workflows/**'
-              - '.dockerignore'
+          workflow: gate.yml
 
   backend:
     uses: ./.github/workflows/dotnet.yml
@@ -75,38 +60,21 @@ jobs:
     permissions:
       contents: read
 
-  deploy:
+  image:
     uses: ./.github/workflows/docker.yml
     needs: [changes, backend]
-    if: ${{ !cancelled() && needs.changes.outputs.deploy == 'true' && needs.backend.result != 'failure' }}
+    if: ${{ needs.changes.outputs.backend == 'true' }}
     with:
-      is-cd: ${{ github.event_name != 'pull_request' }}
-      do-deploy: ${{ github.ref == 'refs/heads/main' }}
-      environment: Development
-    # `secrets: inherit` is load-bearing here — do not narrow it without reading
-    # this first. docker.yml's deploy job reads AZURE_CLIENT_ID / AZURE_TENANT_ID /
-    # AZURE_SUBSCRIPTION_ID / AZURE_CONTAINER_APP_NAME / AZURE_RESOURCE_GROUP, which
-    # exist ONLY as secrets of the `Development` environment that job declares.
-    #
-    # A called workflow's `secrets` context is populated solely from what the caller
-    # passes. Declaring `environment:` in the callee does not by itself pull that
-    # environment's secrets into scope — `inherit` is what lets the callee resolve
-    # secrets against the repository/environment store. Dropping it in #419 left
-    # client-id and tenant-id empty and broke `azure/login` on the first main push
-    # (run 31789136623); docker.yml was byte-identical to the last green run.
-    #
-    # Listing the AZURE_* secrets explicitly cannot work either: a job that `uses:`
-    # a reusable workflow may not declare `environment:`, so they are out of scope
-    # at this caller and would forward empty strings — the same failure.
-    secrets: inherit
+      publish: ${{ needs.changes.outputs.deploy-api == 'true' }}
     permissions:
       contents: read
       packages: write
       id-token: write
 
+  # The single required check. Its job name must stay `gate`.
   gate:
     name: gate
-    needs: [changes, backend, frontend, deploy]
+    needs: [changes, backend, frontend, image]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     permissions: {}
@@ -124,14 +92,13 @@ jobs:
 
           be_needed='${{ needs.changes.outputs.backend }}'
           fe_needed='${{ needs.changes.outputs.frontend }}'
-          deploy_needed='${{ needs.changes.outputs.deploy }}'
           be_result='${{ needs.backend.result }}'
           fe_result='${{ needs.frontend.result }}'
-          deploy_result='${{ needs.deploy.result }}'
+          image_result='${{ needs.image.result }}'
 
           echo "backend needed: ${be_needed}, result: ${be_result}"
           echo "frontend needed: ${fe_needed}, result: ${fe_result}"
-          echo "deploy needed: ${deploy_needed}, result: ${deploy_result}"
+          echo "image needed: ${be_needed}, result: ${image_result}"
 
           if [[ "${be_needed}" == "true" && "${be_result}" != "success" ]]; then
             echo "Backend checks were required but did not succeed."
@@ -143,9 +110,85 @@ jobs:
             exit 1
           fi
 
-          if [[ "${deploy_needed}" == "true" && "${deploy_result}" != "success" ]]; then
-            echo "Deploy checks were required but did not succeed."
+          if [[ "${be_needed}" == "true" && "${image_result}" != "success" ]]; then
+            echo "Image build was required but did not succeed."
             exit 1
           fi
 
           echo "Monorepo gate passed."
+
+  # Deploy jobs live here rather than in a reusable workflow so they can declare
+  # `environment:` themselves. That unlocks the AZURE_* environment secrets
+  # without `secrets: inherit`, which would hand every secret to the image build.
+  deploy-api:
+    name: deploy api
+    needs: [changes, image, gate]
+    if: ${{ !cancelled() && needs.gate.result == 'success' && needs.image.result == 'success' && needs.changes.outputs.deploy-api == 'true' }}
+    runs-on: ubuntu-latest
+    environment: Development
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
+    steps:
+      - name: Log in to Azure
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Build the immutable image reference from the digest the image job
+      # produced and signed. github.repository is mixed case
+      # (vancodocton/MoneyGroup) and container registries reject non-lowercase
+      # paths, so lowercase it here.
+      - name: Resolve image reference
+        id: image
+        env:
+          DIGEST: ${{ needs.image.outputs.digest }}
+        run: |
+          if [[ -z "${DIGEST}" ]]; then
+            echo "::error::image job produced no digest, refusing to deploy."
+            exit 1
+          fi
+          echo "ref=${REGISTRY,,}/${IMAGE_NAME,,}@${DIGEST}" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy Azure Container App
+        uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703 # v2
+        with:
+          containerAppName: ${{ secrets.AZURE_CONTAINER_APP_NAME }}
+          resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          registryUrl: ${{ env.REGISTRY }}
+          imageToDeploy: ${{ steps.image.outputs.ref }}
+
+  # Ships the dist the frontend job already built and linted.
+  deploy-web:
+    name: deploy web
+    needs: [changes, frontend, gate]
+    if: ${{ !cancelled() && needs.gate.result == 'success' && needs.frontend.result == 'success' && needs.changes.outputs.deploy-web == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: clientapp-dist
+          path: src/ClientApp/dist
+
+      - name: Deploy Static Web App
+        uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9 # v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_MANGO_FOREST_03B3E8000 }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "/src/ClientApp/dist"
+          api_location: ""
+          output_location: ""
+          skip_app_build: true
+          production_branch: main

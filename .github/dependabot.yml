@@ -8,10 +8,7 @@ version: 2
 updates:
   - package-ecosystem: "github-actions"
     # Workflow files stored in the default location of `.github/workflows`. (You don't need to specify `/.github/workflows` for `directory`. You can use `directory: "/"`.)
-    # "/" alone would miss the pins inside local composite actions.
-    directories:
-      - "/"
-      - "/.github/actions/*"
+    directory: "/"
     schedule:
       # Check for updates to GitHub Actions every weekday
       interval: "daily"

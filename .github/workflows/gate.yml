@@ -26,19 +26,57 @@ jobs:
     outputs:
       # A CI change runs every job on its PR. Once merged it has been proven, so
       # it does not run them again or deploy.
-      backend: ${{ steps.changes.outputs.backend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.ci-config == 'true') }}
-      frontend: ${{ steps.changes.outputs.frontend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.ci-config == 'true') }}
-      deploy-api: ${{ steps.changes.outputs.backend == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
-      deploy-web: ${{ steps.changes.outputs.frontend == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
+      backend: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.backend == 'true' || (github.event_name == 'pull_request' && steps.filter.outputs.ci-config == 'true') }}
+      frontend: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.frontend == 'true' || (github.event_name == 'pull_request' && steps.filter.outputs.ci-config == 'true') }}
+      deploy-api: ${{ (steps.filter.outcome == 'skipped' || steps.filter.outputs.backend == 'true') && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
+      deploy-web: ${{ (steps.filter.outcome == 'skipped' || steps.filter.outputs.frontend == 'true') && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
+      codeql-actions: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.ci-config == 'true' }}
+      codeql-csharp: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.backend == 'true' || steps.filter.outputs.codeql-config == 'true' }}
+      codeql-js: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.frontend == 'true' || steps.filter.outputs.codeql-config == 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - name: Detect changes
-        id: changes
-        uses: ./.github/actions/detect-changes
+      # Skipped on cron and manual runs, which counts as everything having changed.
+      - name: Detect changed paths
+        id: filter
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: |
+            # CI itself. On a PR this runs every job, so a workflow change is proven
+            # before it merges. It also scans the workflows with CodeQL.
+            ci-config:
+              - '.github/workflows/**'
+
+            # Changes to how CodeQL runs, which can change the results for every language.
+            codeql-config:
+              - '.github/workflows/codeql.yml'
+
+            # Also decides the API image: it is rebuilt, and on main deployed, for any of these.
+            backend:
+              - 'src/AppHost/**'
+              - 'src/ClientApp/*.esproj'
+              - 'src/Core/**'
+              - 'src/Infrastructure/**'
+              - 'src/Infrastructure.PostgreSql/**'
+              - 'src/Infrastructure.SqlServer/**'
+              - 'src/Postgres.Migrator/**'
+              - 'src/ServiceDefaults/**'
+              - 'src/WebApi/**'
+              - 'test/**'
+              - 'MoneyGroup.slnx'
+              - 'Directory.*.props'
+              - 'Directory.*.targets'
+              - 'global.json'
+              - '.config/dotnet-tools.json'
+              - 'testconfig.json'
+              - '.dockerignore'
+
+            frontend:
+              - 'src/ClientApp/**'
 
   backend:
     uses: ./.github/workflows/dotnet.yml
@@ -63,6 +101,45 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.frontend == 'true' }}
     permissions:
+      contents: read
+
+  # The CodeQL jobs are deliberately not in `gate`'s needs. A failed scan turns the
+  # run red but doesn't block merges or deploys, and "Re-run failed jobs" retries
+  # only the scan.
+  codeql-actions:
+    uses: ./.github/workflows/codeql.yml
+    needs: changes
+    if: ${{ needs.changes.outputs.codeql-actions == 'true' }}
+    with:
+      language: actions
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+  codeql-csharp:
+    uses: ./.github/workflows/codeql.yml
+    needs: changes
+    if: ${{ needs.changes.outputs.codeql-csharp == 'true' }}
+    with:
+      language: csharp
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+  codeql-js:
+    uses: ./.github/workflows/codeql.yml
+    needs: changes
+    if: ${{ needs.changes.outputs.codeql-js == 'true' }}
+    with:
+      language: javascript-typescript
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
       contents: read
 
   # The single required check. Its job name must stay `gate`.
@@ -119,9 +196,9 @@ jobs:
       packages: write
       id-token: write
 
-  # Deploy jobs live here rather than in a reusable workflow so they can declare
-  # `environment:` themselves. That unlocks the AZURE_* environment secrets
-  # without `secrets: inherit`, which would hand every secret to the image build.
+  # Lives here rather than in a reusable workflow so it can declare `environment:`
+  # itself. That unlocks the AZURE_* environment secrets without `secrets: inherit`,
+  # which would let the called workflow read every secret.
   deploy-api:
     name: deploy api
     needs: publish-image

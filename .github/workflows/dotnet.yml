@@ -5,6 +5,16 @@ permissions:
 
 on:
   workflow_call:
+    inputs:
+      publish:
+        type: boolean
+        required: false
+        description: Whether to push and sign the image. Otherwise it only builds, to validate a PR.
+        default: false
+    outputs:
+      digest:
+        description: Immutable digest of the image, so a deploy ships exactly what was built and signed.
+        value: ${{ jobs.image.outputs.digest }}
     secrets:
       SONAR_TOKEN:
         description: SonarQube Cloud analysis token, used by the begin/end scanner steps.
@@ -116,3 +126,16 @@ jobs:
           slug: vancodocton/MoneyGroup
           disable_search: true
           files: ./coverage.xml
+
+  # A separate job, so the one that can push and sign packages never holds the
+  # Sonar and Codecov tokens. It only runs once format and tests have passed.
+  image:
+    name: Image
+    needs: [verify-format, build]
+    uses: ./.github/workflows/docker.yml
+    with:
+      publish: ${{ inputs.publish }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write

@@ -25,7 +25,10 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # A new push replaces a PR's run. Every other run gets its own group, because
+  # pushes compare against the previous commit, so a replaced run would lose its
+  # changes.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -33,7 +36,6 @@ jobs:
     name: detect changes
     permissions:
       contents: read
-      actions: read
       pull-requests: read
     runs-on: ubuntu-latest
     outputs:
@@ -47,8 +49,6 @@ jobs:
       - name: Detect changes
         id: changes
         uses: ./.github/actions/detect-changes
-        with:
-          workflow: codeql.yml
 
       - name: Pick languages
         id: pick

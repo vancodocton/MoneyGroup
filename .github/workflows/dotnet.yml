@@ -6,15 +6,11 @@ permissions:
 on:
   workflow_call:
     inputs:
-      publish:
+      skip-image-check:
         type: boolean
         required: false
-        description: Whether to push and sign the image. Otherwise it only builds, to validate a PR.
+        description: Skip the image check, for runs that build the image anyway to publish it.
         default: false
-    outputs:
-      digest:
-        description: Immutable digest of the image, so a deploy ships exactly what was built and signed.
-        value: ${{ jobs.image.outputs.digest }}
     secrets:
       SONAR_TOKEN:
         description: SonarQube Cloud analysis token, used by the begin/end scanner steps.
@@ -127,15 +123,13 @@ jobs:
           disable_search: true
           files: ./coverage.xml
 
-  # A separate job, so the one that can push and sign packages never holds the
-  # Sonar and Codecov tokens. It runs alongside format and tests to save time, so
-  # on main it can publish an image for a commit that then fails them. That image
-  # is never deployed: deploys wait for this whole workflow and use its digest.
+  # Only checks that the image builds, alongside format and tests to save time.
+  # docker.yml declares the permissions below, so they must be granted even though
+  # nothing is pushed. A separate job, so it never holds the Sonar and Codecov tokens.
   image:
     name: Image
+    if: ${{ !inputs.skip-image-check }}
     uses: ./.github/workflows/docker.yml
-    with:
-      publish: ${{ inputs.publish }}
     permissions:
       contents: read
       packages: write

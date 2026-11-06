@@ -44,10 +44,11 @@ jobs:
     uses: ./.github/workflows/dotnet.yml
     needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
+    with:
+      # `publish-image` builds it instead, so it isn't built twice.
+      skip-image-check: ${{ needs.changes.outputs.deploy-api == 'true' }}
     # Forward only the repository secrets dotnet.yml actually reads, instead of
     # handing it every repository secret via `secrets: inherit`.
-    with:
-      publish: ${{ needs.changes.outputs.deploy-api == 'true' }}
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -103,13 +104,28 @@ jobs:
 
           echo "Monorepo gate passed."
 
+  # Publishes only after `gate`, so a failed commit never gets a published image.
+  # A separate job, so the Docker build never runs alongside the Azure secrets, and
+  # re-running a failed deploy reuses this image.
+  publish-image:
+    name: publish image
+    needs: [changes, gate]
+    if: ${{ !cancelled() && needs.gate.result == 'success' && needs.changes.outputs.deploy-api == 'true' }}
+    uses: ./.github/workflows/docker.yml
+    with:
+      publish: true
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
   # Deploy jobs live here rather than in a reusable workflow so they can declare
   # `environment:` themselves. That unlocks the AZURE_* environment secrets
   # without `secrets: inherit`, which would hand every secret to the image build.
   deploy-api:
     name: deploy api
-    needs: [changes, backend, gate]
-    if: ${{ !cancelled() && needs.gate.result == 'success' && needs.backend.result == 'success' && needs.changes.outputs.deploy-api == 'true' }}
+    needs: publish-image
+    if: ${{ !cancelled() && needs.publish-image.result == 'success' }}
     runs-on: ubuntu-latest
     environment: Development
     concurrency: deploy-api
@@ -127,17 +143,17 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # Build the immutable image reference from the digest the backend workflow's
-      # image job produced and signed. github.repository is mixed case
+      # Build the immutable image reference from the digest the publish-image
+      # job produced and signed. github.repository is mixed case
       # (vancodocton/MoneyGroup) and container registries reject non-lowercase
       # paths, so lowercase it here.
       - name: Resolve image reference
         id: image
         env:
-          DIGEST: ${{ needs.backend.outputs.digest }}
+          DIGEST: ${{ needs.publish-image.outputs.digest }}
         run: |
           if [[ -z "${DIGEST}" ]]; then
-            echo "::error::image job produced no digest, refusing to deploy."
+            echo "::error::publish-image job produced no digest, refusing to deploy."
             exit 1
           fi
           echo "ref=${REGISTRY,,}/${IMAGE_NAME,,}@${DIGEST}" >> "$GITHUB_OUTPUT"

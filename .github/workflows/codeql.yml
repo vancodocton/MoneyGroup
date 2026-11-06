@@ -31,8 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       actions: ${{ steps.changes.outputs.ci-config }}
-      csharp: ${{ steps.changes.outputs.backend == 'true' || steps.changes.outputs.codeql-config == 'true' }}
-      js: ${{ steps.changes.outputs.frontend == 'true' || steps.changes.outputs.codeql-config == 'true' }}
+      backend: ${{ steps.changes.outputs.backend == 'true' || steps.changes.outputs.codeql-config == 'true' }}
+      frontend: ${{ steps.changes.outputs.frontend == 'true' || steps.changes.outputs.codeql-config == 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -68,10 +68,10 @@ jobs:
         with:
           category: "/language:actions"
 
-  analyze-csharp:
-    name: Analyze (csharp)
+  analyze-backend:
+    name: Analyze (backend)
     needs: changes
-    if: ${{ needs.changes.outputs.csharp == 'true' }}
+    if: ${{ needs.changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -106,10 +106,10 @@ jobs:
         with:
           category: "/language:csharp"
 
-  analyze-js:
-    name: Analyze (javascript-typescript)
+  analyze-frontend:
+    name: Analyze (frontend)
     needs: changes
-    if: ${{ needs.changes.outputs.js == 'true' }}
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       security-events: write

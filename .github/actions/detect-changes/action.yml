@@ -1,47 +1,30 @@
 name: Detect changes
 description: >-
   Reports which areas in .github/filters.yml changed. PRs compare against their
-  base branch. Pushes compare against the last successful push or manual run of
-  the workflow, so a change whose run failed or was cancelled is picked up by the
-  next run. Other events report everything as changed. The caller must check out
-  with fetch-depth 0 and grant actions read permission.
-
-inputs:
-  workflow:
-    description: File name of the calling workflow, such as gate.yml.
-    required: true
+  base branch and pushes against the previous commit. Other events, such as
+  schedule and workflow_dispatch, report everything as changed. The caller must
+  check out the repository first.
 
 outputs:
   ci-config:
     description: Whether CI configuration changed.
-    value: ${{ steps.scope.outputs.mode == 'full' || steps.filter.outputs.ci-config == 'true' }}
+    value: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.ci-config == 'true' }}
   codeql-config:
     description: Whether CodeQL configuration changed.
-    value: ${{ steps.scope.outputs.mode == 'full' || steps.filter.outputs.codeql-config == 'true' }}
+    value: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.codeql-config == 'true' }}
   backend:
     description: Whether backend paths changed.
-    value: ${{ steps.scope.outputs.mode == 'full' || steps.filter.outputs.backend == 'true' }}
+    value: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.backend == 'true' }}
   frontend:
     description: Whether frontend paths changed.
-    value: ${{ steps.scope.outputs.mode == 'full' || steps.filter.outputs.frontend == 'true' }}
+    value: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.frontend == 'true' }}
 
 runs:
   using: composite
   steps:
-    - name: Choose comparison
-      id: scope
-      shell: bash
-      env:
-        GH_TOKEN: ${{ github.token }}
-        EVENT: ${{ github.event_name }}
-        BRANCH: ${{ github.ref_name }}
-        WORKFLOW: ${{ inputs.workflow }}
-      run: bash "${GITHUB_ACTION_PATH}/scope.sh"
-
     - name: Detect changed paths
       id: filter
-      if: ${{ steps.scope.outputs.mode == 'filter' }}
+      if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
       uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
       with:
-        base: ${{ steps.scope.outputs.base }}
         filters: .github/filters.yml

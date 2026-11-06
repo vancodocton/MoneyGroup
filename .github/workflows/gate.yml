@@ -10,8 +10,10 @@ on:
     - cron: "13 1 * * 4"
 
 concurrency:
-  # Scheduled runs get their own group, so one can't replace a queued deploy.
-  group: ${{ github.workflow }}-${{ github.event_name == 'schedule' && 'schedule' || github.ref }}
+  # A new push replaces a PR's run. Every other run gets its own group, because
+  # pushes compare against the previous commit, so a replaced run would lose its
+  # changes. The deploy jobs queue separately.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -19,7 +21,6 @@ jobs:
     name: detect changes
     permissions:
       contents: read
-      actions: read
       pull-requests: read
     runs-on: ubuntu-latest
     outputs:
@@ -38,8 +39,6 @@ jobs:
       - name: Detect changes
         id: changes
         uses: ./.github/actions/detect-changes
-        with:
-          workflow: gate.yml
 
   backend:
     uses: ./.github/workflows/dotnet.yml
@@ -126,6 +125,7 @@ jobs:
     if: ${{ !cancelled() && needs.gate.result == 'success' && needs.image.result == 'success' && needs.changes.outputs.deploy-api == 'true' }}
     runs-on: ubuntu-latest
     environment: Development
+    concurrency: deploy-api
     permissions:
       id-token: write
       contents: read
@@ -169,6 +169,7 @@ jobs:
     needs: [changes, frontend, gate]
     if: ${{ !cancelled() && needs.gate.result == 'success' && needs.frontend.result == 'success' && needs.changes.outputs.deploy-web == 'true' }}
     runs-on: ubuntu-latest
+    concurrency: deploy-web
     permissions:
       contents: read
     steps:

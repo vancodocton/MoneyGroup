@@ -8,3 +8,4 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 )
+// CI test for AC 3: client change. Do not merge.

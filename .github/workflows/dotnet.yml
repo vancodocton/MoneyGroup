@@ -5,6 +5,12 @@ permissions:
 
 on:
   workflow_call:
+    inputs:
+      skip-image-check:
+        type: boolean
+        required: false
+        description: Skip the image check, for runs that build the image anyway to publish it.
+        default: false
     secrets:
       SONAR_TOKEN:
         description: SonarQube Cloud analysis token, used by the begin/end scanner steps.
@@ -116,3 +122,15 @@ jobs:
           slug: vancodocton/MoneyGroup
           disable_search: true
           files: ./coverage.xml
+
+  # Only checks that the image builds, alongside format and tests to save time.
+  # docker.yml declares the permissions below, so they must be granted even though
+  # nothing is pushed. A separate job, so it never holds the Sonar and Codecov tokens.
+  image:
+    name: Image
+    if: ${{ !inputs.skip-image-check }}
+    uses: ./.github/workflows/docker.yml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write

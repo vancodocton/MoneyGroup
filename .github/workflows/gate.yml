@@ -44,13 +44,19 @@ jobs:
     uses: ./.github/workflows/dotnet.yml
     needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
+    with:
+      # `publish-image` builds it instead, so it isn't built twice.
+      skip-image-check: ${{ needs.changes.outputs.deploy-api == 'true' }}
     # Forward only the repository secrets dotnet.yml actually reads, instead of
     # handing it every repository secret via `secrets: inherit`.
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    # The image job inside needs these. Each job there declares only what it uses.
     permissions:
       contents: read
+      packages: write
+      id-token: write
 
   frontend:
     uses: ./.github/workflows/clientapp.yml
@@ -59,21 +65,10 @@ jobs:
     permissions:
       contents: read
 
-  image:
-    uses: ./.github/workflows/docker.yml
-    needs: [changes, backend]
-    if: ${{ needs.changes.outputs.backend == 'true' }}
-    with:
-      publish: ${{ needs.changes.outputs.deploy-api == 'true' }}
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-
   # The single required check. Its job name must stay `gate`.
   gate:
     name: gate
-    needs: [changes, backend, frontend, image]
+    needs: [changes, backend, frontend]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     permissions: {}
@@ -93,11 +88,9 @@ jobs:
           fe_needed='${{ needs.changes.outputs.frontend }}'
           be_result='${{ needs.backend.result }}'
           fe_result='${{ needs.frontend.result }}'
-          image_result='${{ needs.image.result }}'
 
           echo "backend needed: ${be_needed}, result: ${be_result}"
           echo "frontend needed: ${fe_needed}, result: ${fe_result}"
-          echo "image needed: ${be_needed}, result: ${image_result}"
 
           if [[ "${be_needed}" == "true" && "${be_result}" != "success" ]]; then
             echo "Backend checks were required but did not succeed."
@@ -109,20 +102,30 @@ jobs:
             exit 1
           fi
 
-          if [[ "${be_needed}" == "true" && "${image_result}" != "success" ]]; then
-            echo "Image build was required but did not succeed."
-            exit 1
-          fi
-
           echo "Monorepo gate passed."
+
+  # Publishes only after `gate`, so a failed commit never gets a published image.
+  # A separate job, so the Docker build never runs alongside the Azure secrets, and
+  # re-running a failed deploy reuses this image.
+  publish-image:
+    name: publish image
+    needs: [changes, gate]
+    if: ${{ !cancelled() && needs.gate.result == 'success' && needs.changes.outputs.deploy-api == 'true' }}
+    uses: ./.github/workflows/docker.yml
+    with:
+      publish: true
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
 
   # Deploy jobs live here rather than in a reusable workflow so they can declare
   # `environment:` themselves. That unlocks the AZURE_* environment secrets
   # without `secrets: inherit`, which would hand every secret to the image build.
   deploy-api:
     name: deploy api
-    needs: [changes, image, gate]
-    if: ${{ !cancelled() && needs.gate.result == 'success' && needs.image.result == 'success' && needs.changes.outputs.deploy-api == 'true' }}
+    needs: publish-image
+    if: ${{ !cancelled() && needs.publish-image.result == 'success' }}
     runs-on: ubuntu-latest
     environment: Development
     concurrency: deploy-api
@@ -140,17 +143,17 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # Build the immutable image reference from the digest the image job
-      # produced and signed. github.repository is mixed case
+      # Build the immutable image reference from the digest the publish-image
+      # job produced and signed. github.repository is mixed case
       # (vancodocton/MoneyGroup) and container registries reject non-lowercase
       # paths, so lowercase it here.
       - name: Resolve image reference
         id: image
         env:
-          DIGEST: ${{ needs.image.outputs.digest }}
+          DIGEST: ${{ needs.publish-image.outputs.digest }}
         run: |
           if [[ -z "${DIGEST}" ]]; then
-            echo "::error::image job produced no digest, refusing to deploy."
+            echo "::error::publish-image job produced no digest, refusing to deploy."
             exit 1
           fi
           echo "ref=${REGISTRY,,}/${IMAGE_NAME,,}@${DIGEST}" >> "$GITHUB_OUTPUT"

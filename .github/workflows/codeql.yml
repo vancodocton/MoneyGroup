@@ -2,6 +2,9 @@ name: "CodeQL Advanced"
 
 # Deliberately not called from gate.yml, so a failed scan doesn't turn a deploy run
 # red. One job per language that changed, and every language on cron and manual runs.
+#
+# Keep the job IDs and categories: code scanning identifies an analysis by workflow,
+# job and category, so changing them would split the alert history.
 on:
   push:
     branches: ["main"]
@@ -18,18 +21,6 @@ concurrency:
   # changes.
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
-# What the scan jobs need. `changes` declares its own.
-permissions:
-  # required for all workflows
-  security-events: write
-
-  # required to fetch internal or private CodeQL packs
-  packages: read
-
-  # only required for workflows in private repositories
-  actions: read
-  contents: read
 
 jobs:
   changes:
@@ -52,23 +43,90 @@ jobs:
         id: changes
         uses: ./.github/actions/detect-changes
 
-  codeql-actions:
-    uses: ./.github/workflows/codeql-analyze.yml
+  analyze-actions:
+    name: Analyze (actions)
     needs: changes
     if: ${{ needs.changes.outputs.actions == 'true' }}
-    with:
-      language: actions
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
 
-  codeql-csharp:
-    uses: ./.github/workflows/codeql-analyze.yml
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          languages: actions
+          build-mode: none
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          category: "/language:actions"
+
+  analyze-csharp:
+    name: Analyze (csharp)
     needs: changes
     if: ${{ needs.changes.outputs.csharp == 'true' }}
-    with:
-      language: csharp
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
 
-  codeql-js:
-    uses: ./.github/workflows/codeql-analyze.yml
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          cache: true
+          cache-dependency-path: |
+            **/packages.lock.json
+            **/dotnet-tools.json
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          languages: csharp
+          build-mode: manual
+
+      - name: Build
+        shell: bash
+        run: |
+          dotnet build --configuration Release MoneyGroup.slnx
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          category: "/language:csharp"
+
+  analyze-js:
+    name: Analyze (javascript-typescript)
     needs: changes
     if: ${{ needs.changes.outputs.js == 'true' }}
-    with:
-      language: javascript-typescript
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          languages: javascript-typescript
+          build-mode: none
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          category: "/language:javascript-typescript"

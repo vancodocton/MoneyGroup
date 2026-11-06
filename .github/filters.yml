@@ -11,6 +11,7 @@ ci-config:
 # Changes to how CodeQL runs, which can change the results for every language.
 codeql-config:
   - '.github/workflows/codeql.yml'
+  - '.github/workflows/codeql-analyze.yml'
   - '.github/actions/detect-changes/**'
   - '.github/filters.yml'
 

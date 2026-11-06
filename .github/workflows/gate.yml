@@ -119,9 +119,9 @@ jobs:
       packages: write
       id-token: write
 
-  # Deploy jobs live here rather than in a reusable workflow so they can declare
-  # `environment:` themselves. That unlocks the AZURE_* environment secrets
-  # without `secrets: inherit`, which would hand every secret to the image build.
+  # Lives here rather than in a reusable workflow so it can declare `environment:`
+  # itself. That unlocks the AZURE_* environment secrets without `secrets: inherit`,
+  # which would let the called workflow read every secret.
   deploy-api:
     name: deploy api
     needs: publish-image

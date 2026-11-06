@@ -45,3 +45,4 @@ test/
 ## License
 
 See [LICENSE.txt](LICENSE.txt)
+<!-- CI test for AC 1: docs-only change. Do not merge. -->

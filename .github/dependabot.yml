@@ -47,6 +47,9 @@ updates:
       Ardalis.Specification:
         patterns:
           - "Ardalis.Specification*"
+      OpenTelemetry:
+        patterns:
+          - "OpenTelemetry*"
       Test:
         patterns:
           - "Microsoft.Testing.*"

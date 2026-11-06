@@ -128,10 +128,11 @@ jobs:
           files: ./coverage.xml
 
   # A separate job, so the one that can push and sign packages never holds the
-  # Sonar and Codecov tokens. It only runs once format and tests have passed.
+  # Sonar and Codecov tokens. It runs alongside format and tests to save time, so
+  # on main it can publish an image for a commit that then fails them. That image
+  # is never deployed: deploys wait for this whole workflow and use its digest.
   image:
     name: Image
-    needs: [verify-format, build]
     uses: ./.github/workflows/docker.yml
     with:
       publish: ${{ inputs.publish }}

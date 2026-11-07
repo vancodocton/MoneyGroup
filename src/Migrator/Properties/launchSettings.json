@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "MoneyGroup.Postgres.Migrator": {
+    "MoneyGroup.Migrator": {
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"

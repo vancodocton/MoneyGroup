@@ -84,6 +84,11 @@ updates:
     directory: "/src/WebApi"
     schedule:
       interval: "weekly"
+    # Stay on .NET 10. Remove this rule for a deliberate move to a new major.
+    ignore:
+      - dependency-name: "dotnet/*"
+        update-types:
+          - "version-update:semver-major"
 
   - package-ecosystem: "devcontainers"
     directory: "/"

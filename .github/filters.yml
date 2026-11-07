@@ -1,10 +1,17 @@
 # Which paths affect which CI job. Read by .github/actions/detect-changes, so
 # gate.yml and codeql.yml share one definition.
 
-# CI itself. On a PR this runs every job, so a workflow change is proven before
-# it merges.
+# CI itself. CodeQL scans the workflows when any of these change.
 ci-config:
   - '.github/workflows/**'
+  - '.github/actions/**'
+  - '.github/filters.yml'
+
+# The CI files that can affect a build. On a PR this runs every gate job, so a
+# workflow change is proven before it merges. A new workflow is included unless
+# it's excluded here. ghcr-cleanup.yml builds nothing, so it's proven by a dry run.
+gate-config:
+  - '.github/workflows/!(ghcr-cleanup.yml)'
   - '.github/actions/**'
   - '.github/filters.yml'
 

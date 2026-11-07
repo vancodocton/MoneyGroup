@@ -9,6 +9,9 @@ outputs:
   ci-config:
     description: Whether CI configuration changed.
     value: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.ci-config == 'true' }}
+  gate-config:
+    description: Whether CI configuration that can affect a build changed.
+    value: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.gate-config == 'true' }}
   codeql-config:
     description: Whether CodeQL configuration changed.
     value: ${{ steps.filter.outcome == 'skipped' || steps.filter.outputs.codeql-config == 'true' }}

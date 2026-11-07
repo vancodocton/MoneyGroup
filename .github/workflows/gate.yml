@@ -26,8 +26,8 @@ jobs:
     outputs:
       # A CI change runs every job on its PR. Once merged it has been proven, so
       # it does not run them again or deploy.
-      backend: ${{ steps.changes.outputs.backend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.ci-config == 'true') }}
-      frontend: ${{ steps.changes.outputs.frontend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.ci-config == 'true') }}
+      backend: ${{ steps.changes.outputs.backend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.gate-config == 'true') }}
+      frontend: ${{ steps.changes.outputs.frontend == 'true' || (github.event_name == 'pull_request' && steps.changes.outputs.gate-config == 'true') }}
       deploy-api: ${{ steps.changes.outputs.backend == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
       deploy-web: ${{ steps.changes.outputs.frontend == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
     steps:

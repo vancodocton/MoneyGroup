@@ -2,7 +2,7 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/runtime:10.0 AS base
-USER app
+USER $APP_UID
 WORKDIR /app
 
 
@@ -13,9 +13,9 @@ WORKDIR /src
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
 COPY ["src/Migrator/MoneyGroup.Migrator.csproj", "src/Migrator/"]
-COPY ["src/Core/MoneyGroup.Core.csproj", "src/Core/"]
 COPY ["src/Infrastructure.SqlServer/MoneyGroup.Infrastructure.SqlServer.csproj", "src/Infrastructure.SqlServer/"]
 COPY ["src/Infrastructure/MoneyGroup.Infrastructure.csproj", "src/Infrastructure/"]
+COPY ["src/Core/MoneyGroup.Core.csproj", "src/Core/"]
 RUN dotnet restore "./src/Migrator/MoneyGroup.Migrator.csproj"
 COPY . .
 WORKDIR "/src/src/Migrator"

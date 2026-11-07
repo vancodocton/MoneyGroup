@@ -22,7 +22,7 @@ backend:
   - 'src/Infrastructure/**'
   - 'src/Infrastructure.PostgreSql/**'
   - 'src/Infrastructure.SqlServer/**'
-  - 'src/Postgres.Migrator/**'
+  - 'src/Migrator/**'
   - 'src/ServiceDefaults/**'
   - 'src/WebApi/**'
   - 'test/**'

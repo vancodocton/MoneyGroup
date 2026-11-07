@@ -20,7 +20,6 @@ backend:
   - 'src/ClientApp/*.esproj'
   - 'src/Core/**'
   - 'src/Infrastructure/**'
-  - 'src/Infrastructure.PostgreSql/**'
   - 'src/Infrastructure.SqlServer/**'
   - 'src/Migrator/**'
   - 'src/ServiceDefaults/**'

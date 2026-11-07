@@ -17,7 +17,6 @@
       <Platform Project="AnyCPU" />
     </Project>
     <Project Path="src/Core/MoneyGroup.Core.csproj" />
-    <Project Path="src/Infrastructure.PostgreSql/MoneyGroup.Infrastructure.PostgreSql.csproj" />
     <Project Path="src/Infrastructure.SqlServer/MoneyGroup.Infrastructure.SqlServer.csproj" />
     <Project Path="src/Infrastructure/MoneyGroup.Infrastructure.csproj" />
     <Project Path="src/Migrator/MoneyGroup.Migrator.csproj" />

@@ -1,15 +1,4 @@
 services:
-  postgres:
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./src/Infrastructure.PostgreSql/Docker/scripts/:/docker-entrypoint-initdb.d/
-      - ./src/Infrastructure.PostgreSql/Docker/:/psql/
-      # - postgres:/var/lib/postgresql/data/
-
   mssql:
     environment:
       ACCEPT_EULA: "Y"
@@ -35,5 +24,4 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
 # volumes:
-#   postgres:
 #   mssql:

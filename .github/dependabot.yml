@@ -31,6 +31,20 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    # Stay on .NET 10. Remove these rules for a deliberate move to a new major.
+    ignore:
+      - dependency-name: "Microsoft.AspNetCore.*"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "Microsoft.EntityFrameworkCore*"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "Microsoft.Extensions.*"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "dotnet-ef"
+        update-types:
+          - "version-update:semver-major"
     groups:
       Microsoft:
         patterns:

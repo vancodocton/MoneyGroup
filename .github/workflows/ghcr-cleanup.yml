@@ -1,4 +1,5 @@
 name: GHCR cleanup
+# Throwaway comment to prove the gate exemption; this PR is never merged.
 
 # Keeps `main`, every image from the last 7 days, and the 4 newest images older
 # than that, so a quiet week still leaves something to roll back to. Deletes the

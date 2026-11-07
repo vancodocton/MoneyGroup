@@ -50,7 +50,7 @@
     Transitive pins for vulnerable packages (CentralPackageTransitivePinningEnabled).
     Projects never reference these directly. On each bump, remove a pin once its
     parents resolve a non-vulnerable version on their own, and confirm that
-    restore reports no NuGet audit warnings (NU1902/NU1903).
+    restore reports no NuGet audit warnings (NU1901 to NU1904).
   -->
   <ItemGroup>
     <!-- From Aspire.Microsoft.EntityFrameworkCore.SqlServer (10.0.12) and Microsoft.Data.SqlClient (9.0.x). Remove when they require >= 10.0.13. -->

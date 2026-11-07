@@ -23,12 +23,14 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="Testcontainers.MsSql" />
     <PackageReference Include="xunit.v3.mtp-v2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Infrastructure.SqlServer\MoneyGroup.Infrastructure.SqlServer.csproj" />
     <ProjectReference Include="..\..\src\Infrastructure\MoneyGroup.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Migrator\MoneyGroup.Migrator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

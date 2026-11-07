@@ -22,7 +22,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       # A CI change runs every job on its PR. Once merged it has been proven, so
       # it does not run them again or deploy.
@@ -70,7 +70,7 @@ jobs:
     name: gate
     needs: [changes, backend, frontend]
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions: {}
     steps:
       - name: Enforce component checks by changed paths
@@ -126,7 +126,7 @@ jobs:
     name: deploy api
     needs: publish-image
     if: ${{ !cancelled() && needs.publish-image.result == 'success' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     environment: Development
     concurrency: deploy-api
     permissions:
@@ -171,7 +171,7 @@ jobs:
     name: deploy web
     needs: [changes, frontend, gate]
     if: ${{ !cancelled() && needs.gate.result == 'success' && needs.frontend.result == 'success' && needs.changes.outputs.deploy-web == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     concurrency: deploy-web
     permissions:
       contents: read

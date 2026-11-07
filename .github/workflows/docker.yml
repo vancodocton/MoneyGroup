@@ -26,7 +26,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       # Immutable digest of the image produced (and signed) by this run, so the
       # deploy job ships exactly what was built instead of re-resolving a

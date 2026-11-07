@@ -24,7 +24,6 @@ src/
 ├── Core/                      # Domain entities, services, interfaces
 ├── Infrastructure/            # EF Core repositories, data access
 ├── Infrastructure.SqlServer/  # SQL Server migrations & seeds
-├── Infrastructure.PostgreSql/ # PostgreSQL migrations & seeds
 ├── WebApi/                    # Minimal API endpoints
 ├── AppHost/                   # .NET Aspire orchestration
 └── ServiceDefaults/           # Shared Aspire configuration

@@ -1,8 +1,10 @@
 name: GHCR cleanup
 
-# Keeps `main` and the 4 newest previous images, and deletes the rest.
-# Older images are untagged because `main` moves on each publish, so they are
-# counted with keep-n-untagged rather than keep-n-tagged.
+# Keeps `main`, every image from the last 7 days, and the 4 newest images older
+# than that, so a quiet week still leaves something to roll back to. Deletes the
+# rest. Previous images are untagged because `main` moves on each publish, so
+# they are counted with keep-n-untagged. older-than applies first, so that count
+# covers only images past the 7 days.
 #
 # Don't replace this with a plain "delete untagged" step: an image's platform
 # and attestation manifests are untagged versions too, and deleting them breaks
@@ -35,8 +37,8 @@ jobs:
         with:
           package: moneygroup
           exclude-tags: main
+          older-than: 7 days
           keep-n-untagged: 4
-          delete-tags: nightly,test-verify-deploy-secrets
           delete-orphaned-images: true
           validate: true
           dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run }}

@@ -28,7 +28,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       actions: ${{ steps.changes.outputs.ci-config }}
       backend: ${{ steps.changes.outputs.backend == 'true' || steps.changes.outputs.codeql-config == 'true' }}
@@ -47,7 +47,7 @@ jobs:
     name: Analyze (actions)
     needs: changes
     if: ${{ needs.changes.outputs.actions == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       security-events: write
       packages: read
@@ -72,7 +72,7 @@ jobs:
     name: Analyze (backend)
     needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       security-events: write
       packages: read
@@ -110,7 +110,7 @@ jobs:
     name: Analyze (frontend)
     needs: changes
     if: ${{ needs.changes.outputs.frontend == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       security-events: write
       packages: read

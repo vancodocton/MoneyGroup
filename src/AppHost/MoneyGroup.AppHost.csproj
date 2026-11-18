@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,17 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UserSecretsId>a969ec3c-9f14-4517-9c32-14f33c87b188</UserSecretsId>
-    <!-- DCP/Dashboard come from the Aspire CLI bundle (PATH, else dnx) instead of RID-specific NuGet packages, so packages.lock.json is platform-independent. -->
-    <AspireUseCliBundle>true</AspireUseCliBundle>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.Dotnet" />
     <PackageReference Include="Aspire.Hosting.JavaScript" />
     <PackageReference Include="Aspire.Hosting.SqlServer" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\WebApi\MoneyGroup.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

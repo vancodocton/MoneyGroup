@@ -6,11 +6,11 @@
 |----------|------------|---------|
 | Runtime | .NET | 10.0.101 |
 | API | ASP.NET Core Minimal APIs | 10.0 |
-| ORM | Entity Framework Core | 10.0.1 |
+| ORM | Entity Framework Core | 10.0.15 |
 | Validation | FluentValidation | 12.0.0 |
 | Mapping | Riok.Mapperly | 4.2.1 |
 | Queries | Ardalis.Specification | 9.3.1 |
-| Orchestration | .NET Aspire | 13.1.0 |
+| Orchestration | Aspire | 17.0.0 |
 | Testing | xUnit v3 (MTP-v2) | 3.2.1 |
 
 ---

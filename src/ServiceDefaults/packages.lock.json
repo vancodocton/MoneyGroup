@@ -48,15 +48,6 @@
           "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.21.0, 2.0.0)"
         }
       },
-      "OpenTelemetry.Instrumentation.GrpcNetClient": {
-        "type": "Direct",
-        "requested": "[1.20.0-beta.1, )",
-        "resolved": "1.20.0-beta.1",
-        "contentHash": "0LbRLCNE4WQuP+1GU24fVFOpUoI/ltTa7JSaCt4f/mw4a8PhwdfwIugM+JP0oU1Y0D9yxPirAfnJx5Q/OrvXiA==",
-        "dependencies": {
-          "OpenTelemetry": "[1.20.0, 2.0.0)"
-        }
-      },
       "OpenTelemetry.Instrumentation.Http": {
         "type": "Direct",
         "requested": "[1.21.0, )",

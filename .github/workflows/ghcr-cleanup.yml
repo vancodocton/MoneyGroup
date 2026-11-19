@@ -11,7 +11,7 @@ name: GHCR cleanup
 # the image. This action treats each image and its children as one unit.
 on:
   schedule:
-    - cron: "33 1 * * 4"
+    - cron: "33 1 * * *"
   # Dry run unless unticked, so a manual run can't delete by accident.
   workflow_dispatch:
     inputs:

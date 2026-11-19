@@ -104,6 +104,9 @@ jobs:
         shell: pwsh
         run: |
           dotnet coverage merge ./**/TestResults/**.xml --output coverage.xml --output-format xml
+          # Codecov misreads the Microsoft XML format: it treats each source_id as global, but ids restart at 0 in
+          # every module, so files from different assemblies overwrite each other. Cobertura names files directly.
+          dotnet coverage merge coverage.xml --output coverage.cobertura.xml --output-format cobertura
           dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
       - name: Upload TestResults Artifacts
@@ -114,6 +117,7 @@ jobs:
           path: |
             **/TestResults/**
             coverage.xml
+            coverage.cobertura.xml
 
       - name: Upload TestResults to Codecov
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
@@ -121,7 +125,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: vancodocton/MoneyGroup
           disable_search: true
-          files: ./coverage.xml
+          files: ./coverage.cobertura.xml
 
   # Only checks that the image builds, alongside format and tests to save time.
   # docker.yml declares the permissions below, so they must be granted even though

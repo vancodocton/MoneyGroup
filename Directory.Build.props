@@ -12,5 +12,7 @@
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <!-- Dependabot's updater container also sets GITHUB_ACTIONS=true. Locked mode there makes its restore fail with NU1004 after it bumps Directory.Packages.props, so it skips every packages.lock.json. -->
     <RestoreLockedMode Condition="'$(DEPENDABOT_JOB_ID)' == ''">true</RestoreLockedMode>
+    <!-- GitHub's Automatic Dependency Submission (a dynamic workflow we can't edit) runs a plain `dotnet restore` per project. With TreatWarningsAsErrors, a newly published advisory (NU1903/NU1904) fails that restore, so the dependency graph stops updating. The graph only needs the resolved packages, Dependabot alerts cover vulnerabilities, and the .NET CI build still enforces audit. -->
+    <NuGetAudit Condition="'$(GITHUB_WORKFLOW)' == 'dynamic/dependency-graph/auto-submission'">false</NuGetAudit>
   </PropertyGroup>
 </Project>

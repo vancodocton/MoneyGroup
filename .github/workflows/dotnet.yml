@@ -82,6 +82,10 @@ jobs:
       - name: Begin Analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # On a PR, End Analyze waits for the quality gate and fails if it fails, so `gate`
+          # covers SonarQube Cloud. Not on main, where the PR already passed it, so a gate
+          # change on SonarQube Cloud never blocks a deploy.
+          QUALITY_GATE_WAIT: ${{ github.event_name == 'pull_request' }}
         shell: pwsh
         # Every analysis parameter is set here. The SonarQube Cloud project settings only hold the Automatic
         # Analysis toggle, which must stay off for CI analysis. Report paths must match the Test and End Analyze steps.
@@ -100,6 +104,8 @@ jobs:
             # Migrations are generated. src/ClientApp has no test runner yet, so it has no coverage to report.
             '/d:sonar.coverage.exclusions=**/Migrations/*.cs,src/ClientApp/**'
             '/d:sonar.cpd.exclusions=**/Migrations/*.cs'
+            # On a PR, End Analyze fails if the quality gate fails. See QUALITY_GATE_WAIT above.
+            "/d:sonar.qualitygate.wait=$env:QUALITY_GATE_WAIT"
           )
           dotnet sonarscanner begin @sonarArgs
 
@@ -139,6 +145,84 @@ jobs:
           slug: vancodocton/MoneyGroup
           disable_search: true
           files: ./coverage.xml
+          # The coverage job waits for this upload's statuses, so a failed upload
+          # fails here instead of timing out there.
+          fail_ci_if_error: ${{ github.event_name == 'pull_request' }}
+
+  # Codecov posts codecov/project and codecov/patch after the build job, so the
+  # required `gate` check could pass before them. This waits for them and fails if
+  # either fails. Only on PRs, like the quality gate wait above.
+  coverage:
+    name: Coverage Status
+    needs: build
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    permissions:
+      checks: read
+      statuses: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      # Codecov reports on the PR head, not on the merge commit this run checked out.
+      SHA: ${{ github.event.pull_request.head.sha }}
+      # Must match the statuses Codecov is set to post.
+      CONTEXTS: codecov/project codecov/patch
+      TIMEOUT_SECONDS: 600
+    steps:
+      - name: Wait for Codecov statuses
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Codecov posts check runs when its GitHub App is installed, and commit
+          # statuses otherwise, so read both. Prints "<conclusion> <url>", or nothing
+          # until the result is in.
+          result() {
+            local name="$1" run status
+            run=$(gh api "repos/${REPO}/commits/${SHA}/check-runs?check_name=${name}&filter=latest" \
+              --jq '.check_runs | sort_by(.started_at) | last // empty | "\(.status) \(.conclusion) \(.details_url)"')
+            if [[ -n "${run}" ]]; then
+              read -r status conclusion url <<< "${run}"
+              [[ "${status}" == "completed" ]] && echo "${conclusion} ${url}"
+              return 0
+            fi
+            status=$(gh api "repos/${REPO}/commits/${SHA}/status" --paginate \
+              --jq "[.statuses[] | select(.context == \"${name}\")] | first // empty | \"\(.state) \(.target_url)\"")
+            if [[ -n "${status}" && "${status%% *}" != "pending" ]]; then
+              echo "${status}"
+            fi
+          }
+
+          deadline=$(( SECONDS + TIMEOUT_SECONDS ))
+          pending="${CONTEXTS}"
+          failed=0
+          while [[ -n "${pending// /}" ]]; do
+            still=""
+            for name in ${pending}; do
+              # A failed API call counts as not in yet, so a blip doesn't fail the PR.
+              r=$(result "${name}") || r=""
+              if [[ -z "${r}" ]]; then
+                still+=" ${name}"
+                continue
+              fi
+              echo "${name}: ${r}"
+              case "${r%% *}" in
+                success|neutral|skipped) ;;
+                *) echo "::error::${name} did not pass: ${r}"; failed=1 ;;
+              esac
+            done
+            pending="${still}"
+            [[ -z "${pending// /}" ]] && break
+            if (( SECONDS >= deadline )); then
+              echo "::error::Timed out after ${TIMEOUT_SECONDS}s waiting for:${pending}"
+              exit 1
+            fi
+            echo "Waiting for:${pending}"
+            sleep 15
+          done
+
+          exit "${failed}"
 
   # Only checks that the image builds, alongside format and tests to save time.
   # docker.yml declares the permissions below, so they must be granted even though

@@ -24,7 +24,7 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "dotnet restore",
-	"onCreateCommand": "dotnet tool install --global Aspire.Cli --version 13.1.0",
+	"onCreateCommand": "dotnet tool install --global Aspire.Cli --version 17.0.0",
 	"postStartCommand": "dotnet dev-certs https --trust",
 	// Configure tool-specific properties.
 	"customizations": {

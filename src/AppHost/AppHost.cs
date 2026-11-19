@@ -5,7 +5,8 @@ var mssql = builder.AddSqlServer("mssql", port: 1435)
     .WithBindMount("../Infrastructure.SqlServer/Docker/scripts", "/mssql-server-setup-scripts.d/")
     .AddDatabase("SqlServerConnection", "MoneyGroup");
 
-var webapi = builder.AddProject<Projects.MoneyGroup_WebApi>("moneygroup-webapi")
+var webapi = builder.AddDotnetProject("moneygroup-webapi", "../WebApi/MoneyGroup.WebApi.csproj")
+    .WithHttpHealthCheck("/health")
     .WaitFor(mssql)
     .WithReference(mssql);
 

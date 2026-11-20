@@ -1,0 +1,49 @@
+name: Actions lockfile
+
+# Fails when .github/workflows/actions.lock is out of sync with the workflows, or
+# when a locked commit no longer matches its repo upstream. Fix it locally with
+#   gh extension install github/gh-actions-lock --pin v0.5.1
+#   gh actions-lock            # or --relock to move a tag to its new commit
+# and commit the result. Review every changed `commit` in the diff: that is the
+# code the workflows will run. Dependabot regenerates the entries it bumps.
+#
+# Warnings, such as a major tag like @v7 having moved past its locked commit, don't
+# fail the run on purpose: the locked commit keeps running until a relock.
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/**"
+      - ".github/actions/**"
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/**"
+      - ".github/actions/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify lockfile
+    runs-on: ubuntu-26.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install gh-actions-lock
+        # Keep in step with the version in the comment at the top.
+        run: gh extension install github/gh-actions-lock --pin v0.5.1
+
+      - name: Verify
+        run: gh actions-lock --verify

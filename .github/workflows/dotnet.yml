@@ -45,6 +45,9 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      code-quality: write # Upload coverage to GitHub Code Quality
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -123,6 +126,14 @@ jobs:
           dotnet coverage merge ./**/TestResults/**.xml --output coverage.xml --output-format xml
           dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
+      # GitHub Code Quality accepts Cobertura only, while Sonar reads coverage.xml above.
+      # dotnet-coverage writes absolute file paths. They are made repo-relative here
+      # because GitHub doesn't document how it maps report paths to repository files.
+      - name: Merge coverage as Cobertura
+        run: |
+          dotnet coverage merge ./**/TestResults/**.xml --output coverage.cobertura.xml --output-format cobertura
+          sed -i "s|filename=\"${GITHUB_WORKSPACE}/|filename=\"|g" coverage.cobertura.xml
+
       - name: Upload TestResults Artifacts
         uses: actions/upload-artifact@v7
         if: success() || failure()
@@ -131,6 +142,7 @@ jobs:
           path: |
             **/TestResults/**
             coverage.xml
+            coverage.cobertura.xml
 
       - name: Upload TestResults to Codecov
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
@@ -139,6 +151,19 @@ jobs:
           slug: vancodocton/MoneyGroup
           disable_search: true
           files: ./coverage.xml
+
+      # Feeds the "Restrict code coverage" ruleset rule. The action skips fork PRs by
+      # itself and attributes PR uploads to the head SHA, while this job tests the
+      # merge commit, so per-line positions can shift where main changed a file.
+      # The default wait for processing lets the rule see the result before `gate`
+      # passes. Upload errors only warn while the feature is in public preview.
+      - name: Upload coverage to GitHub
+        uses: actions/upload-code-coverage@v1
+        with:
+          file: coverage.cobertura.xml
+          language: C#
+          label: code-coverage/dotnet-coverage
+          fail-on-error: false
 
   # Only checks that the image builds, alongside format and tests to save time.
   # docker.yml declares the permissions below, so they must be granted even though

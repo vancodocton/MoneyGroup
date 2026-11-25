@@ -31,6 +31,7 @@ workflows:
         - 'actions/setup-dotnet@v6.1.0'
         - 'actions/setup-java@v6.3.0'
         - 'actions/upload-artifact@v7.0.2'
+        - 'actions/upload-code-coverage@v1.4.4'
         - 'codecov/codecov-action@v7.1.1'
     '.github/workflows/gate.yml':
         - 'actions/checkout@v7.0.1'
@@ -82,6 +83,11 @@ dependencies:
         commit: 'sha1-cf430e030ddbb5b0abf93d22962f4752f3646cd9'
         owner_id: 44036562
         repo_id: 192625955
+    'actions/upload-code-coverage@v1.4.4':
+        ref: 'v1.4.4'
+        commit: 'sha1-2b21a77928be8d5168c2b9581a67f2adbebacc52'
+        owner_id: 44036562
+        repo_id: 1220171870
     'azure/container-apps-deploy-action@v2':
         ref: 'v2'
         commit: 'sha1-8dff69dac3367c32ceb2690d8f13adbeab462703'

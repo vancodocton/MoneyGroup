@@ -10,8 +10,9 @@ ci-config:
 # The CI files that can affect a build. On a PR this runs every gate job, so a
 # workflow change is proven before it merges. A new workflow is included unless
 # it's excluded here. ghcr-cleanup.yml builds nothing, so it's proven by a dry run.
+# actions-lock.yml builds nothing either, and runs on its own when workflows change.
 gate-config:
-  - '.github/workflows/!(ghcr-cleanup.yml)'
+  - '.github/workflows/!(ghcr-cleanup.yml|actions-lock.yml)'
   - '.github/actions/**'
   - '.github/filters.yml'
 

@@ -11,7 +11,7 @@ name: GHCR cleanup
 # the image. This action treats each image and its children as one unit.
 on:
   schedule:
-    - cron: "33 1 * * 4"
+    - cron: "33 1 * * *"
   # Dry run unless unticked, so a manual run can't delete by accident.
   workflow_dispatch:
     inputs:
@@ -33,7 +33,7 @@ jobs:
       packages: write
     steps:
       - name: Delete old images
-        uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f # v1.2.2
+        uses: dataaxiom/ghcr-cleanup-action@v1.2.2
         with:
           package: moneygroup
           exclude-tags: main

@@ -202,4 +202,6 @@ jobs:
             echo "::notice::No SWA deployment token, so the client was not deployed."
             exit 0
           fi
-          npx --yes @azure/static-web-apps-cli@2.1.0 deploy ./dist --env production
+          # --ignore-scripts: no dependency lifecycle scripts run (Sonar githubactions:S6505).
+          npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund @azure/static-web-apps-cli@2.1.0
+          ./node_modules/.bin/swa deploy ./dist --env production

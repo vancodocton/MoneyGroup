@@ -163,7 +163,7 @@ jobs:
       # The default wait for processing lets the rule see the result before `gate`
       # passes. Upload errors only warn while the feature is in public preview.
       - name: Upload coverage to GitHub
-        uses: actions/upload-code-coverage@v1
+        uses: actions/upload-code-coverage@v1.4.4
         with:
           file: coverage.cobertura.xml
           language: C#

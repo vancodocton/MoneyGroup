@@ -166,6 +166,19 @@ jobs:
           # fails here instead of timing out there.
           fail_ci_if_error: ${{ github.event_name == 'pull_request' }}
 
+      # Feeds the "Restrict code coverage" ruleset rule. The action skips fork PRs by
+      # itself and attributes PR uploads to the head SHA, while this job tests the
+      # merge commit, so per-line positions can shift where main changed a file.
+      # The default wait for processing lets the rule see the result before `gate`
+      # passes. Upload errors only warn while the feature is in public preview.
+      - name: Upload coverage to GitHub
+        uses: actions/upload-code-coverage@v1.4.4
+        with:
+          file: coverage.cobertura.xml
+          language: C#
+          label: code-coverage/dotnet-coverage
+          fail-on-error: false
+
   # Codecov posts codecov/project and codecov/patch after the build job, so the
   # required `gate` check could pass before them. This waits for them and fails if
   # either fails. Only on PRs, like the quality gate wait above.
@@ -240,19 +253,6 @@ jobs:
           done
 
           exit "${failed}"
-
-      # Feeds the "Restrict code coverage" ruleset rule. The action skips fork PRs by
-      # itself and attributes PR uploads to the head SHA, while this job tests the
-      # merge commit, so per-line positions can shift where main changed a file.
-      # The default wait for processing lets the rule see the result before `gate`
-      # passes. Upload errors only warn while the feature is in public preview.
-      - name: Upload coverage to GitHub
-        uses: actions/upload-code-coverage@v1.4.4
-        with:
-          file: coverage.cobertura.xml
-          language: C#
-          label: code-coverage/dotnet-coverage
-          fail-on-error: false
 
   # Only checks that the image builds, alongside format and tests to save time.
   # docker.yml declares the permissions below, so they must be granted even though

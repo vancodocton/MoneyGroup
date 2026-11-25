@@ -35,13 +35,13 @@ jobs:
       frontend: ${{ steps.changes.outputs.frontend == 'true' || steps.changes.outputs.codeql-config == 'true' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
 
       - name: Detect changes
         id: changes
-        uses: ./.github/actions/detect-changes
+        uses: $/.github/actions/detect-changes
 
   analyze-actions:
     name: Analyze (actions)
@@ -55,16 +55,16 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        uses: github/codeql-action/init@v4.39.3
         with:
           languages: actions
           build-mode: none
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        uses: github/codeql-action/analyze@v4.39.3
         with:
           category: "/language:actions"
 
@@ -80,10 +80,10 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@v6.1.0
         with:
           cache: true
           cache-dependency-path: |
@@ -91,7 +91,7 @@ jobs:
             **/dotnet-tools.json
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        uses: github/codeql-action/init@v4.39.3
         with:
           languages: csharp
           build-mode: manual
@@ -105,7 +105,7 @@ jobs:
           dotnet build --configuration Release -p:NuGetAudit=false MoneyGroup.slnx
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        uses: github/codeql-action/analyze@v4.39.3
         with:
           category: "/language:csharp"
 
@@ -121,15 +121,15 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        uses: github/codeql-action/init@v4.39.3
         with:
           languages: javascript-typescript
           build-mode: none
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        uses: github/codeql-action/analyze@v4.39.3
         with:
           category: "/language:javascript-typescript"

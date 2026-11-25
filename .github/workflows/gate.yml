@@ -32,13 +32,13 @@ jobs:
       deploy-web: ${{ steps.changes.outputs.frontend == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
 
       - name: Detect changes
         id: changes
-        uses: ./.github/actions/detect-changes
+        uses: $/.github/actions/detect-changes
 
   backend:
     uses: ./.github/workflows/dotnet.yml
@@ -141,7 +141,7 @@ jobs:
       IMAGE_NAME: ${{ github.repository }}
     steps:
       - name: Log in to Azure
-        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        uses: azure/login@v3.1.0
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -163,7 +163,7 @@ jobs:
           echo "ref=${REGISTRY,,}/${IMAGE_NAME,,}@${DIGEST}" >> "$GITHUB_OUTPUT"
 
       - name: Deploy Azure Container App
-        uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703 # v2
+        uses: azure/container-apps-deploy-action@v2
         with:
           containerAppName: ${{ secrets.AZURE_CONTAINER_APP_NAME }}
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
@@ -183,16 +183,16 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: clientapp-dist
           path: src/ClientApp/dist
 
       - name: Deploy Static Web App
-        uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9 # v1
+        uses: Azure/static-web-apps-deploy@v1
         env:
           # The token isn't configured while SWA hosting is on hold. This job then
           # passes without deploying, so a client change doesn't fail the main run.

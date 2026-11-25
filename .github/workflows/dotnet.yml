@@ -100,6 +100,11 @@ jobs:
             # Migrations are generated. src/ClientApp has no test runner yet, so it has no coverage to report.
             '/d:sonar.coverage.exclusions=**/Migrations/*.cs,src/ClientApp/**'
             '/d:sonar.cpd.exclusions=**/Migrations/*.cs'
+            # S7637 reads only the inline uses: ref, not actions.lock, which pins every action's commit
+            # (enforced by actions-lock.yml). TODO(#578): remove once SonarQube Cloud supports actions.lock.
+            '/d:sonar.issue.ignore.multicriteria=gha1'
+            '/d:sonar.issue.ignore.multicriteria.gha1.ruleKey=githubactions:S7637'
+            '/d:sonar.issue.ignore.multicriteria.gha1.resourceKey=.github/workflows/**'
           )
           dotnet sonarscanner begin @sonarArgs
 

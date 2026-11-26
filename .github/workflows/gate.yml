@@ -52,13 +52,16 @@ jobs:
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-    # The image job inside needs packages and id-token, and the build job needs
-    # code-quality to upload coverage. Each job there declares only what it uses.
+    # The image job inside needs packages and id-token, the build job needs code-quality
+    # to upload coverage, and the coverage job needs checks and statuses. Each job there
+    # declares only what it uses.
     permissions:
       contents: read
       packages: write
       id-token: write
       code-quality: write
+      checks: read
+      statuses: read
 
   frontend:
     uses: ./.github/workflows/clientapp.yml

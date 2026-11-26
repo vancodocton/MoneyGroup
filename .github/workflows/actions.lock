@@ -5,10 +5,6 @@ version: 'v0.0.3'
 workflows:
     '.github/workflows/actions-lock.yml':
         - 'actions/checkout@v7.0.1'
-    '.github/workflows/azure-static-web-apps-mango-forest-03b3e8000.yml':
-        - 'actions/checkout@v7.0.1'
-        - 'actions/setup-node@v7.1.0'
-        - 'azure/static-web-apps-deploy@v1'
     '.github/workflows/clientapp.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-node@v7.1.0'
@@ -38,7 +34,6 @@ workflows:
         - 'actions/download-artifact@v8.0.2'
         - 'azure/container-apps-deploy-action@v2'
         - 'azure/login@v3.1.0'
-        - 'azure/static-web-apps-deploy@v1'
         - 'dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d'
     '.github/workflows/ghcr-cleanup.yml':
         - 'dataaxiom/ghcr-cleanup-action@v1.3.0'
@@ -98,11 +93,6 @@ dependencies:
         commit: 'sha1-a641126d1b8aa4d1fa005f4f92df94a3a4c4c906'
         owner_id: 6844498
         repo_id: 210798615
-    'azure/static-web-apps-deploy@v1':
-        ref: 'v1'
-        commit: 'sha1-1a947af9992250f3bc2e68ad0754c0b0c11566c9'
-        owner_id: 6844498
-        repo_id: 256014197
     'codecov/codecov-action@v7.1.1':
         ref: 'v7.1.1'
         commit: 'sha1-303a32d7a59b442fa8d48b6a1cc6825c09c847a5'
